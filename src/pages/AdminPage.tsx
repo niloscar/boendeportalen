@@ -29,7 +29,7 @@ export default function AdminPage() {
 
     return (
         <div className="p-8">
-            <AdminNav />
+            <AdminNav pages={ADMIN_SUB_PAGES} />
 
             <div className="text-sm text-gray-500 mb-2">
                 Administration → {currentPage.title}
