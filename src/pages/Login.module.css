@@ -1,0 +1,21 @@
+.cityfloat {
+    animation: cityfloat 14s ease-in-out infinite;
+    transform-origin: center;
+    will-change: transform;
+}
+
+@keyframes cityfloat {
+    0%, 100% {
+        transform: translateY(0) scale(0.98);
+    }
+
+    50% {
+        transform: translateY(-12px) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cityfloat {
+        animation: none;
+    }
+}
