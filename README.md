@@ -47,10 +47,9 @@ refactor/api
 docs/readme-update-1
 ```
 
-#### Filer och mappar
+#### Kod, filer och mappar
 
-Generellt namnges filer och mappar med `camelCase`.
-
+- **Filer och mappar** namnges generellt med `camelCase`, om inget annat anges nedan.
 - **React-komponenter** skrivs i `.tsx`-filer och namnges med `PascalCase`.
 - **Variabler och funktioner** skrivs med `camelCase`.
 - **Typer och interfaces** skrivs med `PascalCase`.
