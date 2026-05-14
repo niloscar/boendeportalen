@@ -2,17 +2,33 @@ import { useEffect, useState } from 'react'
 import SortButton from './SortButton'
 
 const MOCK_RESIDENTS = [
-    { id: 1, fname: 'John', lname: 'Doe', apartment: '101', entrance: 'A', status: 'Aktiv', date: '2023-01-01' },
-    { id: 2, fname: 'Jane', lname: 'Smith', apartment: '102', entrance: 'B', status: 'Inaktiv', date: '2023-02-01' },
-    { id: 3, fname: 'Alice', lname: 'Johnson', apartment: '103', entrance: 'A', status: 'Aktiv', date: '2023-03-01' },
-    { id: 4, fname: 'Bob', lname: 'Brown', apartment: '104', entrance: 'B', status: 'Aktiv', date: '2023-04-01' },
-    { id: 5, fname: 'Charlie', lname: 'Davis', apartment: '105', entrance: 'A', status: 'Inaktiv', date: '2023-05-01' },
+    { id: 1, fname: 'John', lname: 'Doe', house: '1', entrance: 'A', apartment: '1001',  status: 'Aktiv', date: '2023-01-01' },
+    { id: 2, fname: 'Jane', lname: 'Smith', house: '1', entrance: 'B', apartment: '1001',  status: 'Inaktiv', date: '2023-02-01' },
+    { id: 3, fname: 'Alice', lname: 'Johnson', house: '1', entrance: 'A', apartment: '1002', status: 'Aktiv', date: '2023-03-01' },
+    { id: 4, fname: 'Bob', lname: 'Brown', house: '1', entrance: 'B', apartment: '1002', status: 'Aktiv', date: '2023-04-01' },
+    { id: 5, fname: 'Charlie', lname: 'Davis', house: '1', entrance: 'A', apartment: '1003', status: 'Inaktiv', date: '2023-05-01' },
+    { id: 6, fname: 'Eve', lname: 'Miller', house: '1', entrance: 'B', apartment: '1003', status: 'Aktiv', date: '2023-06-01' },
+    { id: 7, fname: 'Frank', lname: 'Wilson', house: '1', entrance: 'A', apartment: '1004', status: 'Aktiv', date: '2023-07-01' },
+    { id: 8, fname: 'Grace', lname: 'Moore', house: '1', entrance: 'B', apartment: '1004', status: 'Inaktiv', date: '2023-08-01' },
+    { id: 9, fname: 'Hank', lname: 'Taylor', house: '1', entrance: 'A', apartment: '1101', status: 'Aktiv', date: '2023-09-01' },
+    { id: 10, fname: 'Ivy', lname: 'Anderson', house: '1', entrance: 'B', apartment: '1101', status: 'Aktiv', date: '2023-10-01' },
+    { id: 11, fname: 'Jack', lname: 'Thomas', house: '2', entrance: 'A', apartment: '1001', status: 'Inaktiv', date: '2023-11-01' },
+    { id: 12, fname: 'Karen', lname: 'Jackson', house: '2', entrance: 'B', apartment: '1001', status: 'Aktiv', date: '2023-12-01' },
+    { id: 13, fname: 'Leo', lname: 'White', house: '2', entrance: 'A', apartment: '1002', status: 'Aktiv', date: '2024-01-01' },
+    { id: 14, fname: 'Mia', lname: 'Harris', house: '2', entrance: 'B', apartment: '1002', status: 'Inaktiv', date: '2024-02-01' },
+    { id: 15, fname: 'Nina', lname: 'Martin', house: '2', entrance: 'A', apartment: '1003', status: 'Aktiv', date: '2024-03-01' },
+    { id: 16, fname: 'Oscar', lname: 'Garcia', house: '2', entrance: 'B', apartment: '1003', status: 'Aktiv', date: '2024-04-01' },
+    { id: 17, fname: 'Paul', lname: 'Clark', house: '2', entrance: 'A', apartment: '1004', status: 'Inaktiv', date: '2024-05-01' },
+    { id: 18, fname: 'Quinn', lname: 'Rodriguez', house: '2', entrance: 'B', apartment: '1004', status: 'Aktiv', date: '2024-06-01' },
+    { id: 19, fname: 'Rachel', lname: 'Lewis', house: '2', entrance: 'A', apartment: '1105', status: 'Aktiv', date: '2024-07-01' },
+    { id: 20, fname: 'Steve', lname: 'Lee', house: '2', entrance: 'B', apartment: '1105', status: 'Inaktiv', date: '2024-08-01' },
 ]
 
 const RESIDENT_KEY_MAP = {
     fname: 'Förnamn',
     lname: 'Efternamn',
-    apartment: 'Lägenhetsnummer',
+    house: 'Hus',
+    apartment: 'Lgh.nr',
     entrance: 'Uppgång',
     status: 'Status',
     date: 'Tilläggsdatum',
@@ -135,7 +151,10 @@ export default function AdminPageResidents() {
                                         : 'asc'
 
                                     return (
-                                        <th key={key}>
+                                        <th 
+                                            key={key}
+                                            className="text-left"
+                                        >
                                             <SortButton
                                                 onClick={() => handleSortChange(sortField)}
                                                 value={`${sortField}:${direction}`}
@@ -151,13 +170,13 @@ export default function AdminPageResidents() {
 
                         <tbody>
                             {sortedSearchResults.map(resident => (
-                                <tr key={resident.id}>
-                                    <td>{resident.fname}</td>
-                                    <td>{resident.lname}</td>
-                                    <td>{resident.apartment}</td>
-                                    <td>{resident.entrance}</td>
-                                    <td>{resident.status}</td>
-                                    <td>{resident.date}</td>
+                                <tr 
+                                    key={resident.id}
+                                    className="border-b border-gray-200 hover:bg-gray-100"
+                                >
+                                    {Object.keys(RESIDENT_KEY_MAP).map((key) => (
+                                        <td key={key}>{resident[key as keyof Resident]}</td>
+                                    ))}
                                 </tr>
                             ))}
                         </tbody>
