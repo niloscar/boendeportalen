@@ -1,9 +1,13 @@
-export default function App() {
+import { Routes, Route } from 'react-router-dom'
+import Login from './pages/Login'
+
+function App() {
     return (
-        <div id="app" className='min-h-screen flex items-center justify-center'>
-            <h1 className='text-4xl font-bold'>
-                Hello world!
-            </h1>
-        </div>
+        <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<div>Detta är en placeholder. Gå till <a href="/login" className="text-blue-500 hover:underline">Inloggning</a></div>} />
+        </Routes>
     );
 }
+
+export default App
