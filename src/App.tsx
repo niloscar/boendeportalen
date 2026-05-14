@@ -1,9 +1,12 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import AdminPage from "./pages/AdminPage";
+
 export default function App() {
     return (
-        <div id="app" className='min-h-screen flex items-center justify-center'>
-            <h1 className='text-4xl font-bold'>
-                Hello world!
-            </h1>
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/admin/:slug?" element={<AdminPage />} />
+            </Routes>
+        </Router>
     );
 }
