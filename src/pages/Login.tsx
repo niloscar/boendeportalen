@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Login.module.css';
 
@@ -7,6 +7,17 @@ import styles from './Login.module.css';
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [now, setNow] = useState<Date>(new Date())
+
+    useEffect(() => {
+        const id = setInterval(() => setNow(new Date()), 60_000)
+        return () => clearInterval(id)
+    }, [])
+
+    const weekdays = ['Söndag','Måndag','Tisdag','Onsdag','Torsdag','Fredag','Lördag']
+    const pad = (n: number) => String(n).padStart(2, '0')
+    const formattedTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`
+    const weekday = weekdays[now.getDay()]
 
     // I can probably put this inside a hook/component later on, but for now this is fine
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,20 +28,22 @@ function Login() {
     }
 
     return (
-        <div className='h-screen flex bg-neutral-200 items-center justify-center'>
-            <div className='flex h-3/4 w-3/4 rounded-l-2xl'>
-                <div className='w-2/3 h-full bg-gradient-to-r from-green-700 to-green-500 rounded-l-2xl'>
-                    <div className='relative h-full overflow-hidden rounded-l-2xl'>
+        <div className='min-h-screen flex bg-neutral-200 items-center justify-center p-8'>
+            <div className='flex w-3/4 h-full overflow-hidden rounded-2xl shadow-2xl'>
+                <div className='w-2/3 min-h-full bg-gradient-to-r from-green-700 to-green-500'>
+                    <div className='relative h-full overflow-hidden'>
                         <img src='/city.svg' alt='City' className={styles.cityfloat + ' w-full h-full object-cover opacity-80'} />
                         <div className='pointer-events-none absolute inset-0 bg-gradient-to-t from-green-950/30 via-transparent to-white/10' />
                     </div>
                 </div>
-                <div className='w-1/3 h-full flex bg-white items-center rounded-r-2xl justify-center p-16'>
-                    <div className='w-full h-full flex flex-col gap-8'>
+                <div className='w-1/3 min-h-full flex bg-white items-stretch justify-center p-16 overflow-y-auto'>
+                    <div className='w-full min-h-full flex flex-col gap-8'>
                         {/* Header */}
                         <div className="flex flex-row items-center justify-between">
                             <h2 className='text-4xl text-neutral-900 font-extrabold'>Bostads<span className='text-green-500'>Portalen</span></h2>
-                            <p className='text-gray-600 ml-2'>Gjord 04:30 en <strong>Onsdag</strong>.</p>
+                            <div className='ml-2 text-right'>
+                                <div className='text-gray-600 text-sm'>{weekday} | {formattedTime}</div>
+                            </div>
                         </div>
 
                         {/* Welcome Message & Description */}
