@@ -1,0 +1,29 @@
+/* Ta bort FullCalendars standardprick */
+.fc-daygrid-event-dot {
+    display: none !important;
+}
+
+/* Andras bokningar */
+.unavailable-slot {
+    background: #e0e0e0;
+    color: #7a7a7a;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+/* Ledig slot */
+.free-slot {
+    background: #e8ffe8 !important;
+    border: 1px dashed #7bc47f !important;
+    color: #2e7d32 !important;
+    cursor: pointer !important;
+}
+
+/* Dina bokningar */
+.own-booking {
+    background: #4caf50;
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+}
