@@ -84,7 +84,11 @@ function Login() {
 
                             {/* Login with Social Media */}
                             {/* Keep in mind, these are just placeholder and need to be implemented or deleted */}
-                            <p className="text-center text-gray-500">Eller logga in med</p>
+                            <div className="flex items-center gap-4">
+                                <div className="flex-1 h-px bg-gray-300/60" />
+                                <span className="text-center text-gray-500 text-sm">Eller logga in med</span>
+                                <div className="flex-1 h-px bg-gray-300/60" />
+                            </div>
                             <div className="flex items-center justify-center gap-4">
                                 <button className="flex items-center gap-2 px-4 py-3 bg-neutral-200 rounded-2xl cursor-pointer hover:bg-neutral-300 transition duration-200">
                                     <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
