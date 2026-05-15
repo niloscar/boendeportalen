@@ -1,5 +1,5 @@
 export interface Apartment {
-    id: number, street: string, postcode: number, city: string, area: string, rooms: string, district: string, description: string
+    id: number, street: string, postcode: number, city: string, area: number, rooms: string, district: string, description: string
 }
 
 export interface Rent {
@@ -15,7 +15,7 @@ export interface Available {
     apartment_id: number,
     renter_id: number,
     start_date: string,
-    end_date: string | null
+    end_date: string
 }
 
 export interface FullData {

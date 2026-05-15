@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ApartmentList from '../components/ApartmentList.tsx'
 import ApartmentFilter from '../components/ApartmentFilter.tsx'
 import type { Apartment, Rent, Available, FullData } from "../types/Apartment.ts";
@@ -12,7 +12,7 @@ const SearchApartment = () => {
             street: "Storgatan 12",
             postcode: 11122,
             city: "Stockholm",
-            area: "34",
+            area: 34,
             rooms: "Ett rum och kök",
             district: "Östermalm",
             description: "En trevlig enrummare mitt i stan!"
@@ -22,7 +22,7 @@ const SearchApartment = () => {
             street: "Storgatan 12",
             postcode: 11122,
             city: "Stockholm",
-            area: "35",
+            area: 35,
             rooms: "Ett rum och kök",
             district: "Östermalm",
             description: "En trevlig enrummare mitt i stan!"
@@ -38,7 +38,7 @@ const SearchApartment = () => {
         },
         {
             id: 2,
-            apartment_id: 2,
+            apartment_id: 4,
             rent: 13000,
             start_date: "2026-01-01",
             end_date: null
@@ -53,27 +53,41 @@ const SearchApartment = () => {
     },
     {
         id: 2,
-        apartment_id: 1,
+        apartment_id: 4,
         renter_id: 14,
         start_date: "2026-02-02",
-        end_date: null
+        end_date: "2026-01-01"
     },
-    {
-        id: 3,
-        apartment_id: 2,
-        renter_id: 2,
-        start_date: "2025-01-01",
-        end_date: null
-    }
     ]);
-
+    useEffect(() => {
+        const newData: FullData[] = [];
+        apartments.forEach(apartment => {
+            const thisAvailability: Available | undefined = availableFrom.find(a => a.apartment_id === apartment.id);
+            const thisRent: Rent | undefined = rent.find(a => a.apartment_id === apartment.id);
+            if (thisRent != undefined && thisAvailability != undefined) {
+                newData.push({
+                    id: apartment.id,
+                    street: apartment.street,
+                    postcode: apartment.postcode,
+                    city: apartment.city,
+                    area: apartment.area,
+                    rooms: apartment.rooms,
+                    district: apartment.district,
+                    description: apartment.description,
+                    rent: thisRent.rent,
+                    available: thisAvailability.end_date
+                })
+            }
+        })
+        setFullData(newData);
+    }, [])
 
     return (
         <div>
             <h1>Lediga lägenheter</h1>
             <div>
                 <ApartmentFilter />
-                <ApartmentList apartments={apartments} />
+                <ApartmentList apartments={fullData} />
             </div>
         </div>
     )
