@@ -19,7 +19,7 @@ export default function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
 
                     return (
                         <li key={`${crumb.title}-${index}`}>
-                            {index > 0 && '<span aria-hidden="true">→</span>'}
+                            {index > 0 && <span aria-hidden="true">→</span>}
                             {/* If breadcrumb has an href and is not the current page, render as a link */}
                             {/* Otherwise, render as plain text (and apply current page styling if it's the last crumb) */}
                             {crumb.href && !isCurrent 
