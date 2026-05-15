@@ -56,7 +56,7 @@ export default function AdminPageResidents() {
     const [searchError, setSearchError] = useState<{ message: string, details: unknown } | null>(null)
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim()
+        const value = e.target.value
 
         setSearchTerm(value)
         setSearchError(null)
@@ -82,16 +82,20 @@ export default function AdminPageResidents() {
         return () => clearTimeout(timeoutId)
     }, [searchTerm])
 
-    const normalizedSearchTerm = debouncedSearchTerm.trim().toLowerCase()
+    const normalizedSearchTerms = debouncedSearchTerm
+        .trim()
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean)
 
-    const searchResults = normalizedSearchTerm
+    const searchResults = normalizedSearchTerms.length > 0
         ? MOCK_RESIDENTS.filter(resident => {
             const haystack = SEARCHABLE_RESIDENT_KEYS // Create a haystack string by concatenating the values of the searchable keys for this resident.
                 .map(key => resident[key])
                 .join(' ')
                 .toLowerCase()
 
-            return haystack.includes(normalizedSearchTerm)
+            return normalizedSearchTerms.every(term => haystack.includes(term))
         })
         : MOCK_RESIDENTS
 
