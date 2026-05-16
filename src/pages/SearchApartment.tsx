@@ -83,6 +83,7 @@ const SearchApartment = () => {
         end_date: "2026-01-01"
     },
     ]);
+    
     useEffect(() => {
         const apartmentData: ApartmentData[] = [];
         apartments.forEach(apartment => {
@@ -109,10 +110,8 @@ const SearchApartment = () => {
     return (
         <div className="flex flex-col items-center gap-6 p-6">
             <h1 className="text-5xl">Lediga lägenheter</h1>
-            {/* <div> */}
             <ApartmentFilter />
             <ApartmentList apartments={apartmentCombined} />
-            {/* </div> */}
         </div>
     )
 }
