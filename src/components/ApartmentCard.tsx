@@ -1,6 +1,6 @@
-import type { FullData } from "../types/Apartment.ts";
+import type { ApartmentData } from "../types/Apartment.ts";
 type Props = {
-    apartment: FullData
+    apartment: ApartmentData
 }
 const ApartmentCard = ({ apartment }: Props) => {
     function subtractMonths(date:Date, months:number) {
@@ -8,7 +8,7 @@ const ApartmentCard = ({ apartment }: Props) => {
         return date;
     }
     const lastDay = subtractMonths(new Date(apartment.available), 1);
-    const month = String(lastDay.getMonth()).padStart(2,"0");
+    const month = String(Math.round(lastDay.getMonth()) + 1).padStart(2,"0");
     const day = String(lastDay.getDate()).padStart(2,"0");
     return (
         <section className="border-solid rounded-2xl bg-white">

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import ApartmentList from '../components/ApartmentList.tsx'
 import ApartmentFilter from '../components/ApartmentFilter.tsx'
-import type { Apartment, Rent, Available, FullData } from "../types/Apartment.ts";
+import type { Apartment, Rent, Available, ApartmentData } from "../types/Apartment.ts";
 
 const SearchApartment = () => {
-    const [fullData, setFullData] = useState<FullData[]>([]);
+    const [apartmentCombined, setApartmentCombined] = useState<ApartmentData[]>([]);
 
     const [apartments, setApartments] = useState<Apartment[]>([
         {
@@ -60,12 +60,12 @@ const SearchApartment = () => {
     },
     ]);
     useEffect(() => {
-        const newData: FullData[] = [];
+        const apartmentData: ApartmentData[] = [];
         apartments.forEach(apartment => {
             const thisAvailability: Available | undefined = availableFrom.find(a => a.apartment_id === apartment.id);
             const thisRent: Rent | undefined = rent.find(a => a.apartment_id === apartment.id);
             if (thisRent != undefined && thisAvailability != undefined) {
-                newData.push({
+                apartmentData.push({
                     id: apartment.id,
                     street: apartment.street,
                     postcode: apartment.postcode,
@@ -79,7 +79,7 @@ const SearchApartment = () => {
                 })
             }
         })
-        setFullData(newData);
+        setApartmentCombined(apartmentData);
     }, [])
 
     return (
@@ -87,7 +87,7 @@ const SearchApartment = () => {
             <h1>Lediga lägenheter</h1>
             <div>
                 <ApartmentFilter />
-                <ApartmentList apartments={fullData} />
+                <ApartmentList apartments={apartmentCombined} />
             </div>
         </div>
     )
