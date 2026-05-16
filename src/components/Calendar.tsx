@@ -8,15 +8,15 @@ import "./Calendar.css";
 
 // Booking
 export type Booking = {
-    id: string;
+    id: number;
     date: string;     // "2026-05-15"
-    slot: number;     // slotId
-    user: string;     // userId
+    slot: number;     // slotid
+    user: number;     // userId
 };
 
 // Timeslots
 export type Timeslot = {
-    slotId: number;
+    id: number;
     start: string;    // "07:00"
     end: string;      // "10:00"
 };
@@ -25,7 +25,7 @@ export type Timeslot = {
 export type CalendarProps = {
     bookings: Booking[];
     timeslots: Timeslot[];
-    currentUser: string;
+    currentUser: number;
 };
 
 // Component -----------------------------
@@ -44,7 +44,7 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
 
         // Loop through bookings and add them as "Booked slot" to the array
         bookings.forEach((booking) => {
-            const slot = timeslots.find((s) => s.slotId === booking.slot);
+            const slot = timeslots.find((s) => s.id === booking.slot);
             if (!slot) return;
 
             const isOwner = booking.user === currentUser;
@@ -78,17 +78,17 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
         days.forEach((date) => {
             timeslots.forEach((slot) => {
                 const isBooked = bookings.some(
-                    (b) => b.date === date && b.slot === slot.slotId
+                    (b) => b.date === date && b.slot === slot.id
                 );
 
                 if (!isBooked) {
                     events.push({
-                        id: `free-${date}-${slot.slotId}`,
+                        id: `free-${date}-${slot.id}`,
                         title: `${slot.start}-${slot.end} Ledig`,
                         start: `${date}T${slot.start}`,
                         end: `${date}T${slot.end}`,
                         extendedProps: {
-                            slot: slot.slotId,
+                            slot: slot.id,
                             date,
                             isOwner: false,
                             isAvailable: true
@@ -121,7 +121,7 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
             .map((booking) => booking.slot);
 
         const availableSlots = timeslots.filter(
-            (s) => !bookedSlots.includes(s.slotId)
+            (s) => !bookedSlots.includes(s.id)
         );
 
         alert(

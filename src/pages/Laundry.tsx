@@ -1,27 +1,26 @@
 import Calendar from "../components/Calendar";
 import { useEffect, useState } from "react";
-import { fetchLaundrySlots } from "../../api/laundry";
+import { fetchLaundrySlots, fetchBookedSlots } from "../../api/laundry";
+import type { Timeslot, Booking } from "../components/Calendar";
 
 export default function Laundry() {
     const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
-
-
-    const bookings = [
-        { id: "1", user: "Sofie", date: "2026-05-15", slot: 1 },
-        { id: "2", user: "Alex", date: "2026-05-15", slot: 3 }
-    ];
-
+    const [bookings, setBookings] = useState<Booking[]>([]);
+    const currentUser = 1;
 
     useEffect(() => {
         fetchLaundrySlots().then(setTimeslots);
     }, []);
 
+    useEffect(() => {
+        fetchBookedSlots().then(setBookings);
+    }, []);
 
     return (
         <Calendar
             bookings={bookings}
             timeslots={timeslots}
-            currentUser="Sofie"
+            currentUser={currentUser}
         />
     );
 }
