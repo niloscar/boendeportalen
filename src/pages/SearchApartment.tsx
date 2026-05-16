@@ -7,84 +7,91 @@ const SearchApartment = () => {
     const [apartmentCombined, setApartmentCombined] = useState<ApartmentData[]>([]);
 
     const [apartments, setApartments] = useState<Apartment[]>([
-        {
-            id: 1,
-            street: "Storgatan 12",
-            postcode: 11122,
-            city: "Stockholm",
-            area: 34,
-            rooms: "Ett rum och kök",
-            district: "Östermalm",
-            description: "En trevlig enrummare mitt i stan!"
-        },
-        {
-            id: 4,
-            street: "Storgatan 12",
-            postcode: 11122,
-            city: "Stockholm",
-            area: 35,
-            rooms: "Ett rum och kök",
-            district: "Östermalm",
-            description: "En trevlig enrummare mitt i stan!"
-        },
-        {
-            id: 3,
-            street: "Storgatan 12",
-            postcode: 11122,
-            city: "Stockholm",
-            area: 35,
-            rooms: "Ett rum och kök",
-            district: "Östermalm",
-            description: "En trevlig enrummare mitt i stan!"
-        }
+
     ]);
     const [rent, setRent] = useState<Rent[]>([
-        {
+    ]);
+    const [availableFrom, setAvailableFrom] = useState<Available[]>([
+    ]);
+
+    useEffect(() => {
+        setApartments([
+            {
+                id: 1,
+                street: "Storgatan 12",
+                postcode: 11122,
+                city: "Stockholm",
+                area: 34,
+                rooms: "Ett rum och kök",
+                district: "Östermalm",
+                description: "En trevlig enrummare mitt i stan!"
+            },
+            {
+                id: 4,
+                street: "Storgatan 12",
+                postcode: 11122,
+                city: "Stockholm",
+                area: 35,
+                rooms: "Ett rum och kök",
+                district: "Östermalm",
+                description: "En trevlig enrummare mitt i stan!"
+            },
+            {
+                id: 3,
+                street: "Storgatan 12",
+                postcode: 11122,
+                city: "Stockholm",
+                area: 35,
+                rooms: "Ett rum och kök",
+                district: "Östermalm",
+                description: "En trevlig enrummare mitt i stan!"
+            }
+        ])
+        setRent([
+            {
+                id: 1,
+                apartment_id: 1,
+                rent: 8000,
+                start_date: "2026-01-01",
+                end_date: null
+            },
+            {
+                id: 2,
+                apartment_id: 4,
+                rent: 13000,
+                start_date: "2026-01-01",
+                end_date: null
+            },
+            {
+                id: 3,
+                apartment_id: 3,
+                rent: 13000,
+                start_date: "2026-01-01",
+                end_date: null
+            },
+        ])
+        setAvailableFrom([{
             id: 1,
             apartment_id: 1,
-            rent: 8000,
-            start_date: "2026-01-01",
-            end_date: null
+            renter_id: 1,
+            start_date: "2025-01-01",
+            end_date: "2026-01-01"
         },
         {
             id: 2,
             apartment_id: 4,
-            rent: 13000,
-            start_date: "2026-01-01",
-            end_date: null
+            renter_id: 14,
+            start_date: "2026-02-02",
+            end_date: "2026-01-01"
         },
         {
             id: 3,
             apartment_id: 3,
-            rent: 13000,
-            start_date: "2026-01-01",
-            end_date: null
+            renter_id: 14,
+            start_date: "2026-02-02",
+            end_date: "2026-01-01"
         },
-    ]);
-    const [availableFrom, setAvailableFrom] = useState<Available[]>([{
-        id: 1,
-        apartment_id: 1,
-        renter_id: 1,
-        start_date: "2025-01-01",
-        end_date: "2026-01-01"
-    },
-    {
-        id: 2,
-        apartment_id: 4,
-        renter_id: 14,
-        start_date: "2026-02-02",
-        end_date: "2026-01-01"
-    }, 
-    {
-        id: 3,
-        apartment_id: 3,
-        renter_id: 14,
-        start_date: "2026-02-02",
-        end_date: "2026-01-01"
-    },
-    ]);
-    
-    useEffect(() => {
+        ])
         const apartmentData: ApartmentData[] = [];
         apartments.forEach(apartment => {
             const thisAvailability: Available | undefined = availableFrom.find(a => a.apartment_id === apartment.id);
