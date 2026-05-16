@@ -26,6 +26,16 @@ const SearchApartment = () => {
             rooms: "Ett rum och kök",
             district: "Östermalm",
             description: "En trevlig enrummare mitt i stan!"
+        },
+        {
+            id: 3,
+            street: "Storgatan 12",
+            postcode: 11122,
+            city: "Stockholm",
+            area: 35,
+            rooms: "Ett rum och kök",
+            district: "Östermalm",
+            description: "En trevlig enrummare mitt i stan!"
         }
     ]);
     const [rent, setRent] = useState<Rent[]>([
@@ -43,6 +53,13 @@ const SearchApartment = () => {
             start_date: "2026-01-01",
             end_date: null
         },
+        {
+            id: 3,
+            apartment_id: 3,
+            rent: 13000,
+            start_date: "2026-01-01",
+            end_date: null
+        },
     ]);
     const [availableFrom, setAvailableFrom] = useState<Available[]>([{
         id: 1,
@@ -54,6 +71,13 @@ const SearchApartment = () => {
     {
         id: 2,
         apartment_id: 4,
+        renter_id: 14,
+        start_date: "2026-02-02",
+        end_date: "2026-01-01"
+    }, 
+    {
+        id: 3,
+        apartment_id: 3,
         renter_id: 14,
         start_date: "2026-02-02",
         end_date: "2026-01-01"
@@ -83,12 +107,12 @@ const SearchApartment = () => {
     }, [])
 
     return (
-        <div>
-            <h1>Lediga lägenheter</h1>
-            <div>
-                <ApartmentFilter />
-                <ApartmentList apartments={apartmentCombined} />
-            </div>
+        <div className="flex flex-col items-center gap-6 p-6">
+            <h1 className="text-5xl">Lediga lägenheter</h1>
+            {/* <div> */}
+            <ApartmentFilter />
+            <ApartmentList apartments={apartmentCombined} />
+            {/* </div> */}
         </div>
     )
 }
