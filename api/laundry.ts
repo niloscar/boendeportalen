@@ -1,10 +1,26 @@
 import axios from "axios";
+import type { Booking, Timeslot } from "../src/components/Calendar";
+
+// Types -----------------------------
+
+type TimeslotRow = {
+    id: number;
+    slot_start: string;
+    slot_end: string;
+};
+
+type BookingRow = {
+    id: number;
+    date: string;
+    slot: number;
+    user: number;
+};
 
 export async function fetchLaundrySlots() {
     console.log("Hämtar slots från Supabase...");
 
     try {
-        const { data } = await axios.get(
+        const { data }: { data: TimeslotRow[] } = await axios.get(
             "https://zavnweqhytaqbpswyhcl.supabase.co/rest/v1/laundry_time_slots?select=*",
             {
                 headers: {
@@ -15,7 +31,7 @@ export async function fetchLaundrySlots() {
         );
 
         console.log("Supabase svar:", data);
-        return data.map((row: any) => ({
+        return data.map((row): Timeslot => ({
             id: row.id,
             start: row.slot_start,
             end: row.slot_end
@@ -31,7 +47,7 @@ export async function fetchBookedSlots() {
     console.log("Hämtar bookings från Supabase...");
 
     try {
-        const { data } = await axios.get(
+        const { data }: { data: BookingRow[] } = await axios.get(
             "https://zavnweqhytaqbpswyhcl.supabase.co/rest/v1/laundry_bookings?select=*",
             {
                 headers: {
@@ -42,7 +58,7 @@ export async function fetchBookedSlots() {
         );
 
         console.log("Supabase svar:", data);
-        return data.map((row: any) => ({
+        return data.map((row): Booking => ({
             id: row.id,
             date: row.date,
             slot: row.slot,

@@ -1,6 +1,8 @@
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import type { DateClickArg } from "@fullcalendar/interaction";
+import type { EventInput, EventClickArg, EventContentArg } from "@fullcalendar/core";
 import svLocale from "@fullcalendar/core/locales/sv";
 import "./Calendar.css";
 
@@ -50,7 +52,7 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
             const isOwner = booking.user === currentUser;
 
             events.push({
-                id: booking.id,
+                id: String(booking.id),
                 title: isOwner
                     ? `${slot.start}-${slot.end} Bokad`
                     : `${slot.start}-${slot.end} Upptaget`,
@@ -104,7 +106,7 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
 
 
     // Handles click on date
-    const handleDateClick = (e: any) => {
+    const handleDateClick = (e: DateClickArg) => {
 
         const clicked = new Date(e.dateStr);
 
@@ -176,7 +178,7 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
                     start: today.toISOString().split("T")[0],
                     end: maxDate.toISOString().split("T")[0]
                 }}
-                eventContent={(e: any) => {
+                eventContent={(e: EventContentArg) => {
                     const isOwner = e.event.extendedProps.isOwner;
 
                     return {
