@@ -7,7 +7,6 @@ import type { EventInput, EventClickArg, EventContentArg } from "@fullcalendar/c
 import svLocale from "@fullcalendar/core/locales/sv";
 import { deleteBooking, createBooking } from "../../../api/laundry";
 import ConfirmDialog from "./ConfirmDialog";
-import "./Calendar.css";
 
 // Types -----------------------------
 
