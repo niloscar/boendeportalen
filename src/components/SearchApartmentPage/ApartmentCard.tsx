@@ -1,4 +1,4 @@
-import type { ApartmentData } from "../types/Apartment.ts";
+import type { ApartmentData } from "../../types/Apartment.ts";
 type Props = {
     apartment: ApartmentData
 }

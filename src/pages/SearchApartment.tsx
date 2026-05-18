@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import ApartmentList from '../components/ApartmentList.tsx'
-import ApartmentFilter from '../components/ApartmentFilter.tsx'
+import { useState, useEffect } from 'react';
+import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
+import ApartmentFilter from '../components/SearchApartmentPage/ApartmentFilter.tsx';
 import type { Apartment, Rent, Available, ApartmentData } from "../types/Apartment.ts";
 
 const SearchApartment = () => {

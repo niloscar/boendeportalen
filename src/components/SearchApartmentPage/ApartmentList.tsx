@@ -1,5 +1,5 @@
 import ApartmentCard from './ApartmentCard.tsx'
-import type { ApartmentData } from "../types/Apartment.ts";
+import type { ApartmentData } from "../../types/Apartment.ts";
 type Props = {
     apartments: ApartmentData[]
 }
