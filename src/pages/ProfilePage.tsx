@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { ErrorReportForm } from '../components/profilePage/ErrorReportForm';
-import { AdditionalServiceForm } from '../components/profilePage/AdditionalServiceForm';
+import { ErrorReportForm } from '../components/ProfilePage/ErrorReportForm';
+import { AdditionalServiceForm } from '../components/ProfilePage/AdditionalServiceForm';
 import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';
 
