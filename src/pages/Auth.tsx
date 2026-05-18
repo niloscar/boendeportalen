@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import Login from '../componentes/auth/Login';
-import Register from '../componentes/auth/Register';
-import ForgotPassword from '../componentes/auth/ForgotPassword';
-import ResetPassword from '../componentes/auth/ResetPassword';
+import Login from '../components/auth/Login';
+import Register from '../components/auth/Register';
+import ForgotPassword from '../components/auth/ForgotPassword';
+import ResetPassword from '../components/auth/ResetPassword';
 import styles from './Auth.module.css';
 
 const isRecoveryFlow = () => {
