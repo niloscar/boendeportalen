@@ -1,26 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+
+import type { EventInput, EventClickArg } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import type { DateClickArg } from "@fullcalendar/interaction";
-import type { EventInput, EventClickArg } from "@fullcalendar/core";
 import svLocale from "@fullcalendar/core/locales/sv";
+
 import { deleteBooking, createBooking } from "../../../api/laundry";
 import ConfirmDialog from "./ConfirmDialog";
+
 
 // Types -----------------------------
 
 export type Booking = {
-    id: number;
-    date: string;
-    slot: number;
-    user: number;
-};
-
-export type CurrentBooking = {
     id: number | null;
     date: string | null;
     slot: number | null;
+    user: number;
 };
 
 export type NewBooking = {
@@ -44,60 +40,51 @@ export type CalendarProps = {
 
 // Component -----------------------------
 
-export default function Calendar({
-    bookings,
-    timeslots,
-    currentUser,
-    refreshBookings
-}: CalendarProps) {
-    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [deleteDialogMessage, setDeleteDialogMessage] = useState("");
-    const [openBookDialog, setOpenBookDialog] = useState(false);
-    const [bookDialogMessage, setBookDialogMessage] = useState("");
+export default function Calendar({ bookings, timeslots, currentUser, refreshBookings }: CalendarProps) {
 
-    const [currentBooking, setCurrentBooking] = useState<CurrentBooking>({
+    // States
+
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
+    const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>("");
+    const [openBookDialog, setOpenBookDialog] = useState<boolean>(false);
+    const [bookDialogMessage, setBookDialogMessage] = useState<string>("");
+
+    const [delBooking, setDelBooking] = useState<Booking>({ 
         id: null,
+        date: null,
         slot: null,
-        date: null
+        user: 0
     });
 
     const [newBooking, setNewBooking] = useState<NewBooking>({
-        user: currentUser,
+        date: null,
         slot: null,
-        date: null
+        user: 0
     });
 
+    // Will hold all events to be displayed in calendar
     const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
 
     // Defines a 30 day window for the calendar.
-    const today = new Date();
-    const maxDate = new Date();
-    maxDate.setDate(today.getDate() + 30);
+    const today = useMemo(() => new Date(), []);
+    const calMaxDate = new Date();
+    calMaxDate.setDate(today.getDate() + 30);
 
-    // ⭐ useEffect som ersätter ALL render-logik
+    // useEffect to render all calendar events
     useEffect(() => {
+
         const events: EventInput[] = [];
 
-        // 1. Sätt currentBooking baserat på användarens bokning
-        const ownerBooking = bookings.find(b => b.user === currentUser);
-
-        if (ownerBooking) {
-            setCurrentBooking({
-                id: ownerBooking.id,
-                slot: ownerBooking.slot,
-                date: ownerBooking.date
-            });
-        } else {
-            setCurrentBooking({ id:null, slot: null, date: null });
-        }
-
-        // 2. Lägg till bokade slots
+        //Loop through bookings
         bookings.forEach((booking) => {
+
             const slot = timeslots.find((s) => s.id === booking.slot);
+
             if (!slot) return;
 
             const isOwner = booking.user === currentUser;
 
+            // Add bookings to the events array
             events.push({
                 id: String(booking.id),
                 title: isOwner
@@ -106,15 +93,18 @@ export default function Calendar({
                 start: `${booking.date}T${slot.start}`,
                 end: `${booking.date}T${slot.end}`,
                 extendedProps: {
-                    user: booking.user,
+                    user: isOwner 
+                        ? booking.user 
+                        : null,
+                    date: booking.date,
                     slot: booking.slot,
-                    isOwner,
+                    isOwner: isOwner,
                     isAvailable: false
                 }
             });
         });
 
-        // 3. Generera alla dagar i 30-dagarsfönstret
+        // Loop through every date of the 30 day timeframe and add them to an array
         const days: string[] = [];
         for (let i = 0; i <= 30; i++) {
             const d = new Date();
@@ -122,8 +112,9 @@ export default function Calendar({
             days.push(d.toISOString().split("T")[0]);
         }
 
-        // 4. Lägg till lediga slots
+        // Fill up events array with "available slots" for every slot that isn't already booked
         days.forEach((date) => {
+
             timeslots.forEach((slot) => {
                 const isBooked = bookings.some(
                     (b) => b.date === date && b.slot === slot.id
@@ -136,8 +127,8 @@ export default function Calendar({
                         start: `${date}T${slot.start}`,
                         end: `${date}T${slot.end}`,
                         extendedProps: {
+                            date: date,
                             slot: slot.id,
-                            date,
                             isOwner: false,
                             isAvailable: true
                         }
@@ -146,33 +137,26 @@ export default function Calendar({
             });
         });
 
-        // 5. Uppdatera state EN gång
+        //Update state that holds events
         setCalendarEvents(events);
 
-    }, [bookings, timeslots, currentUser]);
+    }, [bookings, timeslots, currentUser, today]);
 
-    // Handles click on date
-    const handleDateClick = (e: DateClickArg) => {
-        const clicked = new Date(e.dateStr);
-
-        if (clicked > maxDate) {
-            alert("Du kan bara boka upp till 30 dagar framåt");
-            return;
-        }
-    };
-
-    // Handles click on booking
+    // Handles click on events
     const handleEventClick = (e: EventClickArg) => {
+
         const props = e.event.extendedProps;
         const isOwner = props.isOwner;
 
         // If slot is available
         if (props.isAvailable) {
-            setBookDialogMessage(
-                `Vill du boka tid ${timeslots[props.slot - 1].start}-${timeslots[props.slot - 1].end} ${props.date}. Tänk på att du endast kan ha en aktiv bokning. Tidigare bokningar kommer att ersättas.`
-            );
+
+            //Set message and show pop-up dialog
+            setBookDialogMessage(`Vill du boka ${props.date} ${timeslots[props.slot - 1].start}-${timeslots[props.slot - 1].end}?\n\nTänk på att du endast kan ha EN aktiv bokning åt gången och att tidigare bokningar kommer att ersättas.`);
             setOpenBookDialog(true);
-            setNewBooking({ user: currentUser, slot: props.slot, date: props.date });
+
+            //Prepare data for new booking
+            setNewBooking({ date: props.date, slot: props.slot, user: currentUser });
             return;
         }
 
@@ -182,26 +166,28 @@ export default function Calendar({
             return;
         }
 
-        const timestamp = e.event.start;
-        const date = new Date(timestamp).toLocaleDateString("sv-SE");
+        //If slot is booked by the logged in user 
+        if (isOwner) {
 
-        setDeleteDialogMessage(
-            `Ta bort bokning? ${timeslots[props.slot - 1].start}-${timeslots[props.slot - 1].end} ${date}. Den här åtgärden går inte att ångra.`
-        );
-
-        setOpenDeleteDialog(true);
-        setCurrentBooking({ id:e.event.id, slot: props.slot, date: props.date });
+            //Set message and show pop-up dialog
+            setDeleteDialogMessage(`Vill du ta bort bokningen för\n${props.date} ${timeslots[props.slot - 1].start}-${timeslots[props.slot - 1].end}?\n\nDen här åtgärden går inte att ångra.`);
+            setOpenDeleteDialog(true);
+            
+            //Prepare data for deletion
+            setDelBooking({ id: Number(e.event.id), slot: props.slot, date: props.date, user: currentUser });
+        }
     };
 
-    async function handleDelete() {
-        console.log(currentBooking.id)
-        const result = await deleteBooking(currentBooking.id);
+    // Delete booking and close dialog, re-render calendar.
+    async function handleDeleteBooking() {
+        const result = await deleteBooking(delBooking.id);
         console.log(result);
         setOpenDeleteDialog(false);
-        await refreshBookings();
+        refreshBookings();
     }
 
-    async function handleBook() {
+    // Create booking and close dialog, re-render calendar.
+    async function handleNewBooking() {
         const result = await createBooking(newBooking.user, newBooking.slot, newBooking.date);
         console.log(result);
         setOpenBookDialog(false);
@@ -235,7 +221,6 @@ export default function Calendar({
                 eventContent={(arg) => ({
                     html: `<div class="w-full">${arg.event.title}</div>`
                 })}
-                dateClick={handleDateClick}
                 eventClick={handleEventClick}
                 firstDay={1}
                 locale={svLocale}
@@ -246,24 +231,30 @@ export default function Calendar({
                 height="auto"
                 validRange={{
                     start: today.toISOString().split("T")[0],
-                    end: maxDate.toISOString().split("T")[0]
+                    end: calMaxDate.toISOString().split("T")[0]
                 }}
             />
 
             <ConfirmDialog
                 open={openDeleteDialog}
-                title="Ta bort bokning?"
+                title="Radera bokning"
                 message={deleteDialogMessage}
-                onConfirm={handleDelete}
-                onCancel={() => setOpenDeleteDialog(false)}
+                onConfirm={handleDeleteBooking}
+                onCancel={() => {
+                    setOpenDeleteDialog(false);
+                    setDelBooking({ id:null, date: null, slot: null, user: 0 });
+                }}
             />
 
             <ConfirmDialog
                 open={openBookDialog}
-                title="Vill du boka?"
+                title="Bekräfta bokning"
                 message={bookDialogMessage}
-                onConfirm={handleBook}
-                onCancel={() => setOpenBookDialog(false)}
+                onConfirm={handleNewBooking}
+                onCancel={() => { 
+                    setOpenBookDialog(false); 
+                    setNewBooking({ date: null, slot: null, user: 0 });
+                }}
             />
         </div>
     );
