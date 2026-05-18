@@ -1,4 +1,4 @@
-import apiConfig from './axiosConfig.js';
+import apiConfig from './axiosConfig.ts';
 
 export const getAvailableApartments = async () => {
     try {
