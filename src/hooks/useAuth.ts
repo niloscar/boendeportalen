@@ -36,8 +36,7 @@ export function useAuth() {
 
         return () => {
             mounted = false
-            const maybe = sub as unknown as { data?: { subscription?: { unsubscribe?: () => void } } }
-            maybe.data?.subscription?.unsubscribe?.()
+            sub.data.subscription.unsubscribe()
         }
     }, [])
 
