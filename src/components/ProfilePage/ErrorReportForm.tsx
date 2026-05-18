@@ -4,7 +4,7 @@ interface ErrorReportFormProps {
   onCancel: () => void;
 }
 
-// Mock data - kommer från databasen senare
+// Mock data - kwill come from the database later
 const ERROR_CATEGORIES = [
   'Vattenskada',
   'Elfel',
@@ -17,7 +17,7 @@ const ERROR_CATEGORIES = [
 export const ErrorReportForm = ({ onCancel }: ErrorReportFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Lägg till submit-logik här
+    // TODO: Add submit logic here
     console.log('Error report submitted');
   };
 

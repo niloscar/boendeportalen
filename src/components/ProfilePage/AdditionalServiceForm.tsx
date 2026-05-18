@@ -4,7 +4,7 @@ interface AdditionalServiceFormProps {
   onCancel: () => void;
 }
 
-// Mock data - kommer från databasen senare
+// Mock data - will come from the database later
 const SERVICE_TYPES = [
   'Renovering',
   'Målning',
@@ -17,7 +17,7 @@ const SERVICE_TYPES = [
 export const AdditionalServiceForm = ({ onCancel }: AdditionalServiceFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Lägg till submit-logik här
+    // TODO: Add submit logic here
     console.log('Additional service request submitted');
   };
 
