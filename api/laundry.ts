@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Booking, Timeslot } from "../src/components/Calendar";
+import type { Booking, Timeslot } from "../src/components/LaundryPage/Calendar";
 
 // Types -----------------------------
 
