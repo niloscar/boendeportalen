@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import type { ReportFormData } from '../components/profilePage/ReportForm';
 import { ErrorReportForm } from '../components/profilePage/ErrorReportForm';
 import { AdditionalServiceForm } from '../components/profilePage/AdditionalServiceForm';
 import Button from '../components/ui/Button';
@@ -17,12 +16,12 @@ const ProfilePage = () => {
         setActiveForm((current) => (current === form ? null : form));
     };
 
-    const handleErrorSubmit = (_data: ReportFormData) => {
+    const handleErrorSubmit = () => {
         setSubmitMessage('Felanmälan är mottagen. Vi återkommer inom kort.');
         setActiveForm(null);
     };
 
-    const handleServiceSubmit = (_data: ReportFormData) => {
+    const handleServiceSubmit = () => {
         setSubmitMessage('Din förfrågan är mottagen. Vi återkommer inom kort.');
         setActiveForm(null);
     };
