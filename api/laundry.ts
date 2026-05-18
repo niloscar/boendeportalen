@@ -16,12 +16,14 @@ type BookingRow = {
     user: number;
 };
 
+const url: string = "https://zavnweqhytaqbpswyhcl.supabase.co/rest/v1/";
+
 export async function fetchLaundrySlots() {
     console.log("Hämtar slots från Supabase...");
 
     try {
         const { data }: { data: TimeslotRow[] } = await axios.get(
-            "https://zavnweqhytaqbpswyhcl.supabase.co/rest/v1/laundry_time_slots?select=*",
+            `${url}laundry_time_slots?select=*`,
             {
                 headers: {
                     apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
@@ -48,7 +50,7 @@ export async function fetchBookedSlots() {
 
     try {
         const { data }: { data: BookingRow[] } = await axios.get(
-            "https://zavnweqhytaqbpswyhcl.supabase.co/rest/v1/laundry_bookings?select=*",
+            `${url}/laundry_bookings?select=*`,
             {
                 headers: {
                     apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
@@ -71,3 +73,56 @@ export async function fetchBookedSlots() {
     }
 }
 
+export async function deleteBooking(id: number) {
+    try {
+
+        const response = await axios.delete(url + "laundry_bookings", {
+            params: {
+                id: `eq.${id}`
+            },
+            headers: {
+                apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+                Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`
+            }
+        });
+
+        return {
+            success: true,
+            data: response.data
+        };
+
+    } catch (error: any) {
+        console.error("Error deleting booking:", error);
+
+        return {
+            success: false,
+            error: error.response?.data ?? error.message
+        };
+    }
+}
+
+export async function createBooking(user: number, slot: number, date: string) {
+    try {
+        const response = await axios.post(
+            `${url}/laundry_bookings`,
+            {
+                user,
+                slot,
+                date
+            },
+            {
+                headers: {
+                    "apikey": import.meta.env.VITE_SUPABASE_ANON_KEY,
+                    "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+                    "Content-Type": "application/json",
+                    "Prefer": "return=representation"
+                }
+            }
+        );
+
+        return response.data;
+    } catch (error) {
+        console.error("Error creating booking:", error);
+        throw error;
+    }
+}

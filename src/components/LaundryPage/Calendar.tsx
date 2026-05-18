@@ -1,9 +1,12 @@
+import { useState } from "react"
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import type { DateClickArg } from "@fullcalendar/interaction";
 import type { EventInput, EventClickArg, EventContentArg } from "@fullcalendar/core";
 import svLocale from "@fullcalendar/core/locales/sv";
+import { deleteBooking, createBooking } from "../../../api/laundry";
+import ConfirmDialog from "./ConfirmDialog";
 import "./Calendar.css";
 
 // Types -----------------------------
@@ -11,6 +14,13 @@ import "./Calendar.css";
 // Booking
 export type Booking = {
     id: number;
+    date: string;     // "2026-05-15"
+    slot: number;     // slotid
+    user: number;     // userId
+};
+
+// Booking
+export type newBooking = {
     date: string;     // "2026-05-15"
     slot: number;     // slotid
     user: number;     // userId
@@ -33,6 +43,17 @@ export type CalendarProps = {
 // Component -----------------------------
 
 export default function Calendar({ bookings = [], timeslots = [], currentUser }: CalendarProps) {
+
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [deleteDialogMessage, setDeleteDialogMessage] = useState("");
+    const [openBookDialog, setOpenBookDialog] = useState(false);
+    const [bookDialogMessage, setBookDialogMessage] = useState("");
+    const [currentBooking, setCurrentBooking] = useState<number>(0);
+    const [newBooking, setNewBooking] = useState<NewBooking>({
+        user: currentUser,
+        slot: null,
+        date: null
+    });
     
     // Defines a 30 day window for the calendar.
     const today = new Date();
@@ -115,21 +136,6 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
             alert("Du kan bara boka upp till 30 dagar framåt");
             return;
         }
-
-        // Show available slots
-        const date = e.dateStr.split("T")[0];
-        const bookedSlots = bookings
-            .filter((booking) => booking.date === date)
-            .map((booking) => booking.slot);
-
-        const availableSlots = timeslots.filter(
-            (s) => !bookedSlots.includes(s.id)
-        );
-
-        alert(
-            "Lediga slots: " +
-            availableSlots.map((s) => s.start + "-" + s.end).join(", ")
-        );
     };
 
     // Handles click on booking
@@ -141,6 +147,8 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
         // If slot is available
         if (props.isAvailable) {
             alert(`Boka slot ${props.slot} på ${props.date}`);
+            setOpenBookDialog(true);
+            setNewBooking({user:currentUser, slot:props.slot, date:props.date})
             return;
         }
 
@@ -150,9 +158,22 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
             return;
         }
 
-        // If this is your booking:
-        alert("Redigera din bokning: " + e.event.id);
+        setOpenDeleteDialog(true)
+        setCurrentBooking(Number(e.event.id));
+
     };
+
+    async function handleDelete() {
+        const result = await deleteBooking(currentBooking);
+        console.log(result);
+        setOpenDeleteDialog(false);
+    }
+
+    async function handleBook() {
+        const result = await createBooking(newBooking.user, newBooking.slot, newBooking.date);
+        console.log(result);
+        setOpenBookDialog(false);
+    }
 
     return (
         <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
@@ -165,6 +186,22 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
                     right: "prev,next"
                 }}
                 events={renderCalEvents()}
+                eventClassNames={(arg) => {
+                    const { isOwner, isAvailable } = arg.event.extendedProps;
+
+                    if (isAvailable) {
+                        return "!bg-green-50 !border !border-dashed !border-green-400 !text-green-700 !cursor-pointer !h-full flex items-center px-2";
+                    }
+
+                    if (isOwner) {
+                        return "!bg-green-600 !text-white !h-full flex items-center px-2";
+                    }
+
+                    return "!bg-neutral-300 !text-neutral-500 !pointer-events-none !h-full flex items-center px-2";
+                }}
+                eventContent={(arg) => ({
+                    html: `<div class="w-full">${arg.event.title}</div>`
+                })}
                 dateClick={handleDateClick}
                 eventClick={handleEventClick}
                 firstDay={1} // 1 = måndag
@@ -178,16 +215,20 @@ export default function Calendar({ bookings = [], timeslots = [], currentUser }:
                     start: today.toISOString().split("T")[0],
                     end: maxDate.toISOString().split("T")[0]
                 }}
-                eventContent={(e: EventContentArg) => {
-                    const isOwner = e.event.extendedProps.isOwner;
-
-                    return {
-                        html: 
-                        `<div class="${isOwner ? "own-booking" : "unavailable-slot"}">
-                            ${e.event.title}
-                        </div>`
-                    };
-                }}
+            />
+            <ConfirmDialog
+                open={openDeleteDialog}
+                title="Ta bort bokning?"
+                message="Den här åtgärden går inte att ångra."
+                onConfirm={handleDelete}
+                onCancel={() => setOpenDeleteDialog(false)}
+            />
+            <ConfirmDialog
+                open={openBookDialog}
+                title="Vill du boka?"
+                message="Tänk på att du endast kan ha en aktiv bokning. Tidigare bokningar kommer att ersättas."
+                onConfirm={handleBook}
+                onCancel={() => setOpenBookDialog(false)}
             />
         </div>
     );
