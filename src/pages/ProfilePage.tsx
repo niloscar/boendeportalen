@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ErrorReportForm } from '../components/ProfilePage/ErrorReportForm';
 import { AdditionalServiceForm } from '../components/ProfilePage/AdditionalServiceForm';
-import Button from '../components/ProfilePage/Button';
+import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';
 
 type ActiveForm = null | 'error' | 'service';
