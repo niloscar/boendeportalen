@@ -28,6 +28,7 @@ export const ErrorReportForm = ({ onCancel }: ErrorReportFormProps) => {
       descriptionPlaceholder="Beskriv vad som är trasigt..."
       onSubmit={handleSubmit}
       onCancel={onCancel}
+      showExtras={true}
     />
   );
 };

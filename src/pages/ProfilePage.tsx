@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ErrorReportForm } from '../components/ProfilePage/ErrorReportForm';
 import { AdditionalServiceForm } from '../components/ProfilePage/AdditionalServiceForm';
+import Button from '../components/ProfilePage/Button';
 import profilePageImage from '../assets/profilepage.webp';
 
 type ActiveForm = null | 'error' | 'service';
@@ -10,11 +11,11 @@ const ProfilePage = () => {
 
   return (
     <div className='min-h-screen bg-neutral-100 text-neutral-900'>
-      <header className='flex items-center justify-between px-6 py-5 sm:px-10'>
+        <header className='flex items-center justify-between px-6 py-5 sm:px-10'>
         <div className='text-lg font-semibold tracking-wide'>Logo</div>
-        <button className='rounded-2xl bg-neutral-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800'>
+        <Button variant='primary' size='md' className='px-5 py-2 text-sm'>
           Meny
-        </button>
+        </Button>
       </header>
 
       <main className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-16 sm:px-10'>
@@ -43,22 +44,18 @@ const ProfilePage = () => {
               </div>
 
               <div className='grid gap-4 sm:grid-cols-2'>
-                <button 
-                  onClick={() => setActiveForm('error')}
-                  className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
+                <Button onClick={() => setActiveForm('error')} variant='primary' size='md'>
                   Felanmälan
-                </button>
-                <button 
-                  onClick={() => setActiveForm('service')}
-                  className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
+                </Button>
+                <Button onClick={() => setActiveForm('service')} variant='primary' size='md'>
                   Efterfråga tilläggsservice
-                </button>
-                <button className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
+                </Button>
+                <Button variant='primary' size='md'>
                   Mitt kontrakt
-                </button>
-                <button className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
+                </Button>
+                <Button variant='primary' size='md'>
                   Planlösning
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -90,15 +87,9 @@ const ProfilePage = () => {
               </p>
 
               <div className='mt-6 grid gap-4 md:grid-cols-3'>
-                <button className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
-                  Kök
-                </button>
-                <button className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
-                  Badrum
-                </button>
-                <button className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
-                  Ventilation
-                </button>
+                <Button variant='primary' size='md'>Kök</Button>
+                <Button variant='primary' size='md'>Badrum</Button>
+                <Button variant='primary' size='md'>Ventilation</Button>
               </div>
             </div>
           </div>
@@ -118,9 +109,7 @@ const ProfilePage = () => {
                 <p>exempel@email.com</p>
               </div>
 
-              <button className='mt-6 rounded-2xl bg-neutral-900 px-6 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
-                Ändra uppgifter
-              </button>
+              <Button className='mt-6' variant='primary' size='md'>Ändra uppgifter</Button>
             </div>
           </div>
         </section>
