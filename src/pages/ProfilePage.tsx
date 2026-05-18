@@ -1,4 +1,13 @@
+import { useState } from 'react';
+import { ErrorReportForm } from '../components/ProfilePage/ErrorReportForm';
+import { AdditionalServiceForm } from '../components/ProfilePage/AdditionalServiceForm';
+import profilePageImage from '../assets/profilepage.webp';
+
+type ActiveForm = null | 'error' | 'service';
+
 const ProfilePage = () => {
+  const [activeForm, setActiveForm] = useState<ActiveForm>(null);
+
   return (
     <div className='min-h-screen bg-neutral-100 text-neutral-900'>
       <header className='flex items-center justify-between px-6 py-5 sm:px-10'>
@@ -34,10 +43,14 @@ const ProfilePage = () => {
               </div>
 
               <div className='grid gap-4 sm:grid-cols-2'>
-                <button className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
+                <button 
+                  onClick={() => setActiveForm('error')}
+                  className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
                   Felanmälan
                 </button>
-                <button className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
+                <button 
+                  onClick={() => setActiveForm('service')}
+                  className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
                   Efterfråga tilläggsservice
                 </button>
                 <button className='rounded-2xl bg-neutral-900 px-4 py-4 text-sm font-semibold text-white transition hover:bg-neutral-800'>
@@ -49,13 +62,21 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            <div className='flex min-h-[280px] items-center justify-center rounded-2xl bg-neutral-200/70 text-neutral-400'>
-              <div className='flex h-24 w-24 items-center justify-center rounded-2xl bg-neutral-300 text-5xl'>
-                🖼
+              <div className='flex min-h-[280px] items-center justify-center rounded-2xl bg-neutral-200/70 text-neutral-400 overflow-hidden'>
+                <img src={profilePageImage} alt='Lägenhet' className='w-full h-full object-cover' />
               </div>
-            </div>
           </div>
         </section>
+
+        {activeForm !== null && (
+          <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
+            {activeForm === 'error' ? (
+              <ErrorReportForm onCancel={() => setActiveForm(null)} />
+            ) : (
+              <AdditionalServiceForm onCancel={() => setActiveForm(null)} />
+            )}
+          </section>
+        )}
 
         <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
           <div className='flex items-start gap-4'>
