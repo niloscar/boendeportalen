@@ -8,12 +8,17 @@ export default function Laundry() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const currentUser = 1;
 
+    async function refreshBookings() {
+        const data = await fetchBookedSlots();
+        setBookings(data);
+    }
+
     useEffect(() => {
         fetchLaundrySlots().then(setTimeslots);
     }, []);
 
     useEffect(() => {
-        fetchBookedSlots().then(setBookings);
+        refreshBookings();
     }, []);
 
     return (
@@ -21,6 +26,7 @@ export default function Laundry() {
             bookings={bookings}
             timeslots={timeslots}
             currentUser={currentUser}
+            refreshBookings={refreshBookings}
         />
     );
 }
