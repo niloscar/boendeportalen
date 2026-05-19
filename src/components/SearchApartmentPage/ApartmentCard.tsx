@@ -46,10 +46,10 @@ const ApartmentCard = ({ apartment }: Props) => {
         return (<div>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </div>)
     }
     return (
-        <section className="border-solid rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 max-w-xs">
+        <section className="border border-solid border-green-500 rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 max-w-xs">
             <ImageCarousel images={images}/>
             <h2 className="text-2xl">{apartment.street}</h2>
-            <section>
+            <section className="w-full">
                 <ul className="w-full">
                     <li className="flex w-full justify-between"><p className="font-semibold">Hyra:</p><p className="self-end">{apartment.rent}</p></li>
                     <li className="flex w-full justify-between"><p className="font-semibold">Antal rum:</p><p className="self-end">{apartment.rooms}</p></li>
