@@ -2,11 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { signInWithProvider } from '../../lib/supabase'
 import { signInWithEmail } from '../../lib/supabase'
-
-type LoginProps = {
-    onSwitchToRegister: () => void
-    onForgotPassword?: () => void
-}
+import type { LoginProps } from '../../types/auth'
 
 function Login({ onSwitchToRegister, onForgotPassword }: LoginProps) {
     const [email, setEmail] = useState('')

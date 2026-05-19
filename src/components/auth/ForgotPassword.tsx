@@ -1,9 +1,6 @@
 import { useState } from 'react'
 import { resetPasswordForEmail } from '../../lib/supabase'
-
-type Props = {
-    onClose: () => void
-}
+import type { Props } from '../../types/auth'
 
 export default function ForgotPassword({ onClose }: Props) {
     const [email, setEmail] = useState('')

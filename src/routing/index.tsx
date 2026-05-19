@@ -1,14 +1,6 @@
-import type { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
-import type { User } from '@supabase/supabase-js'
 import type { Profile } from '../types/profile'
-
-type RouteGuardProps = {
-    children: ReactNode
-    user: User | null
-    loading: boolean
-    profile?: Profile | null
-}
+import type { RouteGuardProps } from '../types/routing'
 
 function hasAdminAccess(profile?: Profile | null): boolean {
     const role = String(profile?.role ?? '').toLowerCase()

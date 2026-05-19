@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
 import { handleSessionFromUrl, signOut, updateUser } from '../../lib/supabase'
-
-type Props = {
-    onClose: () => void
-}
+import type { Props } from '../../types/auth'
 
 export default function ResetPassword({ onClose }: Props) {
     const [loading, setLoading] = useState(false)

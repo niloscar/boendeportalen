@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
 import { signUpWithEmail, supabase } from '../../lib/supabase'
-
-type RegisterProps = {
-    onSwitchToLogin: () => void
-}
+import type { RegisterProps } from '../../types/auth'
 
 function Register({ onSwitchToLogin }: RegisterProps) {
     const [email, setEmail] = useState('')
