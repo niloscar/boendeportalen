@@ -174,18 +174,38 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
     // Delete booking and close dialog, re-render calendar.
     async function handleDeleteBooking() {
         if (!delBooking || !delBooking.id) return;
+
+        //Delete booking
         const result = await deleteBooking(delBooking.id);
         console.log(result);
+
+        //Cleanup
         setOpenDeleteDialog(false);
+        setDelBooking(null);
         refreshBookings();
     }
 
     // Create booking and close dialog, re-render calendar.
     async function handleNewBooking() {
         if (!newBooking?.slot || !newBooking?.date) return;
+
+        //Find current booking/-s
+        const userBookings = bookings.filter(b => b.user === currentUser);
+
+        //Book new slot
         const result = await createBooking(newBooking.user, newBooking.slot, newBooking.date);
         console.log(result);
+
+        //Delete old bookings
+        for (const b of userBookings) {
+            if (b.id) {
+                await deleteBooking(b.id);
+            }
+        }
+
+        //Cleanup
         setOpenBookDialog(false);
+        setNewBooking(null);
         await refreshBookings();
     }
 
