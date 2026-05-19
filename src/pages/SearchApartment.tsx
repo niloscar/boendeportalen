@@ -43,7 +43,7 @@ const SearchApartment = () => {
                 district: "Östermalm",
                 description: "En trevlig enrummare mitt i stan!"
             }
-        ])
+        ]);
         setRent([
             {
                 id: 1,
@@ -66,7 +66,7 @@ const SearchApartment = () => {
                 start_date: "2026-01-01",
                 end_date: null
             },
-        ])
+        ]);
         setAvailableFrom([{
             id: 1,
             apartment_id: 1,
@@ -88,8 +88,7 @@ const SearchApartment = () => {
             start_date: "2026-02-02",
             end_date: "2026-01-01"
         },
-        ])
-       
+        ]);
     }, []);
 
    const apartmentCombined: ApartmentData[] = useMemo(() => {
