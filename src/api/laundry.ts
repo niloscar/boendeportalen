@@ -66,7 +66,7 @@ export async function deleteBooking(id: number) {
 
         return { success: true, data: response.data };
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         return {
             success: false,
             error: error.response?.data ?? error.message

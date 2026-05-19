@@ -18,8 +18,10 @@ export default function Laundry() {
     }, []);
 
     useEffect(() => {
-        refreshBookings();
-    }, []);
+        (async () => {
+            await refreshBookings();
+        })();
+    }, [refreshBookings]);
 
     return (
         <Calendar

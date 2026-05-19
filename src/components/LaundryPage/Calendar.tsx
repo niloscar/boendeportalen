@@ -62,74 +62,76 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
     // useEffect to render all calendar events
     useEffect(() => {
+        const buildEvents = async () => {
+            const events: EventInput[] = [];
 
-        const events: EventInput[] = [];
+            //Loop through bookings
+            bookings.forEach((booking) => {
 
-        //Loop through bookings
-        bookings.forEach((booking) => {
+                const slot = timeslots.find((s) => s.id === booking.slot);
 
-            const slot = timeslots.find((s) => s.id === booking.slot);
+                if (!slot) return;
 
-            if (!slot) return;
+                const isOwner = booking.user === currentUser;
 
-            const isOwner = booking.user === currentUser;
-
-            // Add bookings to the events array
-            events.push({
-                id: String(booking.id),
-                title: isOwner
-                    ? `${slot.start}-${slot.end} Bokad`
-                    : `${slot.start}-${slot.end} Upptaget`,
-                start: `${booking.date}T${slot.start}`,
-                end: `${booking.date}T${slot.end}`,
-                extendedProps: {
-                    user: isOwner 
-                        ? booking.user 
-                        : null,
-                    date: booking.date,
-                    slot: booking.slot,
-                    isOwner: isOwner,
-                    isAvailable: false
-                }
+                // Add bookings to the events array
+                events.push({
+                    id: String(booking.id),
+                    title: isOwner
+                        ? `${slot.start}-${slot.end} Bokad`
+                        : `${slot.start}-${slot.end} Upptaget`,
+                    start: `${booking.date}T${slot.start}`,
+                    end: `${booking.date}T${slot.end}`,
+                    extendedProps: {
+                        user: isOwner
+                            ? booking.user
+                            : null,
+                        date: booking.date,
+                        slot: booking.slot,
+                        isOwner: isOwner,
+                        isAvailable: false
+                    }
+                });
             });
-        });
 
-        // Loop through every date of the 30 day timeframe and add them to an array
-        const days: string[] = [];
-        for (let i = 0; i <= 30; i++) {
-            const d = new Date();
-            d.setDate(today.getDate() + i);
-            days.push(d.toISOString().split("T")[0]);
-        }
+            // Loop through every date of the 30 day timeframe and add them to an array
+            const days: string[] = [];
+            for (let i = 0; i <= 30; i++) {
+                const d = new Date();
+                d.setDate(today.getDate() + i);
+                days.push(d.toISOString().split("T")[0]);
+            }
 
-        // Fill up events array with "available slots" for every slot that isn't already booked
-        days.forEach((date) => {
+            // Fill up events array with "available slots" for every slot that isn't already booked
+            days.forEach((date) => {
 
-            timeslots.forEach((slot) => {
-                const isBooked = bookings.some(
-                    (b) => b.date === date && b.slot === slot.id
-                );
+                timeslots.forEach((slot) => {
+                    const isBooked = bookings.some(
+                        (b) => b.date === date && b.slot === slot.id
+                    );
 
-                if (!isBooked) {
-                    events.push({
-                        id: `free-${date}-${slot.id}`,
-                        title: `${slot.start}-${slot.end} Ledig`,
-                        start: `${date}T${slot.start}`,
-                        end: `${date}T${slot.end}`,
-                        extendedProps: {
-                            date: date,
-                            slot: slot.id,
-                            isOwner: false,
-                            isAvailable: true
-                        }
-                    });
-                }
+                    if (!isBooked) {
+                        events.push({
+                            id: `free-${date}-${slot.id}`,
+                            title: `${slot.start}-${slot.end} Ledig`,
+                            start: `${date}T${slot.start}`,
+                            end: `${date}T${slot.end}`,
+                            extendedProps: {
+                                date: date,
+                                slot: slot.id,
+                                isOwner: false,
+                                isAvailable: true
+                            }
+                        });
+                    }
+                });
             });
-        });
 
-        //Update state that holds events
-        setCalendarEvents(events);
+            //Update state that holds events
+            setCalendarEvents(events);
+        };
 
+        buildEvents();
     }, [bookings, timeslots, currentUser, today]);
 
     // Handles click on events
@@ -163,7 +165,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
             //Set message and show pop-up dialog
             setDeleteDialogMessage(`Vill du ta bort bokningen för\n${props.date} ${slot?.start}-${slot?.end}?\n\nDen här åtgärden går inte att ångra.`);
             setOpenDeleteDialog(true);
-            
+
             //Prepare data for deletion
             setDelBooking({ id: Number(e.event.id), slot: props.slot, date: props.date, user: currentUser });
         }
@@ -243,8 +245,8 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                 title="Bekräfta bokning"
                 message={bookDialogMessage}
                 onConfirm={handleNewBooking}
-                onCancel={() => { 
-                    setOpenBookDialog(false); 
+                onCancel={() => {
+                    setOpenBookDialog(false);
                     setNewBooking(null);
                 }}
             />
