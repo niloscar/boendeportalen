@@ -1,13 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import ApartmentFilter from '../components/SearchApartmentPage/ApartmentFilter.tsx';
 import type { Apartment, Rent, Available, ApartmentData } from "../types/Apartment.ts";
 
 const SearchApartment = () => {
-    const [apartmentCombined, setApartmentCombined] = useState<ApartmentData[]>([]);
-
     const [apartments, setApartments] = useState<Apartment[]>([
-
     ]);
     const [rent, setRent] = useState<Rent[]>([
     ]);
@@ -92,28 +89,37 @@ const SearchApartment = () => {
             end_date: "2026-01-01"
         },
         ])
-        const apartmentData: ApartmentData[] = [];
-        apartments.forEach(apartment => {
-            const thisAvailability: Available | undefined = availableFrom.find(a => a.apartment_id === apartment.id);
-            const thisRent: Rent | undefined = rent.find(a => a.apartment_id === apartment.id);
-            if (thisRent != undefined && thisAvailability != undefined) {
-                apartmentData.push({
-                    id: apartment.id,
-                    street: apartment.street,
-                    postcode: apartment.postcode,
-                    city: apartment.city,
-                    area: apartment.area,
-                    rooms: apartment.rooms,
-                    district: apartment.district,
-                    description: apartment.description,
-                    rent: thisRent.rent,
-                    available: thisAvailability.end_date
-                })
-            }
-        })
-        setApartmentCombined(apartmentData);
-    }, [])
+       
+    }, []);
 
+   const apartmentCombined: ApartmentData[] = useMemo(() => {
+        return apartments.flatMap((apartment) => {
+            const thisAvailability = availableFrom.find(
+                a => a.apartment_id === apartment.id
+            );
+
+            const thisRent = rent.find(
+                r => r.apartment_id === apartment.id
+            );
+
+            if (!thisAvailability || !thisRent) {
+                return [];
+            }
+
+            return [{
+                id: apartment.id,
+                street: apartment.street,
+                postcode: apartment.postcode,
+                city: apartment.city,
+                area: apartment.area,
+                rooms: apartment.rooms,
+                district: apartment.district,
+                description: apartment.description,
+                rent: thisRent.rent,
+                available: thisAvailability.end_date
+            }];
+        });
+    }, [apartments, rent, availableFrom]);
     return (
         <div className="flex flex-col items-center gap-6 p-6">
             <h1 className="text-5xl">Lediga lägenheter</h1>
