@@ -15,3 +15,13 @@ export interface ApartmentImages {
     url: string,
     description: string
 }
+
+export type Filter =  {
+  rooms: string[],
+  maxRent: number,
+  district: string[],
+  selectedRooms: React.ChangeEventHandler<HTMLInputElement>,
+  changeRent: React.ChangeEventHandler<HTMLInputElement>,
+  selectedDistrict: React.ChangeEventHandler<HTMLInputElement>,
+  filterResults: React.MouseEventHandler<HTMLButtonElement>
+}

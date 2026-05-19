@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getApartmentImages } from '../../api/apartmentApi.ts';
 import type { ApartmentData, ApartmentImages } from "../../types/Apartment.ts";
-import Style from '../../pages/SearchApartment.module.css';
 import ImageCarousel from './ImageCarousel.tsx';
+import Button from '../ui/Button.tsx';
 
 type Props = {
     apartment: ApartmentData
@@ -33,7 +33,9 @@ const ApartmentCard = ({ apartment }: Props) => {
         }
     }
     useEffect(() => {
-        getImages();
+        if (apartment.id != null) {
+            getImages();
+        }
     }, [])
     const lastDay = subtractMonths(new Date(apartment.end_date), 1);
     const month = String(Math.round(lastDay.getMonth()) + 1).padStart(2, "0");
@@ -47,7 +49,7 @@ const ApartmentCard = ({ apartment }: Props) => {
     }
     return (
         <section className="border border-solid border-green-500 rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 max-w-xs">
-            <ImageCarousel images={images}/>
+            <ImageCarousel images={images} />
             <h2 className="text-2xl">{apartment.street}</h2>
             <section className="w-full">
                 <ul className="w-full">
@@ -58,7 +60,7 @@ const ApartmentCard = ({ apartment }: Props) => {
                     <li className="flex w-full justify-between"><p className="font-semibold">Område:</p><p className="self-end">{apartment.district}</p></li>
                 </ul>
             </section>
-            <button className="bg-neutral-900 text-white font-semibold rounded-2xl cursor-pointer hover:bg-neutral-800 transition duration-200 p-2 self-start">Läs mer</button>
+            <Button variant="secondary" size="md" type="button" children="Läs mer" className="self-start" />
         </section>
     )
 }
