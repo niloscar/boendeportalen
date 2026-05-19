@@ -1,3 +1,4 @@
+import axios from "axios";
 import apiConfig from "./axiosConfig";
 import type { Booking, Timeslot } from "../components/LaundryPage/Calendar";
 
@@ -67,9 +68,17 @@ export async function deleteBooking(id: number) {
         return { success: true, data: response.data };
 
     } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            return {
+                success: false,
+                error: error.response?.data ?? error.message
+            };
+        }
+
+        // fallback för andra typer av fel
         return {
             success: false,
-            error: error.response?.data ?? error.message
+            error: "Unexpected error"
         };
     }
 }

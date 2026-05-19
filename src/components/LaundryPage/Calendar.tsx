@@ -173,7 +173,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
     // Delete booking and close dialog, re-render calendar.
     async function handleDeleteBooking() {
-        if (!delBooking.id) return;
+        if (!delBooking || !delBooking.id) return;
         const result = await deleteBooking(delBooking.id);
         console.log(result);
         setOpenDeleteDialog(false);
@@ -182,6 +182,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
     // Create booking and close dialog, re-render calendar.
     async function handleNewBooking() {
+        if (!newBooking?.slot || !newBooking?.date) return;
         const result = await createBooking(newBooking.user, newBooking.slot, newBooking.date);
         console.log(result);
         setOpenBookDialog(false);
