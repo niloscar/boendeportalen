@@ -1,20 +1,53 @@
-import type { ApartmentData } from "../../types/Apartment.ts";
+import { useState, useEffect } from 'react';
+import { getApartmentImages } from '../../api/apartmentApi.ts';
+import type { ApartmentData, ApartmentImages } from "../../types/Apartment.ts";
+import Style from '../../pages/SearchApartment.module.css';
+import ImageCarousel from './ImageCarousel.tsx';
+
 type Props = {
     apartment: ApartmentData
 }
+
 const ApartmentCard = ({ apartment }: Props) => {
-    function subtractMonths(date:Date, months:number) {
+    const [images, setImages] = useState<ApartmentImages[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    function subtractMonths(date: Date, months: number) {
         date.setMonth(date.getMonth() - months);
         return date;
     }
 
+    const getImages = async () => {
+        try {
+            setLoading(true);
+            setError('');
+            const data = await getApartmentImages(apartment.id);
+            setImages(data);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                setError(error.message);
+            }
+        } finally {
+            setLoading(false);
+        }
+    }
+    useEffect(() => {
+        getImages();
+    }, [])
     const lastDay = subtractMonths(new Date(apartment.end_date), 1);
-    const month = String(Math.round(lastDay.getMonth()) + 1).padStart(2,"0");
-    const day = String(lastDay.getDate()).padStart(2,"0");
-    const mainImg = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/2019.07.10_metro_California-housing_Blog-post_related.webp/1920px-2019.07.10_metro_California-housing_Blog-post_related.webp.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail";
+    const month = String(Math.round(lastDay.getMonth()) + 1).padStart(2, "0");
+    const day = String(lastDay.getDate()).padStart(2, "0");
+
+    if (loading) {
+        return (<div>Laddar lägenheter, vänligen vänta</div>)
+    }
+    if (error) {
+        return (<div>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </div>)
+    }
     return (
         <section className="border-solid rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 max-w-xs">
-            <img src={mainImg} />
+            <ImageCarousel images={images}/>
             <h2 className="text-2xl">{apartment.street}</h2>
             <section>
                 <ul className="w-full">

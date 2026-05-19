@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import ApartmentFilter from '../components/SearchApartmentPage/ApartmentFilter.tsx';
-import type { Apartment, Rent, Available, ApartmentData } from "../types/Apartment.ts";
+import type { ApartmentData } from "../types/Apartment.ts";
 import { getAvailableApartments } from '../api/apartmentApi.ts';
 
 const SearchApartment = () => {
@@ -29,13 +29,13 @@ const SearchApartment = () => {
     },[]);
 
     if(loading) {
-        <div>Laddar lägenheter, vänligen vänta</div>
+        return (<div>Laddar lägenheter, vänligen vänta</div>)
     }
     if(error) {
-        <div>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </div>
+        return (<div>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </div>)
     }
     return (
-        <div className="flex flex-col items-center gap-6 p-6">
+        <div className="flex flex-col items-center gap-6 p-6 max-w-6xl">
             <h1 className="text-5xl">Lediga lägenheter</h1>
             <ApartmentFilter />
             <ApartmentList apartments={apartments} />

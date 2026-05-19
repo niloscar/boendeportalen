@@ -6,7 +6,7 @@ type Props = {
 
 const ApartmentList = ({ apartments }: Props)  => {
     return (
-        <div className="flex flex-row gap-4 items-center">
+        <div className="flex flex-row gap-4 flex-wrap items-center">
             {apartments.map(( apartment : ApartmentData) => (
                 <ApartmentCard key={apartment.id} apartment={apartment} />
             ))}
