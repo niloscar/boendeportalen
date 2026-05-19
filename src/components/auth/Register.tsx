@@ -130,7 +130,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-6">
                 <div className="flex flex-col gap-2">
                     <label htmlFor="full-name" className="text-sm font-medium text-gray-700">Fullt namn:</label>
                     <input
@@ -140,7 +140,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setFullName(e.target.value)}
                         required
                         placeholder='Johan Andersson'
-                        className="w-full p-6 bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -152,7 +152,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setPhone(e.target.value)}
                         required
                         placeholder='0701234567'
-                        className="w-full p-6 bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -164,7 +164,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         placeholder='johan.andersson@example.com'
-                        className="w-full p-6 bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -176,7 +176,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         placeholder='********'
-                        className="w-full p-6 bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -188,18 +188,18 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
                         placeholder='********'
-                        className="w-full p-6 bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
 
-                <button type="submit" disabled={loading || cooldownSeconds > 0} className="w-full py-6 bg-neutral-900 text-white font-semibold rounded-2xl cursor-pointer hover:bg-neutral-800 transition duration-200 disabled:opacity-60">
+                <button type="submit" disabled={loading || cooldownSeconds > 0} className="w-full py-4 sm:py-5 md:py-6 text-sm sm:text-base bg-neutral-900 text-white font-semibold rounded-2xl cursor-pointer hover:bg-neutral-800 transition duration-200 disabled:opacity-60">
                     {loading ? 'Skapar konto…' : cooldownSeconds > 0 ? `Vänta ${cooldownSeconds}s` : 'Skapa konto'}
                 </button>
 
                 {error && <div className="text-red-600 text-sm text-center">{error}</div>}
                 {success && <div className="text-green-600 text-sm text-center">{success}</div>}
 
-                <p className="text-center text-gray-500">
+                <p className="text-center text-sm sm:text-base text-gray-500">
                     Har du redan ett konto?
                     <button type="button" className="ml-1 text-green-500 cursor-pointer hover:underline" onClick={onSwitchToLogin}>Logga in här</button>
                 </p>

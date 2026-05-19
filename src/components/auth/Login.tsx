@@ -47,7 +47,7 @@ function Login({ onSwitchToRegister, onForgotPassword }: LoginProps) {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-6">
                 <div className="flex flex-col gap-2">
                     <label htmlFor="email" className="text-sm font-medium text-gray-700">Email:</label>
                     <input
@@ -57,7 +57,7 @@ function Login({ onSwitchToRegister, onForgotPassword }: LoginProps) {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         placeholder='Ange emailadress'
-                        className="w-full p-6 bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -69,16 +69,16 @@ function Login({ onSwitchToRegister, onForgotPassword }: LoginProps) {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         placeholder='Ange lösenord'
-                        className="w-full p-6 bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
 
                 <button type="button" onClick={() => onForgotPassword?.()} className="text-sm text-green-500 cursor-pointer hover:underline self-end">Glömt lösenord?</button>
-                <button type="submit" disabled={loading} className="w-full py-6 bg-neutral-900 text-white font-semibold rounded-2xl cursor-pointer hover:bg-neutral-800 transition duration-200 disabled:opacity-60">{loading ? 'Loggar in…' : 'Logga in'}</button>
+                <button type="submit" disabled={loading} className="w-full py-4 sm:py-5 md:py-6 text-sm sm:text-base bg-neutral-900 text-white font-semibold rounded-2xl cursor-pointer hover:bg-neutral-800 transition duration-200 disabled:opacity-60">{loading ? 'Loggar in…' : 'Logga in'}</button>
 
                 {error && <div className="text-red-600 text-sm text-center">{error}</div>}
 
-                <p className="text-center text-gray-500">
+                <p className="text-center text-sm sm:text-base text-gray-500">
                     Har du inget konto?
                     <button type="button" className="ml-1 text-green-500 cursor-pointer hover:underline" onClick={onSwitchToRegister}>
                         Registrera dig här
@@ -91,7 +91,7 @@ function Login({ onSwitchToRegister, onForgotPassword }: LoginProps) {
                     <div className="flex-1 h-px bg-gray-300/60" />
                 </div>
                 <div className="flex items-center justify-center gap-4">
-                    <button type="button" className="flex items-center gap-2 px-4 py-3 bg-neutral-200 rounded-2xl cursor-pointer hover:bg-neutral-300 transition duration-200" onClick={() => signInWithProvider('google')}>
+                    <button type="button" className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm sm:text-base bg-neutral-200 rounded-2xl cursor-pointer hover:bg-neutral-300 transition duration-200" onClick={() => signInWithProvider('google')}>
                         <img src="/google-icon.svg" alt="Google" className="w-5 h-5" />
                         Google
                     </button>
