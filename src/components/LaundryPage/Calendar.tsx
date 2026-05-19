@@ -224,18 +224,26 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                     const { isOwner, isAvailable } = arg.event.extendedProps;
 
                     if (isAvailable) {
-                        return "!bg-green-50 !border !border-dashed !border-green-400 !text-green-700 !cursor-pointer !h-full flex items-center px-2";
+                        return "!bg-neutral-200 hover:!bg-green-300 transition duration-200 !border-0 !rounded-sm p-6 !text-gray-700 !cursor-pointer !h-full flex items-center px-2";
                     }
 
                     if (isOwner) {
-                        return "!bg-green-600 !text-white !h-full flex items-center px-2";
+                        return "!bg-green-500 hover:!bg-green-700 transition duration-200 !border-0 !rounded-sm p-6 !text-white !h-full flex items-center px-2";
                     }
 
-                    return "!bg-neutral-300 !text-neutral-500 !pointer-events-none !h-full flex items-center px-2";
+                    return "!bg-neutral-100 !border-0 !rounded-sm p-6 !text-neutral-100 !pointer-events-none !h-full flex items-center px-2";
                 }}
-                eventContent={(arg) => ({
-                    html: `<div class="w-full">${arg.event.title}</div>`
-                })}
+                eventContent={(arg) => {
+                    const { isAvailable, isOwner } = arg.event.extendedProps;
+
+                    let textColor = "text-gray-700"; // default för lediga
+                    if (isOwner) textColor = "text-white";
+                    if (!isAvailable && !isOwner) textColor = "text-neutral-500";
+
+                    return {
+                        html: `<div class="w-full ${textColor}">${arg.event.title}</div>`
+                    };
+                }}
                 eventClick={handleEventClick}
                 firstDay={1}
                 locale={svLocale}
@@ -259,6 +267,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                     setOpenDeleteDialog(false);
                     setDelBooking(null);
                 }}
+                confirmColor="red"
             />
 
             <ConfirmDialog
@@ -270,6 +279,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                     setOpenBookDialog(false);
                     setNewBooking(null);
                 }}
+                confirmColor="green"
             />
         </div>
     );
