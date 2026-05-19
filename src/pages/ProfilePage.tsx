@@ -1,33 +1,199 @@
-import { useState } from 'react';
-import { ErrorReportForm } from '../components/ProfilePage/ErrorReportForm';
-import { AdditionalServiceForm } from '../components/ProfilePage/AdditionalServiceForm';
+import { useEffect, useMemo, useState } from 'react';
+import type { ChangeEvent } from 'react';
+import type { ReportFormData } from '../components/ProfilePage/ReportForm';
 import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';
+import ApartmentOverviewCard from '../components/ProfilePage/ApartmentOverviewCard';
+import ApartmentDocumentsSection from '../components/ProfilePage/ApartmentDocumentsSection';
+import PersonalInfoSection from '../components/ProfilePage/PersonalInfoSection';
+import ProfileFormsSection from '../components/ProfilePage/ProfileFormsSection';
+import type { ActiveForm } from '../components/ProfilePage/ProfileFormsSection';
+import {
+    createErrorReport,
+    createServiceRequest,
+    getApartmentDocuments,
+    getApartmentForUser,
+    getPublicApartmentFileUrl,
+    getPublicContractUrl,
+    getUserProfile,
+    uploadErrorReportAttachment,
+    uploadAvatar,
+} from '../api/profilepageApi';
+import type { ApartmentDocument, ContractSummary, UserProfile } from '../api/profilepageApi';
 
-type ActiveForm = null | 'error' | 'service';
+const isNonEmptyString = (value: string | null | undefined): value is string =>
+    Boolean(value && value.trim().length > 0);
 
 const ProfilePage = () => {
     const [activeForm, setActiveForm] = useState<ActiveForm>(null);
     const [submitMessage, setSubmitMessage] = useState<string | null>(null);
-    const apartmentInfo = null;
-    const personalInfo = null;
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadError, setLoadError] = useState<string | null>(null);
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [contract, setContract] = useState<ContractSummary | null>(null);
+    const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
+
+    // TODO: Replace with Supabase auth user id when login is ready.
+    const userId = (import.meta.env.VITE_PROFILEPAGE_USER_ID as string | undefined) ?? '';
+
+    const apartmentInfo = useMemo(() => {
+        if (!contract?.apartments) {
+            return null;
+        }
+
+        const { apartments } = contract;
+        const address = `${apartments.street}, ${apartments.postcode} ${apartments.city}`;
+        const area = apartments.area ? `${apartments.area} kvm` : null;
+        const rooms = apartments.rooms ? `${apartments.rooms} rum` : null;
+        const rent = contract.rent ? `${contract.rent} kr/mån` : null;
+
+        return [address, area, rooms, rent].filter(isNonEmptyString);
+    }, [contract]);
+
+    const personalInfo = useMemo(() => {
+        if (!profile) {
+            return null;
+        }
+
+        return [profile.full_name, profile.email, profile.phone].filter(isNonEmptyString);
+    }, [profile]);
+
+    const manualDocuments = useMemo(
+        () => documents.filter((doc) => doc.document_type === 'manual'),
+        [documents]
+    );
+
+    const floorPlanDocument = useMemo(
+        () => documents.find((doc) => doc.document_type === 'floor_plan') ?? null,
+        [documents]
+    );
+
+    useEffect(() => {
+        const loadProfileData = async () => {
+            if (!userId) {
+                setLoadError('Ingen användare är vald ännu.');
+                return;
+            }
+
+            setIsLoading(true);
+            setLoadError(null);
+
+            try {
+                const [profileData, contractData] = await Promise.all([
+                    getUserProfile(userId),
+                    getApartmentForUser(userId),
+                ]);
+
+                setProfile(profileData);
+                setContract(contractData);
+
+                if (contractData?.apartment_id) {
+                    const documentsData = await getApartmentDocuments(contractData.apartment_id);
+                    setDocuments(documentsData);
+                } else {
+                    setDocuments([]);
+                }
+            } catch {
+                setLoadError('Kunde inte hämta profilinformation. Försök igen senare.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadProfileData();
+    }, [userId]);
 
     const toggleForm = (form: ActiveForm) => {
         setActiveForm((current) => (current === form ? null : form));
     };
 
-    const handleErrorSubmit = () => {
-        setSubmitMessage('Felanmälan är mottagen. Vi återkommer inom kort.');
-        setActiveForm(null);
+    const handleErrorSubmit = async (data: ReportFormData) => {
+        if (!userId || !contract?.apartment_id) {
+            setSubmitMessage('Vi saknar uppgifter för att skapa felanmälan.');
+            return;
+        }
+
+        try {
+            const report = await createErrorReport(userId, contract.apartment_id, {
+                category: data.category,
+                subject: data.category,
+                location: data.location,
+                description: data.description,
+                extra_location: data.extraLocation,
+                allow_master_key: data.allowMasterKey,
+                has_pet: data.hasPets,
+                contact_first: data.contactFirst,
+            });
+
+            if (report?.id && data.attachment) {
+                await uploadErrorReportAttachment(report.id, data.attachment);
+            }
+
+            setSubmitMessage('Felanmälan är mottagen. Vi återkommer inom kort.');
+            setActiveForm(null);
+        } catch {
+            setSubmitMessage('Felanmälan kunde inte skickas. Försök igen senare.');
+        }
     };
 
-    const handleServiceSubmit = () => {
-        setSubmitMessage('Din förfrågan är mottagen. Vi återkommer inom kort.');
-        setActiveForm(null);
+    const handleServiceSubmit = async (data: ReportFormData) => {
+        if (!userId || !contract?.apartment_id) {
+            setSubmitMessage('Vi saknar uppgifter för att skapa förfrågan.');
+            return;
+        }
+
+        try {
+            await createServiceRequest(userId, contract.apartment_id, {
+                service_type: data.category,
+                location: data.location,
+                description: data.description,
+            });
+
+            setSubmitMessage('Din förfrågan är mottagen. Vi återkommer inom kort.');
+            setActiveForm(null);
+        } catch {
+            setSubmitMessage('Förfrågan kunde inte skickas. Försök igen senare.');
+        }
     };
 
     const showUnavailableMessage = (label: string) => {
         setSubmitMessage(`${label} är inte tillgänglig ännu.`);
+    };
+
+    const openContract = () => {
+        const contractUrl = getPublicContractUrl(contract?.contract_file_path ?? null);
+
+        if (!contractUrl) {
+            showUnavailableMessage('Mitt kontrakt');
+            return;
+        }
+
+        window.open(contractUrl, '_blank', 'noreferrer');
+    };
+
+    const openFloorPlan = () => {
+        if (!floorPlanDocument) {
+            showUnavailableMessage('Planlösning');
+            return;
+        }
+
+        window.open(getPublicApartmentFileUrl(floorPlanDocument.file_path), '_blank', 'noreferrer');
+    };
+
+    const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+
+        if (!file || !userId) {
+            return;
+        }
+
+        try {
+            const avatarUrl = await uploadAvatar(userId, file);
+            setProfile((current) => (current ? { ...current, avatar_url: avatarUrl } : current));
+            setSubmitMessage('Din profilbild är uppdaterad.');
+        } catch {
+            setSubmitMessage('Profilbilden kunde inte uppdateras. Försök igen.');
+        }
     };
 
     return (
@@ -66,131 +232,53 @@ const ProfilePage = () => {
                     </section>
                 )}
 
-                <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
-                    <div className='grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-stretch'>
-                        <div className='flex flex-col gap-6'>
-                            <div className='flex items-start gap-4'>
-                                <div
-                                    className='mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-2xl text-neutral-500'
-                                    aria-hidden='true'
-                                >
-                                    ⌂
-                                </div>
-                                <div>
-                                    <h2 className='text-lg font-semibold'>Bostadsinformation</h2>
-                                    {apartmentInfo ? (
-                                        <div className='mt-4 space-y-1 text-sm leading-6 text-gray-700'>
-                                            <p>{apartmentInfo}</p>
-                                        </div>
-                                    ) : (
-                                        <div className='mt-4 space-y-1 text-sm leading-6 text-gray-600'>
-                                            <p>Adress saknas</p>
-                                            <p>Storlek saknas</p>
-                                            <p>Rum och kök saknas</p>
-                                            <p>Hyra saknas</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className='grid gap-4 sm:grid-cols-2'>
-                                <Button onClick={() => toggleForm('error')} variant='primary' size='md'>
-                                    Felanmälan
-                                </Button>
-                                <Button onClick={() => toggleForm('service')} variant='primary' size='md'>
-                                    Efterfråga tilläggsservice
-                                </Button>
-                                <Button variant='primary' size='md' onClick={() => showUnavailableMessage('Mitt kontrakt')}>
-                                    Mitt kontrakt
-                                </Button>
-                                <Button variant='primary' size='md' onClick={() => showUnavailableMessage('Planlösning')}>
-                                    Planlösning
-                                </Button>
-                            </div>
-                        </div>
-
-                        <div className='flex min-h-[280px] items-center justify-center rounded-2xl bg-neutral-200/70 text-neutral-400 overflow-hidden'>
-                            <img src={profilePageImage} alt='Lägenhet' className='w-full h-full object-cover' />
-                        </div>
-                    </div>
-                </section>
-
-                {activeForm !== null && (
-                    <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
-                        {activeForm === 'error' ? (
-                            <ErrorReportForm
-                                onCancel={() => setActiveForm(null)}
-                                onSubmit={handleErrorSubmit}
-                            />
-                        ) : (
-                            <AdditionalServiceForm
-                                onCancel={() => setActiveForm(null)}
-                                onSubmit={handleServiceSubmit}
-                            />
-                        )}
+                {isLoading && (
+                    <section className='rounded-2xl border border-neutral-200 bg-white p-4 text-sm text-gray-700'>
+                        Hämtar dina uppgifter...
                     </section>
                 )}
 
-                <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
-                    <div className='flex items-start gap-4'>
-                        <div
-                            className='flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-lg text-neutral-500'
-                            aria-hidden='true'
-                        >
-                            i
-                        </div>
-                        <div className='flex-1'>
-                            <h2 className='text-lg font-semibold'>Ta hand om din lägenhet</h2>
-                            <p className='mt-3 max-w-2xl text-sm leading-6 text-gray-600'>
-                                Nyttiga dokument om hur du tar hand om din lägenhet på bästa sätt
-                            </p>
-
-                            <div className='mt-6 grid gap-4 md:grid-cols-3'>
-                                <Button variant='primary' size='md' onClick={() => showUnavailableMessage('Kök')}>
-                                    Kök
-                                </Button>
-                                <Button variant='primary' size='md' onClick={() => showUnavailableMessage('Badrum')}>
-                                    Badrum
-                                </Button>
-                                <Button variant='primary' size='md' onClick={() => showUnavailableMessage('Ventilation')}>
-                                    Ventilation
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
-                    <div className='flex items-start gap-4'>
-                        <div
-                            className='flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-lg text-neutral-500'
-                            aria-hidden='true'
-                        >
-                            ⍰
-                        </div>
-                        <div>
-                            <h2 className='text-lg font-semibold'>Mina uppgifter</h2>
-                            {personalInfo ? (
-                                <div className='mt-5 space-y-1 text-sm leading-6 text-gray-700'>
-                                    <p>{personalInfo}</p>
-                                </div>
-                            ) : (
-                                <p className='mt-5 text-sm leading-6 text-gray-600'>
-                                    Inga personuppgifter tillgängliga.
-                                </p>
-                            )}
-
-                            <Button
-                                className='mt-6'
-                                variant='primary'
-                                size='md'
-                                onClick={() => showUnavailableMessage('Ändra uppgifter')}
-                            >
-                                Ändra uppgifter
+                {loadError && (
+                    <section
+                        className='rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-900'
+                        role='status'
+                        aria-live='polite'
+                    >
+                        <div className='flex items-center justify-between gap-4'>
+                            <p>{loadError}</p>
+                            <Button variant='secondary' size='md' onClick={() => setLoadError(null)}>
+                                Stäng
                             </Button>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                )}
+
+                <ApartmentOverviewCard
+                    apartmentInfo={apartmentInfo}
+                    onErrorReport={() => toggleForm('error')}
+                    onServiceRequest={() => toggleForm('service')}
+                    onOpenContract={openContract}
+                    onOpenFloorPlan={openFloorPlan}
+                    imageSrc={profilePageImage}
+                />
+
+                <ProfileFormsSection
+                    activeForm={activeForm}
+                    onCloseForm={() => setActiveForm(null)}
+                    onErrorSubmit={handleErrorSubmit}
+                    onServiceSubmit={handleServiceSubmit}
+                />
+
+                <ApartmentDocumentsSection
+                    documents={manualDocuments}
+                    getDocumentUrl={getPublicApartmentFileUrl}
+                />
+
+                <PersonalInfoSection
+                    personalInfo={personalInfo}
+                    onEditProfile={() => showUnavailableMessage('Ändra uppgifter')}
+                    onAvatarUpload={handleAvatarUpload}
+                />
             </main>
         </div>
     );
