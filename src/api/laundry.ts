@@ -24,7 +24,7 @@ export async function fetchLaundrySlots() {
             "laundry_time_slots?select=*"
         );
 
-        return data.map((row): Timeslot => ({
+        return data.map((row:TimeslotRow): Timeslot => ({
             id: row.id,
             start: row.slot_start,
             end: row.slot_end
@@ -45,7 +45,7 @@ export async function fetchBookedSlots() {
             `laundry_bookings?select=*&date=gte.${today}`
         );
 
-        return data.map((row): Booking => ({
+        return data.map((row:BookingRow): Booking => ({
             id: row.id,
             date: row.date,
             slot: row.slot,
