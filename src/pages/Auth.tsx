@@ -57,7 +57,7 @@ function Auth() {
                 <div className='w-1/3 min-h-full flex bg-white items-stretch justify-center p-16 overflow-y-auto'>
                     <div className='w-full min-h-full flex flex-col gap-8'>
                         <div className='flex flex-row items-center justify-between'>
-                            <h2 className='text-4xl text-neutral-900 font-extrabold'>Bostads<span className='text-green-500'>Portalen</span></h2>
+                            <h2 className='text-4xl text-neutral-900 font-extrabold'>Boende<span className='text-green-500'>Portalen</span></h2>
                             <div className='ml-2 text-right'>
                                 <div className='text-gray-600 text-sm'>{weekday} | {formattedTime}</div>
                             </div>
@@ -68,7 +68,7 @@ function Auth() {
                                 {isLogin ? 'Välkommen!' : 'Registrera dig!'}
                             </h1>
                             <p className='text-md text-gray-700 text-center'>
-                                {isLogin ? 'Välkommen till BostadsPortalen! Här kan du enkelt hantera din bostad och få hjälp med vardagliga uppgifter.' : 'Skapa ett konto för att komma igång med BostadsPortalen!'}
+                                {isLogin ? 'Välkommen till BoendePortalen! Här kan du enkelt hantera din bostad och få hjälp med vardagliga uppgifter.' : 'Skapa ett konto för att komma igång med BoendePortalen!'}
                             </p>
                         </div>
 
@@ -84,7 +84,7 @@ function Auth() {
                         {showReset && <ResetPassword onClose={() => setShowReset(false)} />}
 
                         <div className='mt-auto text-center'>
-                            <p className='text-gray-500'>© 2026 <strong>BostadsPortalen</strong>. All rights reserved.</p>
+                            <p className='text-gray-500'>© 2026 <strong>BoendePortalen</strong>. All rights reserved.</p>
                         </div>
                     </div>
                 </div>
