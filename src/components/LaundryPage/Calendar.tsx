@@ -7,7 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
 
 import { deleteBooking, createBooking } from "../../api/laundry";
-import ConfirmDialog from "./ConfirmDialog";
+import ConfirmDialog from "../ConfirmDialog";
 
 
 // Types -----------------------------
@@ -49,18 +49,8 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
     const [openBookDialog, setOpenBookDialog] = useState<boolean>(false);
     const [bookDialogMessage, setBookDialogMessage] = useState<string>("");
 
-    const [delBooking, setDelBooking] = useState<Booking>({ 
-        id: null,
-        date: null,
-        slot: null,
-        user: 0
-    });
-
-    const [newBooking, setNewBooking] = useState<NewBooking>({
-        date: null,
-        slot: null,
-        user: 0
-    });
+    const [delBooking, setDelBooking] = useState<Booking | null>(null);
+    const [newBooking, setNewBooking] = useState<NewBooking | null>(null);
 
     // Will hold all events to be displayed in calendar
     const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
@@ -147,12 +137,13 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
         const props = e.event.extendedProps;
         const isOwner = props.isOwner;
+        const slot = timeslots.find(s => s.id === props.slot);
 
         // If slot is available
         if (props.isAvailable) {
 
             //Set message and show pop-up dialog
-            setBookDialogMessage(`Vill du boka ${props.date} ${timeslots[props.slot - 1].start}-${timeslots[props.slot - 1].end}?\n\nTänk på att du endast kan ha EN aktiv bokning åt gången och att tidigare bokningar kommer att ersättas.`);
+            setBookDialogMessage(`Vill du boka ${props.date} ${slot?.start}-${slot?.end}?\n\nTänk på att du endast kan ha EN aktiv bokning åt gången och att tidigare bokningar kommer att ersättas.`);
             setOpenBookDialog(true);
 
             //Prepare data for new booking
@@ -170,7 +161,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
         if (isOwner) {
 
             //Set message and show pop-up dialog
-            setDeleteDialogMessage(`Vill du ta bort bokningen för\n${props.date} ${timeslots[props.slot - 1].start}-${timeslots[props.slot - 1].end}?\n\nDen här åtgärden går inte att ångra.`);
+            setDeleteDialogMessage(`Vill du ta bort bokningen för\n${props.date} ${slot?.start}-${slot?.end}?\n\nDen här åtgärden går inte att ångra.`);
             setOpenDeleteDialog(true);
             
             //Prepare data for deletion
@@ -180,6 +171,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
     // Delete booking and close dialog, re-render calendar.
     async function handleDeleteBooking() {
+        if (!delBooking.id) return;
         const result = await deleteBooking(delBooking.id);
         console.log(result);
         setOpenDeleteDialog(false);
@@ -242,7 +234,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                 onConfirm={handleDeleteBooking}
                 onCancel={() => {
                     setOpenDeleteDialog(false);
-                    setDelBooking({ id:null, date: null, slot: null, user: 0 });
+                    setDelBooking(null);
                 }}
             />
 
@@ -253,7 +245,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                 onConfirm={handleNewBooking}
                 onCancel={() => { 
                     setOpenBookDialog(false); 
-                    setNewBooking({ date: null, slot: null, user: 0 });
+                    setNewBooking(null);
                 }}
             />
         </div>

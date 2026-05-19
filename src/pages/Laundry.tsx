@@ -1,5 +1,5 @@
 import Calendar from "../components/LaundryPage/Calendar";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundry";
 import type { Timeslot, Booking } from "../components/LaundryPage/Calendar";
 
@@ -8,10 +8,10 @@ export default function Laundry() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const currentUser = 1;
 
-    async function refreshBookings() {
+    const refreshBookings = useCallback(async () => {
         const data = await fetchBookedSlots();
         setBookings(data);
-    }
+    }, []);
 
     useEffect(() => {
         fetchLaundrySlots().then(setTimeslots);
