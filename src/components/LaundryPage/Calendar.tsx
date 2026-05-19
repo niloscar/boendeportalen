@@ -6,7 +6,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
 
-import { deleteBooking, createBooking } from "../../../api/laundry";
+import { deleteBooking, createBooking } from "../../api/laundry";
 import ConfirmDialog from "./ConfirmDialog";
 
 
