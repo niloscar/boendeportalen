@@ -16,20 +16,13 @@ const ApartmentCard = ({ apartment }: Props) => {
         <section className="border-solid rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 max-w-xs">
             <img src={mainImg} />
             <h2 className="text-2xl">{apartment.street}</h2>
-            <section className="flex flex-row gap-4 justify-between w-full">
-                <ul className="font-semibold">
-                    <li>Hyra:</li>
-                    <li>Antal rum:</li>
-                    <li>Inflyttning:</li>
-                    <li>Sista anmälningsdag:</li>
-                    <li>Område:</li>
-                </ul>
-                <ul>
-                    <li>{apartment.rent}</li>
-                    <li>{apartment.rooms}</li>
-                    <li>{apartment.end_date}</li>
-                    <li>{lastDay.getFullYear()}-{month}-{day}</li>
-                    <li>{apartment.district}</li>
+            <section>
+                <ul className="w-full">
+                    <li className="flex w-full justify-between"><p className="font-semibold">Hyra:</p><p className="self-end">{apartment.rent}</p></li>
+                    <li className="flex w-full justify-between"><p className="font-semibold">Antal rum:</p><p className="self-end">{apartment.rooms}</p></li>
+                    <li className="flex w-full justify-between"><p className="font-semibold">Inflyttning:</p><p className="self-end">{apartment.end_date}</p></li>
+                    <li className="flex w-full justify-between"><p className="font-semibold">Sista anmälningsdag:</p><p className="self-end">{lastDay.getFullYear()}-{month}-{day}</p></li>
+                    <li className="flex w-full justify-between"><p className="font-semibold">Område:</p><p className="self-end">{apartment.district}</p></li>
                 </ul>
             </section>
             <button className="bg-neutral-900 text-white font-semibold rounded-2xl cursor-pointer hover:bg-neutral-800 transition duration-200 p-2 self-start">Läs mer</button>
