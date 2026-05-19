@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
 import Login from '../components/auth/Login';
 import Register from '../components/auth/Register';
 import ForgotPassword from '../components/auth/ForgotPassword';
@@ -40,12 +38,6 @@ function Auth() {
         const id = setInterval(() => setNow(new Date()), 60_000)
         return () => clearInterval(id)
     }, [])
-
-    const navigate = useNavigate()
-    const { user, loading } = useAuth()
-    useEffect(() => {
-        if (!loading && user && !isRecoveryFlow() && !showReset) navigate('/')
-    }, [user, loading, navigate, showReset])
 
     const weekdays = ['Söndag', 'Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag']
     const pad = (n: number) => String(n).padStart(2, '0')
