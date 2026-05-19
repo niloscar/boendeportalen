@@ -7,7 +7,8 @@ const ApartmentCard = ({ apartment }: Props) => {
         date.setMonth(date.getMonth() - months);
         return date;
     }
-    const lastDay = subtractMonths(new Date(apartment.available), 1);
+
+    const lastDay = subtractMonths(new Date(apartment.end_date), 1);
     const month = String(Math.round(lastDay.getMonth()) + 1).padStart(2,"0");
     const day = String(lastDay.getDate()).padStart(2,"0");
     const mainImg = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/2019.07.10_metro_California-housing_Blog-post_related.webp/1920px-2019.07.10_metro_California-housing_Blog-post_related.webp.png?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail";
@@ -26,7 +27,7 @@ const ApartmentCard = ({ apartment }: Props) => {
                 <ul>
                     <li>{apartment.rent}</li>
                     <li>{apartment.rooms}</li>
-                    <li>{apartment.available}</li>
+                    <li>{apartment.end_date}</li>
                     <li>{lastDay.getFullYear()}-{month}-{day}</li>
                     <li>{apartment.district}</li>
                 </ul>

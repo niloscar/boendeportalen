@@ -35,5 +35,5 @@ export interface ApartmentData {
     district: string,
     description: string,
     rent: number,
-    available: string
+    end_date: string
 }
