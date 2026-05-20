@@ -1,0 +1,35 @@
+.breadcrumbs {
+    font-size: 0.875rem;
+    color: var(--color-neutral-500);
+    margin: calc(var(--spacing) * 3) 0;
+    background-color: var(--color-neutral-100);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    border-radius: var(--radius-2xl);
+    width: fit-content;
+
+    & ol {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing);
+
+        & li {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing);
+        }
+    }
+}
+
+.link {
+    color: var(--color-neutral-500);
+
+    &:hover {
+        color: var(--color-neutral-700);
+        text-decoration: underline;
+    }
+}
+
+.current {
+    color: var(--color-neutral-900);
+    font-weight: 500;
+}
