@@ -10,7 +10,6 @@ const apiConfig = axios.create({
     timeout: 10000
 });
 
-// Injicera JWT-token från aktiv session på varje anrop
 apiConfig.interceptors.request.use(async (config) => {
     const { data } = await supabase.auth.getSession();
     const token = data.session?.access_token;
