@@ -20,8 +20,10 @@ export type Filter =  {
   rooms: string[],
   maxRent: number,
   district: string[],
+  filtersVisibility: boolean,
   selectedRooms: React.ChangeEventHandler<HTMLInputElement>,
   changeRent: React.ChangeEventHandler<HTMLInputElement>,
   selectedDistrict: React.ChangeEventHandler<HTMLInputElement>,
-  filterResults: React.MouseEventHandler<HTMLButtonElement>
+  filterResults: React.MouseEventHandler<HTMLButtonElement>,
+  setVisibility: (arg: boolean) => void;
 }

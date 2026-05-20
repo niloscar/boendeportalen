@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import type { ApartmentImages } from "../../types/Apartment.ts";
-import Style from '../../pages/SearchApartment.module.css';
 
 type Props = {
     images: ApartmentImages[]
@@ -27,8 +26,8 @@ const ImageCarousel = ({ images }: Props) => {
     return (
         <div className="relative m-auto w-full">
             <img src={images[nextIndex].url} className={`h-50 m-auto`} alt={images[nextIndex].description} />
-            <a className={Style.prev} onClick={() => back()}>❮</a>
-            <a className={Style.next} onClick={() => forward()}>❯</a>
+            <a className={`hover:bg-neutral-200 absolute top-[40%] cursor-pointer text-green-500 rounded-l text-2xl p-4`} onClick={() => back()}>❮</a>
+            <a className={`hover:bg-neutral-200 absolute top-[40%] right-0 cursor-pointer text-green-500 rounded-r text-2xl p-4`} onClick={() => forward()}>❯</a>
         </div>
     )
 }

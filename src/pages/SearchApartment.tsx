@@ -13,6 +13,7 @@ const SearchApartment = () => {
     const [rooms, setRooms] = useState<string[]>([]);
     const [maxRent, setMaxRent] = useState(20000);
     const [district, setDistrict] = useState<string[]>([]);
+    const [filtersVisibility, setFilterVisibility] = useState<boolean>(false);
 
     const fetchApartments = async () => {
         try {
@@ -38,6 +39,10 @@ const SearchApartment = () => {
         const filterRent = filterRooms.filter(a => a.rent < maxRent);
         const filterArea = district.length > 0 ? filterRent.filter((a) => district.some((dr) => dr === a.district)) : filterRent;
         setFilteredApartments(filterArea);
+        setFilterVisibility(false);
+    }
+    const setVisibility = (visibility : boolean) => {
+        setFilterVisibility(visibility)
     }
     const selectedRooms: React.ChangeEventHandler<HTMLInputElement> = (e) => {
         const isRoomChecked = rooms.find(r => r == e.target.name);
@@ -80,8 +85,8 @@ const SearchApartment = () => {
     return (
         <div className="flex flex-col items-center gap-6 p-6 max-w-6xl">
             <h1 className="text-5xl">Lediga lägenheter</h1>
-            <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} />
-            {apartments.length < 1 ? <div>Kunde inte hitta några lediga lägenheter</div> :
+            <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} filtersVisibility={filtersVisibility} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} setVisibility={setVisibility} />
+            {filteredApartments.length < 1 ? <div>Kunde inte hitta några lediga lägenheter</div> :
                 <ApartmentList apartments={filteredApartments} />}
         </div>
     )
