@@ -8,6 +8,7 @@ import ApartmentDocumentsSection from '../components/ProfilePage/ApartmentDocume
 import PersonalInfoSection from '../components/ProfilePage/PersonalInfoSection';
 import ProfileFormsSection from '../components/ProfilePage/ProfileFormsSection';
 import type { ActiveForm } from '../components/ProfilePage/ProfileFormsSection';
+import useAuth from '../hooks/useAuth';
 import {
     createErrorReport,
     createServiceRequest,
@@ -33,8 +34,8 @@ const ProfilePage = () => {
     const [contract, setContract] = useState<ContractSummary | null>(null);
     const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
 
-    // TODO: Replace with Supabase auth user id when login is ready.
-    const userId = (import.meta.env.VITE_PROFILEPAGE_USER_ID as string | undefined) ?? '';
+    const { user, loading } = useAuth();
+    const userId = user?.id ?? '';
 
     const apartmentInfo = useMemo(() => {
         if (!contract?.apartments) {
@@ -70,8 +71,11 @@ const ProfilePage = () => {
 
     useEffect(() => {
         const loadProfileData = async () => {
+            if (loading) {
+                return;
+            }
             if (!userId) {
-                setLoadError('Ingen användare är vald ännu.');
+                setLoadError('Du behöver logga in för att se sidan.');
                 return;
             }
 
@@ -101,7 +105,7 @@ const ProfilePage = () => {
         };
 
         loadProfileData();
-    }, [userId]);
+    }, [loading, userId]);
 
     const toggleForm = (form: ActiveForm) => {
         setActiveForm((current) => (current === form ? null : form));
