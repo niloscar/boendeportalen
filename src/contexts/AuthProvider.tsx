@@ -1,14 +1,24 @@
 import { useState, type ReactNode } from 'react'
 import { AuthContext, type AuthContextValue, type User } from '../contexts/AuthContext'
+import { saveToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from '../utils/storage'
 
 type AuthProviderProps = {
     children: ReactNode
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
+const EXAMPLE_USER: User = {
+    id: 1,
+    level: 2, // Admin level(?)
+    fname: 'Admin',
+    lname: 'User',
+    email: import.meta.env.VITE_EXAMPLE_EMAIL
+}
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [user, setUser] = useState(null as User | null)
+export function AuthProvider({ children }: AuthProviderProps) {
+    const storedUser = getFromLocalStorage<User>('auth')
+
+    const [user, setUser] = useState<User | null>(storedUser)
+    const [isAuthenticated, setIsAuthenticated] = useState(Boolean(storedUser))
 
     const login = ({ email, password }: { email: string; password: string }) => {
         const exampleEmail = import.meta.env.VITE_EXAMPLE_EMAIL
@@ -16,24 +26,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         if (email === exampleEmail && password === examplePassword) {
             setIsAuthenticated(true)
-            setUser({ 
-                id: 1,
-                level: 2, // Admin level(?)
-                fname: 'Admin',
-                lname: 'User',
-                email: exampleEmail
-            })
-
-            console.log('Login successful')
-            return true
+            setUser(EXAMPLE_USER)
+            saveToLocalStorage('auth', EXAMPLE_USER)
         } else {
             console.log('Invalid credentials')
-            return false
         }
     }
+    
     const logout = () => {
         setIsAuthenticated(false)
         setUser(null)
+        removeFromLocalStorage('auth')
         console.log('Logged out')
     }
 
