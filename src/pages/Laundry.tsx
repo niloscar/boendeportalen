@@ -1,7 +1,7 @@
 import Calendar from "../components/LaundryPage/Calendar";
 import { useEffect, useState, useCallback } from "react";
 import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundry";
-import type { Timeslot, Booking } from "../components/LaundryPage/Calendar";
+import type { Timeslot, Booking } from "../types/laundry";
 
 export default function Laundry() {
     const [timeslots, setTimeslots] = useState<Timeslot[]>([]);

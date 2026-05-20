@@ -7,38 +7,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
 
 import { deleteBooking, createBooking } from "../../api/laundry";
-import ConfirmDialog from "../ConfirmDialog";
-
-
-// Types -----------------------------
-
-export type Booking = {
-    id: number | null;
-    date: string | null;
-    slot: number | null;
-    user: number;
-};
-
-export type NewBooking = {
-    date: string | null;
-    slot: number | null;
-    user: number;
-};
-
-export type Timeslot = {
-    id: number;
-    start: string;
-    end: string;
-};
-
-export type CalendarProps = {
-    bookings: Booking[];
-    timeslots: Timeslot[];
-    currentUser: number;
-    refreshBookings: () => void;
-};
-
-// Component -----------------------------
+import type { NewBooking, Booking, CalendarProps } from "../../types/laundry";
+import ConfirmDialog from "../ui/ConfirmDialog";
 
 export default function Calendar({ bookings, timeslots, currentUser, refreshBookings }: CalendarProps) {
 
@@ -51,6 +21,8 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
     const [delBooking, setDelBooking] = useState<Booking | null>(null);
     const [newBooking, setNewBooking] = useState<NewBooking | null>(null);
+
+    const [isProcessing, setIsProcessing] = useState(false);
 
     // Will hold all events to be displayed in calendar
     const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
@@ -173,7 +145,15 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
     // Delete booking and close dialog, re-render calendar.
     async function handleDeleteBooking() {
-        if (!delBooking || !delBooking.id) return;
+
+        //Prevents multiple clicks
+        if (isProcessing) return; 
+        setIsProcessing(true);
+
+        if (!delBooking || !delBooking.id) {
+            setIsProcessing(false);
+            return;
+        }
 
         //Delete booking
         const result = await deleteBooking(delBooking.id);
@@ -181,13 +161,22 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
         //Cleanup
         setOpenDeleteDialog(false);
+        setIsProcessing(false);
         setDelBooking(null);
         refreshBookings();
     }
 
     // Create booking and close dialog, re-render calendar.
     async function handleNewBooking() {
-        if (!newBooking?.slot || !newBooking?.date) return;
+
+        //Prevents multiple clicks
+        if (isProcessing) return; 
+        setIsProcessing(true);
+
+        if (!newBooking?.slot || !newBooking?.date) {
+            setIsProcessing(false); 
+            return;
+        }
 
         //Find current booking/-s
         const userBookings = bookings.filter(b => b.user === currentUser);
@@ -205,6 +194,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
         //Cleanup
         setOpenBookDialog(false);
+        setIsProcessing(false);
         setNewBooking(null);
         await refreshBookings();
     }
@@ -228,7 +218,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                     }
 
                     if (isOwner) {
-                        return "!bg-green-500 hover:!bg-green-700 transition duration-200 !border-0 !rounded-sm p-6 !text-white !h-full flex items-center px-2";
+                        return "!bg-green-500 hover:!bg-green-700 transition duration-200 !border-0 !rounded-sm p-6 !text-white !cursor-pointer !h-full flex items-center px-2";
                     }
 
                     return "!bg-neutral-100 !border-0 !rounded-sm p-6 !text-neutral-100 !pointer-events-none !h-full flex items-center px-2";
@@ -237,7 +227,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                     const { isAvailable, isOwner } = arg.event.extendedProps;
 
                     let textColor = "text-gray-700"; // default för lediga
-                    if (isOwner) textColor = "text-white";
+                    if (isOwner) textColor = "text-white cursor-pointer";
                     if (!isAvailable && !isOwner) textColor = "text-neutral-500";
 
                     return {
@@ -262,6 +252,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                 open={openDeleteDialog}
                 title="Radera bokning"
                 message={deleteDialogMessage}
+                isProcessing={isProcessing}
                 onConfirm={handleDeleteBooking}
                 onCancel={() => {
                     setOpenDeleteDialog(false);
@@ -274,6 +265,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
                 open={openBookDialog}
                 title="Bekräfta bokning"
                 message={bookDialogMessage}
+                isProcessing={isProcessing}
                 onConfirm={handleNewBooking}
                 onCancel={() => {
                     setOpenBookDialog(false);

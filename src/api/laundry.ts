@@ -1,21 +1,6 @@
 import axios from "axios";
 import apiConfig from "./axiosConfig";
-import type { Booking, Timeslot } from "../components/LaundryPage/Calendar";
-
-// Types -----------------------------
-
-type TimeslotRow = {
-    id: number;
-    slot_start: string;
-    slot_end: string;
-};
-
-type BookingRow = {
-    id: number;
-    date: string;
-    slot: number;
-    user: number;
-};
+import type { TimeslotRow, Timeslot, BookingRow, Booking } from "../types/laundry";
 
 //Fetch timeslots from Supabase
 export async function fetchLaundrySlots() {

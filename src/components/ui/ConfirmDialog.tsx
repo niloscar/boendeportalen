@@ -1,20 +1,15 @@
 import { useEffect } from "react";
+import type { ConfirmDialogProps } from "../../types/ui";
 
 export default function ConfirmDialog({
     open,
     title = "Är du säker?",
     message = "Vill du verkligen fortsätta?",
+    isProcessing,
     onConfirm,
     onCancel,
     confirmColor
-}: {
-    open: boolean;
-    title?: string;
-    message?: string;
-    onConfirm: () => void;
-    onCancel: () => void;
-    confirmColor: "green" | "red";
-}) {
+}: ConfirmDialogProps) {
 
     const colorMap = {
         green: "bg-green-500 hover:bg-green-700",
@@ -54,11 +49,12 @@ export default function ConfirmDialog({
 
                     <button
                         onClick={onConfirm}
+                        disabled={isProcessing}
                         className={`px-4 py-2 rounded-xl text-white transition ${colorMap[confirmColor]}`}>
-                        OK
-                </button>
+                        {isProcessing ? "..." : "OK"}
+                    </button>
+                </div>
             </div>
-        </div>
         </div >
     );
 }
