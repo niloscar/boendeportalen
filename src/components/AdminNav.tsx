@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../contexts/useAuth'
 import styles from './AdminNav.module.css'
 
 type AdminSubPage = { slug: string, title: string }

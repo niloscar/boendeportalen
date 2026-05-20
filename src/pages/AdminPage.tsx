@@ -1,5 +1,5 @@
 import { Navigate, useParams } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../contexts/useAuth'
 import AdminLoginForm from '../components/AdminLoginForm'
 import AdminNav from '../components/AdminNav'
 import AdminDashboard from '../components/AdminDashboard'
