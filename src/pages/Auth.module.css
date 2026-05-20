@@ -1,0 +1,56 @@
+.cityfloat {
+    animation: cityfloat 14s ease-in-out infinite;
+    transform-origin: center;
+    will-change: transform;
+}
+
+@keyframes cityfloat {
+    0%, 100% {
+        transform: translateY(0) scale(0.98);
+    }
+
+    50% {
+        transform: translateY(-12px) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cityfloat {
+        animation: none;
+    }
+}
+
+.cityImage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+}
+
+.cardTransition {
+    transition: width 280ms ease, height 280ms ease, max-height 280ms ease, box-shadow 280ms ease;
+}
+
+.formSwap {
+    will-change: transform, opacity;
+    transition: opacity 180ms ease, transform 220ms ease;
+}
+
+.formSwapIn {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.formSwapOut {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .formSwap, .cardTransition {
+        animation: none;
+        transition: none;
+    }
+}

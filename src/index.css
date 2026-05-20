@@ -25,4 +25,6 @@
 .fc .fc-button:disabled,
 .fc .fc-button.fc-button-disabled {
     @apply bg-neutral-300 text-gray-500 cursor-not-allowed;
+body {
+    font-family: "Inter";
 }
