@@ -1,6 +1,6 @@
 import FormButton from "./ui/FormButton"
 import { useState } from "react"
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from "../contexts/useAuth"
 
 export default function AdminLoginForm() {
     const [fieldData, setFieldData] = useState({
