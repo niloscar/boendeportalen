@@ -6,7 +6,7 @@ const ApartmentFilter = ({ rooms, maxRent, district, filtersVisibility, selected
   const classes = filtersVisibility ? "border border-solid border-green-500 rounded-2xl bg-white p-6 z-50" : '';
   return (
     <div className="self-end relative h-10">
-      <div className={`flex flex-col absolute right-0 top-0 ${classes}`}>
+      <div className={`flex flex-col absolute right-0 top-0 min-w-min ${classes}`}>
         <Button variant="primary" size="md" type="button" children="Tillgängliga Filter" onClick={() => setVisibility(!filtersVisibility)} />
         <form className={`${!filtersVisibility ? Style.hidden : Style.visible}`}>
           <div className="pt-2 pb-2">
@@ -28,8 +28,10 @@ const ApartmentFilter = ({ rooms, maxRent, district, filtersVisibility, selected
           </div>
           <div className="pt-2 pb-2">
             <label htmlFor="rent" className="font-semibold">Maxhyra</label>
-            <input type="range" min="1000" max="20000" value={maxRent} id="rentRange" onChange={(e) => changeRent(e)} />
-            <p>{maxRent}</p>
+            <div className="flex gap-2">
+              <input type="range" min="1000" max="20000" value={maxRent} id="rentRange" onChange={(e) => changeRent(e)} />
+              <p>{maxRent}</p>
+            </div>
           </div>
           <div className="pt-2 pb-2">
             <h3 className="font-semibold">Område</h3>
