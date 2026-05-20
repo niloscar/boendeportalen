@@ -1,5 +1,5 @@
 import { Navigate, useParams } from 'react-router-dom'
-import { useAuth } from '../contexts/useAuth'
+import { useAuth } from '../hooks/useAuth'
 import AdminLoginForm from '../components/AdminLoginForm'
 import AdminNav from '../components/AdminNav'
 import AdminDashboard from '../components/AdminDashboard'
@@ -31,7 +31,8 @@ const dashboardPage = ADMIN_SUB_PAGES[1]
 // ]
 
 export default function AdminPage() {
-    const { isAuthenticated } = useAuth()
+    const { profile } = useAuth()
+    const isAuthenticated = Boolean(profile)
     const { slug } = useParams<{ slug?: string }>()
 
     if (!isAuthenticated && slug !== loginPage.slug) return <Navigate to={`/admin/${loginPage.slug}`} replace />

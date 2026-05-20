@@ -22,10 +22,19 @@ export function PrivateRoute({ children, user, loading }: RouteGuardProps) {
 }
 
 export function AdminRoute({ children, user, loading, profile }: RouteGuardProps) {
+    console.log(user, profile)
+    console.log('AdminRoute:', {
+        loading,
+        user,
+        profile,
+        role: profile?.role,
+        isAdmin: profile?.isAdmin,
+    })
+
     if (loading) return null
     if (!user) return <Navigate to='/auth' replace />
     if (!hasAdminAccess(profile)) return <Navigate to='/' replace />
-
+    console.log('Admin access granted for user:', user.email)
     return children
 }
 

@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { FeaturesContext } from './FeaturesContext'
+import { FeaturesContext } from '../contexts/FeaturesContext'
 
 export const useFeatures = () => {
     const context = useContext(FeaturesContext)

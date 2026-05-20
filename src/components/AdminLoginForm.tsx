@@ -1,13 +1,25 @@
 import FormButton from "./ui/FormButton"
 import { useState } from "react"
-import { useAuth } from "../contexts/useAuth"
+import { useAuth } from "../hooks/useAuth"
 
 export default function AdminLoginForm() {
     const [fieldData, setFieldData] = useState({
         email: '',
         password: ''
     })
-    const { login } = useAuth()
+    
+    console.log(useAuth())
+
+    const login = (fieldData: { email: string; password: string }) => {
+        // Implement your login logic here, e.g., call an API, update context, etc.
+        console.log('Logging in with:', fieldData)
+        // For example, if you have a login function from your auth library:
+        // login(fieldData.email, fieldData.password).then(() => {
+        //     // Optionally, you can also redirect to the dashboard page after login
+        //     window.location.href = '/admin/dashboard'
+        // })
+        return true
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target
