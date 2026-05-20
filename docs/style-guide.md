@@ -1,6 +1,6 @@
 # Style Guide
 
-This guide covers how to use Tailwind CSS effectively in the BostadsPortalen project. For quick reference, see the detailed examples in [styling.md](./styling.md).
+This guide covers how to use Tailwind CSS effectively in the BoendePortalen project. For quick reference, see the detailed examples in [styling.md](./styling.md).
 
 ## Tailwind CSS Overview
 
