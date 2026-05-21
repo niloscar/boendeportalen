@@ -9,6 +9,7 @@ import svLocale from "@fullcalendar/core/locales/sv";
 import { deleteBooking, createBooking } from "../../api/guestSuite";
 import type { NewBooking, Booking, CalendarProps } from "../../types/guestSuite";
 import ConfirmDialog from "../ui/ConfirmDialog";
+import AlertDialog from "../ui/AlertDialog";
 
 export default function Calendar({ bookings, currentUser, refreshBookings }: CalendarProps) {
 
@@ -18,6 +19,8 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
     const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>("");
     const [openBookDialog, setOpenBookDialog] = useState<boolean>(false);
     const [bookDialogMessage, setBookDialogMessage] = useState<string>("");
+    const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
+    const [alertDialogMessage, setAlertDialogMessage] = useState<string>("");
 
     const [delBooking, setDelBooking] = useState<Booking | null>(null);
     const [newBooking, setNewBooking] = useState<NewBooking | null>(null);
@@ -97,8 +100,18 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
         // If slot is available
         if (props.isAvailable) {
 
+            const userBookings = bookings.filter(b => b.user === currentUser);
+
+            // Prevent user from booking more than 5 dates
+            if (userBookings.length >= 5) {
+                //Set message and show pop-up dialog
+                setAlertDialogMessage(`Du har redan fem aktiva bokningar. Avboka ett datum för att kunna boka ett nytt.`);
+                setOpenAlertDialog(true);
+                return;
+            }
+
             //Set message and show pop-up dialog
-            setBookDialogMessage(`Vill du boka ${props.date}?\n\nTänk på att du endast kan ha EN aktiv bokning åt gången och att tidigare bokningar kommer att ersättas.`);
+            setBookDialogMessage(`Vill du boka ${props.date}?\n\nTänk på att du endast kan ha 5 aktiva bokningar åt gången.`);
             setOpenBookDialog(true);
 
             //Prepare data for new booking
@@ -159,25 +172,21 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
             return;
         }
 
-        //Find current booking/-s
-        const userBookings = bookings.filter(b => b.user === currentUser);
-
         //Book new slot
         const result = await createBooking(newBooking.user, newBooking.date);
         console.log(result);
-
-        //Delete old bookings
-        for (const b of userBookings) {
-            if (b.id) {
-                await deleteBooking(b.id);
-            }
-        }
 
         //Cleanup
         setOpenBookDialog(false);
         setIsProcessing(false);
         setNewBooking(null);
         await refreshBookings();
+    }
+
+    async function handleAlertConfirm() {
+        //Cleanup
+        setOpenAlertDialog(false);
+        setAlertDialogMessage("");
     }
 
     return (
@@ -248,6 +257,14 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
                     setOpenBookDialog(false);
                     setNewBooking(null);
                 }}
+                confirmColor="green"
+            />
+
+            <AlertDialog
+                open={openAlertDialog}
+                title="Information"
+                message={alertDialogMessage}
+                onConfirm={handleAlertConfirm}
                 confirmColor="green"
             />
         </div>
