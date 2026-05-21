@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Skeleton from '@mui/material/Skeleton';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import ApartmentFilter from '../components/SearchApartmentPage/ApartmentFilter.tsx';
 import type { ApartmentData } from "../types/Apartment.ts";
@@ -32,7 +33,7 @@ const SearchApartment = () => {
         }
     }
     useEffect(() => {
-         (async () => {
+        (async () => {
             await fetchApartments();
         })();
     }, []);
@@ -44,7 +45,7 @@ const SearchApartment = () => {
         setFilteredApartments(filterArea);
         setFilterVisibility(false);
     }
-    const setVisibility = (visibility : boolean) => {
+    const setVisibility = (visibility: boolean) => {
         setFilterVisibility(visibility)
     }
     const selectedRooms: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -87,7 +88,19 @@ const SearchApartment = () => {
         <div className="flex flex-col items-center gap-6 p-6 max-w-6xl">
             <h1 className="text-5xl">Lediga lägenheter</h1>
             <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} filtersVisibility={filtersVisibility} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} setVisibility={setVisibility} />
-            <ApartmentList apartments={filteredApartments} loading={loading}/>
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start">
+                {loading ?
+                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start">
+                        <Skeleton variant="rounded" className="w-xs" height="502px" />
+                        <Skeleton variant="rounded" className="w-xs" height="502px" />
+                        <Skeleton variant="rounded" className="w-xs" height="502px" />
+                    </div>
+                    :
+                    apartments!.length < 1 ? <div>Kunde inte hitta några lediga lägenheter</div> :
+                        <ApartmentList variant="div" items={filteredApartments} />
+                }
+            </div>
+
         </div>
     )
 }

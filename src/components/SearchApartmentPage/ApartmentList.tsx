@@ -1,23 +1,16 @@
-import Skeleton from '@mui/material/Skeleton';
-import ApartmentCard from './ApartmentCard.tsx'
+import ApartmentCard from './ApartmentCard.tsx';
+import ListItem from '../ui/ListItem.tsx';
 import type { ApartmentListProp } from "../../types/Apartment.ts";
 
-const ApartmentList = ({ apartments, loading }: ApartmentListProp) => {
+const ApartmentList = ({ variant, items }: ApartmentListProp) => {
     return (
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start">
-            {loading ?
-                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start">
-                    <Skeleton variant="rounded" className="w-xs" height="502px" />
-                    <Skeleton variant="rounded" className="w-xs" height="502px" />
-                    <Skeleton variant="rounded" className="w-xs" height="502px" />
-                </div>
-                :
-                apartments.length < 1 ? <div>Kunde inte hitta några lediga lägenheter</div> :
-                    apartments.map((apartment) => (
-                        <ApartmentCard key={apartment.id} apartment={apartment} />
-                    ))
-            }
-        </div>
+        variant === 'div' ?
+            items.map((item) => (
+                <ApartmentCard key={item.id} apartment={item} />
+            )) :
+            items.map((item) => (
+                <ListItem key={item.id} detail={item} />
+            ))
     )
 }
 
