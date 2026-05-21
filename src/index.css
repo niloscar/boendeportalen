@@ -1,1 +1,32 @@
 @import "tailwindcss";
+
+body {
+    font-family: "Inter";
+}
+
+/* Calendar - - - - - - - - - */
+
+/* Text */
+.fc .fc-toolbar-title, .fc .fc-col-header-cell-cushion, .fc .fc-timegrid-slot-label-cushion {
+    @apply text-neutral-900 font-normal;
+}
+
+.fc .fc-timegrid-slot-label-cushion{
+    @apply !text-xs;
+}
+
+/* Buttons */
+.fc .fc-button {
+    @apply bg-green-500 text-white rounded-2xl p-3 border-0 transition duration-200;
+}
+
+/* Hover */
+.fc .fc-button:hover {
+    @apply bg-green-700;
+}
+
+/* Disabled */
+.fc .fc-button:disabled,
+.fc .fc-button.fc-button-disabled {
+    @apply bg-neutral-300 text-gray-500 cursor-not-allowed;
+}
