@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import SortButton from './SortButton'
+import SortButton from '../../ui/SortButton'
 
 const MOCK_RESIDENTS = [
     { id: 1, fname: 'John', lname: 'Doe', house: '1', entrance: 'A', apartment: '1001',  status: 'Aktiv', date: '2023-01-01' },
@@ -48,7 +48,7 @@ type SearchResultOrder = {
     direction: SortDirection
 }
 
-export default function AdminPageResidents() {
+export default function AdminTenants() {
     const [searchTerm, setSearchTerm] = useState('')
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
     const [searchResultOrder, setSearchResultOrder] = useState<SearchResultOrder>({ field: 'fname', direction: 'asc' })

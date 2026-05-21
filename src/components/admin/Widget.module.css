@@ -1,0 +1,16 @@
+.expand-button {
+    position: absolute;
+    top: calc(var(--spacing) * 2);
+    right: calc(var(--spacing) * 2);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--color-neutral-400);
+    padding: var(--spacing);
+    border-radius: calc(var(--spacing) * 2);;
+
+    &:hover {
+        background: var(--color-neutral-100);
+        color: var(--color-neutral-600);
+    }
+}

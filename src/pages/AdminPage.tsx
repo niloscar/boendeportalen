@@ -1,45 +1,38 @@
 import { Navigate, useParams } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
-import AdminLoginForm from '../components/AdminLoginForm'
-import AdminNav from '../components/AdminNav'
-import AdminDashboard from '../components/AdminDashboard'
-import AdminUsers from '../components/AdminUsers'
-import AdminSettings from '../components/AdminSettings'
-// import Breadcrumbs from '../components/ui/BreadCrumbs'
-import type { ComponentType } from 'react'
+import AdminLoginForm from '../components/admin/LoginForm'
+import AdminNav from '../components/admin/Nav'
+import AdminDashboard from './admin/DashboardPage'
+import AdminUsers from './admin/UsersPage'
+import AdminSettings from './admin/SettingsPage'
+import Breadcrumbs from '../components/ui/Breadcrumbs'
 
-type AdminSubPage = {
-    slug: string
-    title: string
-    component: ComponentType
-    authRequired: boolean
-}
+import type { Profile } from '../types/profile'
+import type { AdminSubPage } from '../types/admin'
+
+import styles from './AdminPage.module.css'
 
 const ADMIN_SUB_PAGES = [
-    { slug: 'login', title: 'Logga in', component: AdminLoginForm, authRequired: false },
     { slug: 'dashboard', title: 'Kontrollpanel', component: AdminDashboard, authRequired: true },
     { slug: 'users', title: 'Hantera användare', component: AdminUsers, authRequired: true },
     { slug: 'settings', title: 'Inställningar', component: AdminSettings, authRequired: true },
 ] satisfies readonly AdminSubPage[]
 
-const loginPage = ADMIN_SUB_PAGES[0]
-const dashboardPage = ADMIN_SUB_PAGES[1]
+const loginPage = { slug: 'auth', title: 'Logga in', component: AdminLoginForm, authRequired: false }
+const dashboardPage = ADMIN_SUB_PAGES[0]
 
-// const CRUMBS = [
-//     { title: 'Administration', href: '/admin' },
-//     { title: 'Administration' },
-// ]
+const CRUMBS = [
+    { title: 'Administration', href: '/admin' }
+]
 
-export default function AdminPage() {
-    const { profile } = useAuth()
-    const isAuthenticated = Boolean(profile)
-    const { slug } = useParams<{ slug?: string }>()
+export default function AdminPage({ profile, signOut }: { profile: Profile | null; signOut: () => void }) {
+    const isAuthenticated = Boolean(profile?.isAdmin || profile?.role === 'admin')
+    const { '*': slug } = useParams<{ '*'?: string }>()
 
-    if (!isAuthenticated && slug !== loginPage.slug) return <Navigate to={`/admin/${loginPage.slug}`} replace />
+    if (!isAuthenticated && slug !== loginPage.slug) return <Navigate to={`/${loginPage.slug}`} replace />
     if (isAuthenticated && (!slug || slug === loginPage.slug)) return <Navigate to={`/admin/${dashboardPage.slug}`} replace />
 
     const currentPage = ADMIN_SUB_PAGES.find(page => page.slug === slug) || dashboardPage
-    const Component = currentPage.component
+    const SubPageComponent = currentPage.component
 
     const navPages = ADMIN_SUB_PAGES.filter(page => (
         isAuthenticated ? page.authRequired : !page.authRequired
@@ -50,16 +43,14 @@ export default function AdminPage() {
             <div className="fakeApp w-full max-w-7xl bg-white p-8">
 
                 <h1 className="text-2xl font-bold mb-4">
-                    Administration → {currentPage.title}
+                    Administration {/* → {currentPage.title} */}
                 </h1>
 
-                {isAuthenticated && <AdminNav pages={navPages} />}
+                {isAuthenticated && <AdminNav profile={profile} pages={navPages} signOut={signOut} />}
 
-                {/* <Breadcrumbs crumbs={[...CRUMBS, { title: currentPage.title }]} /> */}
+                <Breadcrumbs crumbs={[...CRUMBS, { title: currentPage.title }]} />
 
-                <main className="flex flex-wrap gap-8 max-w-7xl">
-                    <Component />
-                </main>
+                <SubPageComponent styles={styles} />
             </div>
         </div>
     );
