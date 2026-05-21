@@ -56,13 +56,29 @@ export function useAuth() {
 
         void syncAuthState()
 
+        let lastSync = 0
+        let isSyncing = false
+
+        const syncIfNeeded = () => {
+            const now = Date.now()
+            if (now - lastSync < 1000) return
+            lastSync = now
+
+            if (isSyncing) return
+            isSyncing = true
+
+            void syncAuthState().finally(() => {
+                isSyncing = false
+            })
+        }
+
         const handleFocus = () => {
-            void syncAuthState()
+            syncIfNeeded()
         }
 
         const handleVisibilityChange = () => {
             if (document.visibilityState === 'visible') {
-                void syncAuthState()
+                syncIfNeeded()
             }
         }
 
@@ -71,7 +87,7 @@ export function useAuth() {
 
             setSession(session)
             if (session) {
-                void syncAuthState()
+                syncIfNeeded()
             } else {
                 setUser(null)
                 setProfile(null)
