@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         void supabase.auth.signOut()
                     }
 
-                    return
+                    return null
                 }
 
                 setSession(currentSession)
@@ -73,7 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             })
         }
 
-        syncIfNeeded()
+        syncAuthState()
 
         const handleFocus = () => {
             syncIfNeeded()
@@ -88,10 +88,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const subscription = onAuthStateChange(async (_event, nextSession) => {
             if (!mountedRef.current) return
 
-            setSession(nextSession)
+            lastSyncRef.current = 0
+
             if (nextSession) {
-                syncIfNeeded()
+                setSession(nextSession)
+                syncAuthState()
             } else {
+                setSession(null)
                 setUser(null)
                 setProfile(null)
             }
