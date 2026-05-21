@@ -18,7 +18,7 @@ const Apartment = () => {
       <h2 className="text-2xl">Om bostaden</h2>
       <p>{apartmentInfo.description}</p>
       <h2 className="text-2xl">Visning</h2>
-      <p>Visning sker två veckor innan sista ansökningsdag. Vi kan ej boka om visningar. Om du ej kan delta är det OK att skicka en ersättare som kan visa upp din legitimation.</p>
+      <p>Visning sker två veckor innan sista ansökningsdag. Du kommer att få en kallelse. Vänligen notera att visningstiden ej går att boka om. Om du inte kan delta i person går det bra att skicka en ersättare med giltlig legitimation. </p>
       <h2 className="text-2xl">Detaljer</h2>
       <ul className="max-w-md">
         <ApartmentList variant="ul" items={details} />
