@@ -31,6 +31,7 @@ export type Filter =  {
 
 export type ApartmentListProp = {
     apartments: ApartmentData[],
+    loading: boolean,
 }
 export type ApartmentProp = {
     apartment: ApartmentData,
