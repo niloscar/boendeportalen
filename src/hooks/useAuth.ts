@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
-import { getSession, getUser, onAuthStateChange, supabase } from '../lib/supabase'
+import { onAuthStateChange, supabase } from '../lib/supabase'
 import type { Profile } from '../types/profile'
 
 export function useAuth() {
@@ -12,17 +12,34 @@ export function useAuth() {
     useEffect(() => {
         let mounted = true
 
-        async function init() {
+        async function syncAuthState() {
             try {
-                const s = await getSession()
+                const { data: sessionData } = await supabase.auth.getSession()
+                const currentSession = sessionData.session ?? null
+                const { data: userData, error: userError } = await supabase.auth.getUser()
+
                 if (!mounted) return
-                setSession(s)
-                const u = await getUser()
-                if (!mounted) return
-                setUser(u)
-                if (u?.id) {
+
+                const currentUser = userData.user ?? null
+
+                if (userError || !currentUser) {
+                    setSession(null)
+                    setUser(null)
+                    setProfile(null)
+
+                    if (currentSession) {
+                        void supabase.auth.signOut()
+                    }
+
+                    return
+                }
+
+                setSession(currentSession)
+                setUser(currentUser)
+
+                if (currentUser.id) {
                     try {
-                        const { data } = await supabase.from('users').select('*').eq('id', u.id).single()
+                        const { data } = await supabase.from('users').select('*').eq('id', currentUser.id).single()
                         if (!mounted) return
                         setProfile(data ?? null)
                     } catch {
@@ -37,31 +54,37 @@ export function useAuth() {
             }
         }
 
-        init()
+        void syncAuthState()
+
+        const handleFocus = () => {
+            void syncAuthState()
+        }
+
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                void syncAuthState()
+            }
+        }
 
         const sub = onAuthStateChange(async (_event, session) => {
+            if (!mounted) return
+
             setSession(session)
             if (session) {
-                const u = await getUser()
-                setUser(u)
-                if (u?.id) {
-                    try {
-                        const { data } = await supabase.from('users').select('*').eq('id', u.id).single()
-                        setProfile(data ?? null)
-                    } catch {
-                        setProfile(null)
-                    }
-                } else {
-                    setProfile(null)
-                }
+                void syncAuthState()
             } else {
                 setUser(null)
                 setProfile(null)
             }
         })
 
+        window.addEventListener('focus', handleFocus)
+        document.addEventListener('visibilitychange', handleVisibilityChange)
+
         return () => {
             mounted = false
+            window.removeEventListener('focus', handleFocus)
+            document.removeEventListener('visibilitychange', handleVisibilityChange)
             sub.data.subscription.unsubscribe()
         }
     }, [])
