@@ -47,7 +47,8 @@ export type ApartmentProp = {
     apartment: ApartmentData,
 }
 export type ApartmentImagesProp = {
-    images: ApartmentImages[]
+    images: ApartmentImages[],
+    size: string,
 }
 
 export type ListProp = {

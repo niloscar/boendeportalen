@@ -10,8 +10,11 @@ const Apartment = () => {
 
   return (
     <section className="flex flex-col gap-6 p-6 max-w-3xl">
-      <h1 className="text-5xl">{apartmentInfo.street}</h1>
-      <ImageCarousel images={apartmentInfo.images} />
+      <div className="flex justify-between">
+        <h1 className="text-5xl">{apartmentInfo.street}</h1>
+        <Button variant="primary" size="md" type="button" children="Anmäl intresse" />
+      </div>
+      <ImageCarousel images={apartmentInfo.images} size="large" />
       <h2 className="text-2xl">Om bostaden</h2>
       <p>{apartmentInfo.description}</p>
       <h2 className="text-2xl">Visning</h2>
