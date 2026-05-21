@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { Filter } from "../../types/Apartment"
 import Button from '../ui/Button';
 import Style from '../../pages/SearchApartment.module.css'

@@ -8,7 +8,8 @@ export interface ApartmentData {
     district: string,
     description: string,
     rent: number,
-    end_date: string
+    end_date: string,
+    images: ApartmentImages[]
 }
 
 export interface ApartmentImages {
@@ -26,4 +27,14 @@ export type Filter =  {
   selectedDistrict: React.ChangeEventHandler<HTMLInputElement>,
   filterResults: React.MouseEventHandler<HTMLButtonElement>,
   setVisibility: (arg: boolean) => void;
+}
+
+export type ApartmentListProp = {
+    apartments: ApartmentData[],
+}
+export type ApartmentProp = {
+    apartment: ApartmentData,
+}
+export type ApartmentImagesProp = {
+    images: ApartmentImages[]
 }

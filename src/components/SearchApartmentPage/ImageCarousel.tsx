@@ -1,10 +1,7 @@
 import { useState } from 'react';
-import type { ApartmentImages } from "../../types/Apartment.ts";
+import type { ApartmentImagesProp } from "../../types/Apartment.ts";
 
-type Props = {
-    images: ApartmentImages[]
-}
-const ImageCarousel = ({ images }: Props) => {
+const ImageCarousel = ({ images }: ApartmentImagesProp) => {
     const [nextIndex, setNextIndex] = useState(0);
     const arrayLength = images.length;
 

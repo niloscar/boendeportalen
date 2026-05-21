@@ -1,4 +1,4 @@
-import { useState, useEffect, type HtmlHTMLAttributes, type InputHTMLAttributes } from 'react';
+import { useState, useEffect } from 'react';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import ApartmentFilter from '../components/SearchApartmentPage/ApartmentFilter.tsx';
 import type { ApartmentData } from "../types/Apartment.ts";
@@ -31,7 +31,10 @@ const SearchApartment = () => {
         }
     }
     useEffect(() => {
-        fetchApartments();
+         (async () => {
+            await fetchApartments();
+        })();
+  
     }, []);
     const filterResults: React.MouseEventHandler<HTMLButtonElement> = (e) => {
         e.preventDefault();
