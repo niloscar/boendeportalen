@@ -28,7 +28,7 @@ const Header: React.FC = () => {
                                 {profile?.avatar_url ? (
                                     <img src={profile?.avatar_url} alt="Användaravatar" className="h-full w-full object-cover" />
                                 ) : (
-                                    <span>{user.email?.slice(0, 2).toUpperCase() ?? 'VL'}</span>
+                                    <span>{profile?.full_name?.slice(0, 2).toUpperCase() ?? 'VL'}</span>
                                 )}
                             </span>
                             <div className="flex flex-col items-start leading-tight">
