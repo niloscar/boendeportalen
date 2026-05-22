@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import ApartmentFilter from '../components/SearchApartmentPage/ApartmentFilter.tsx';
-import type { ApartmentData } from "../types/Apartment.ts";
+import type { ApartmentData } from "../types/apartment.ts";
 import { getAvailableApartments } from '../api/apartmentApi.ts';
 
 const SearchApartment = () => {
-    const [apartments, setApartments] = useState<ApartmentData[]>([
-    ]);
+    const [apartments, setApartments] = useState<ApartmentData[]>([]);
     const [filteredApartments, setFilteredApartments] = useState<ApartmentData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -85,7 +84,7 @@ const SearchApartment = () => {
 
     return (
         <div className="flex flex-col items-center gap-6 p-6 max-w-6xl">
-            <h1 className="text-5xl">Lediga lägenheter</h1>
+            <h1 className="text-3xl md:text-5xl">Lediga lägenheter</h1>
             <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} filtersVisibility={filtersVisibility} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} setVisibility={setVisibility} />
             {loading ?
                 <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start">

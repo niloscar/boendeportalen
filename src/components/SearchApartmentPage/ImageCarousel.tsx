@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ApartmentImagesProp } from "../../types/Apartment.ts";
+import type { ApartmentImagesProp } from "../../types/apartment.ts";
 
 const ImageCarousel = ({ images, size }: ApartmentImagesProp) => {
     const [nextIndex, setNextIndex] = useState(0);
@@ -19,10 +19,10 @@ const ImageCarousel = ({ images, size }: ApartmentImagesProp) => {
             setNextIndex(arrayLength - 1);
         }
     };
-    const imageSize = size == 'large' ? "h-120" : "h-50";
+    const imageSize = size == 'large' ? "md:h-110" : "h-50";
     return (
         <div className="relative m-auto w-full">
-            <img src={images[nextIndex].url} className={`${imageSize} m-auto`} alt={images[nextIndex].description} />
+            <img src={images[nextIndex].url} className={`h-50 ${imageSize} m-auto`} alt={images[nextIndex].description} />
             <a className={`hover:bg-neutral-200 absolute top-[40%] cursor-pointer text-green-500 rounded-l text-2xl p-4`} onClick={() => back()}>❮</a>
             <a className={`hover:bg-neutral-200 absolute top-[40%] right-0 cursor-pointer text-green-500 rounded-r text-2xl p-4`} onClick={() => forward()}>❯</a>
         </div>

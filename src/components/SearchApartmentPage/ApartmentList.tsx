@@ -1,6 +1,6 @@
 import ApartmentCard from './ApartmentCard.tsx';
 import ListItem from './ListItem.tsx';
-import type { ApartmentListProp } from "../../types/Apartment.ts";
+import type { ApartmentListProp } from "../../types/apartment.ts";
 
 const ApartmentList = ({ variant, items }: ApartmentListProp) => {
     return (
