@@ -1,4 +1,4 @@
-import { HouseLineIcon } from '@phosphor-icons/react';
+import { HouseLineIcon, FileTextIcon, MapPinIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
 interface ApartmentOverviewCardProps {
@@ -44,6 +44,23 @@ const ApartmentOverviewCard = ({
                                 <p>Hyra saknas</p>
                             </div>
                         )}
+
+                        <div className='mt-4 flex gap-4'>
+                            <button
+                                onClick={onOpenContract}
+                                className='flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200'
+                            >
+                                <FileTextIcon size={15} />
+                                Mitt kontrakt
+                            </button>
+                            <button
+                                onClick={onOpenFloorPlan}
+                                className='flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 transition-colors duration-200'
+                            >
+                                <MapPinIcon size={15} />
+                                Planlösning
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -53,12 +70,6 @@ const ApartmentOverviewCard = ({
                     </Button>
                     <Button onClick={onServiceRequest} variant='primary' size='md'>
                         Efterfråga tilläggsservice
-                    </Button>
-                    <Button variant='primary' size='md' onClick={onOpenContract}>
-                        Mitt kontrakt
-                    </Button>
-                    <Button variant='primary' size='md' onClick={onOpenFloorPlan}>
-                        Planlösning
                     </Button>
                 </div>
             </div>
