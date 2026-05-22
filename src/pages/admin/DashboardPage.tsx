@@ -1,5 +1,6 @@
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import Widget from '../../components/admin/Widget'
+
 import type { AdminSubPageProps } from '../../types/admin'
 
 const WIDGETS = [

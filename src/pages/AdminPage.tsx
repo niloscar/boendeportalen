@@ -1,4 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom'
+import { useAuthContext } from '../contexts/useAuthContext'
+import { hasAdminAccess } from '../utils/accessControl'
+
 import AdminNav from '../components/admin/Nav'
 import AdminDashboard from './admin/DashboardPage'
 import AdminUsers from './admin/UsersPage'
@@ -28,18 +31,20 @@ const CRUMBS = [
     { title: 'Administration', href: '/admin' }
 ]
 
-export default function AdminPage({ profile, signOut }: AdminPageProps) {
-    const isAuthenticated = Boolean(profile?.isAdmin || profile?.role === 'admin')
+export default function AdminPage({ signOut }: AdminPageProps) {
+    const { profile } = useAuthContext()
     const { '*': slug } = useParams<{ '*'?: string }>()
+    
+    const isAdmin = hasAdminAccess(profile)
 
-    if (!isAuthenticated) return <Navigate to={`/auth`} replace />
-    if (isAuthenticated && !slug) return <Navigate to={`/admin/${dashboardPage.slug}`} replace />
+    if (!isAdmin) return <Navigate to={`/auth`} replace />
+    if (isAdmin && !slug) return <Navigate to={`/admin/${dashboardPage.slug}`} replace />
 
     const currentPage = ADMIN_SUB_PAGES.find(page => page.slug === slug) || dashboardPage
     const SubPageComponent = currentPage.component
 
     const navPages = ADMIN_SUB_PAGES.filter(page => (
-        isAuthenticated ? page.authRequired : !page.authRequired
+        isAdmin ? page.authRequired : !page.authRequired
     ))
 
     return (
@@ -50,7 +55,7 @@ export default function AdminPage({ profile, signOut }: AdminPageProps) {
                     Administration {/* → {currentPage.title} */}
                 </h1>
 
-                {isAuthenticated && <AdminNav profile={profile} pages={navPages} signOut={signOut} />}
+                {isAdmin && <AdminNav pages={navPages} signOut={signOut} />}
 
                 <Breadcrumbs crumbs={[...CRUMBS, { title: currentPage.title }]} />
 

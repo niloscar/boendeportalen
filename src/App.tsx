@@ -13,6 +13,7 @@ import AdminPage from './pages/AdminPage'
 function App() {
     // Add profile in here if you want to send profile info to route guards, like AdminRoute.
     const { user, loading, profile } = useAuth()
+    const isAdmin = hasAdminAccess(profile)
 
     return (
         <Routes>
@@ -31,8 +32,8 @@ function App() {
                     <p className="font-bold text-neutral-900">Det här är en placeholder för startsidan.</p>
                     {!user && <p><Link to="/auth" className="text-neutral-900 hover:underline">Logga in</Link> för att se mer.</p>}
                     {user && <div className="mt-4 flex flex-col gap-2">
-                        <p>Inloggad som <Link to="/profile" className="text-neutral-900 hover:underline">{profile?.full_name}</Link>.</p>
-                        {hasAdminAccess(profile) && <p>Du har adminbehörighet. Gå till <Link to="/admin" className="text-neutral-900 hover:underline">adminsidan</Link>.</p>}
+                        <p>Inloggad som <span className="text-neutral-900">{profile?.full_name}</span>.</p>
+                        {isAdmin && <p>Du har adminbehörighet. Gå till <Link to="/admin" className="text-neutral-900 hover:underline">adminsidan</Link>.</p>}
                         <button onClick={async () => { await signOut(); window.location.reload(); }} className="py-2 px-4 mr-auto bg-red-600 text-white rounded cursor-pointer hover:bg-red-700">Logga ut</button>
                     </div>
                     }

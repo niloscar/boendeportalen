@@ -1,27 +1,27 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom'
-import styles from './Nav.module.css'
-import type { AuthError } from '@supabase/supabase-js'
-import type { Profile } from '../../types/profile'
+import { NavLink, Navigate } from 'react-router-dom'
+import { useAuthContext } from '../../contexts/useAuthContext'
+import { hasAdminAccess } from '../../utils/accessControl'
 
-type AdminSubPage = { slug: string, title: string }
+import type { AuthError } from '@supabase/supabase-js'
+import type { AdminSubPage } from '../../types/admin'
+
+import styles from './Nav.module.css'
+
 type AdminNavProps = {
-    pages: AdminSubPage[]
+    pages: Pick<AdminSubPage, 'slug' | 'title'>[]
     signOut: () => Promise<{ error: AuthError | null }>
-    profile: Profile | null
 }
 
-export default function AdminNav({ pages, signOut, profile }: AdminNavProps) {
-    const navigate = useNavigate()
-    const isAuthenticated = Boolean(profile?.isAdmin || profile?.role === 'admin')
+export default function AdminNav({ pages, signOut }: AdminNavProps) {
+    const { profile } = useAuthContext()
 
     async function handleSignOut() {
         await signOut()
-        navigate('/auth', { replace: true })
+        return <Navigate to={`/auth`} replace />
     }
 
-    const classNames = [
-        styles.link
-    ].join(' ')
+    const isAdmin = hasAdminAccess(profile)
+    const classNames = [styles.link].filter(Boolean).join(' ')
 
     return (
         <nav className={`${styles['admin-nav']} m-0 flex items-center`}>
@@ -37,12 +37,12 @@ export default function AdminNav({ pages, signOut, profile }: AdminNavProps) {
                     </li>
                 ))}
             </ul>
-            {isAuthenticated && profile && (
+            {isAdmin && profile && (
                 <ul className="flex space-x-2 ml-auto">
                     <li className="text-gray-500">
                         Inloggad som{' '}
                         {profile.full_name 
-                            ? <Link className={styles.link} to="/profile">{profile.full_name}</Link>
+                            ? <span className={styles.link}>{profile.full_name}</span>
                             : 'gäst'
                         }
                     </li>
