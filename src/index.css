@@ -13,7 +13,7 @@ body {
 }
 
 .fc .fc-timegrid-slot-label-cushion{
-    @apply text-xs!;
+    @apply !text-xs;
 }
 
 /* Buttons */

@@ -7,7 +7,7 @@
     cursor: pointer;
     color: var(--color-neutral-400);
     padding: var(--spacing);
-    border-radius: calc(var(--spacing) * 2);;
+    border-radius: calc(var(--spacing) * 2);
 
     &:hover {
         background: var(--color-neutral-100);

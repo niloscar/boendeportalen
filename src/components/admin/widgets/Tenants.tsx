@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { GearSixIcon } from '@phosphor-icons/react'
 import SortButton from '../../ui/SortButton'
+import type { ChangeEvent } from 'react'
 
 const MOCK_RESIDENTS = [
     { id: 1, fname: 'John', lname: 'Doe', house: '1', entrance: 'A', apartment: '1001',  status: 'Aktiv', date: '2023-01-01' },
@@ -56,7 +57,7 @@ export default function AdminTenants() {
     const [isSearching, setIsSearching] = useState(false)
     const [searchError, setSearchError] = useState<{ message: string, details: unknown } | null>(null)
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
 
         setSearchTerm(value)

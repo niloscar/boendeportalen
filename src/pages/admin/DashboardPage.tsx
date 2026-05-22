@@ -19,15 +19,8 @@ export default function DashboardPage({ styles }: AdminSubPageProps) {
 
     return (
         <main className={`${styles['admin-subpage']} ${styles['dashboard']}`}>
-            <ResponsiveMasonry
-                columnsCountBreakPoints={{0: 1, 960: 2}}
-                gutterBreakPoints={{
-                    0: 'var(--dashboard-masonry-gap)',
-                } as unknown as Record<number, number>}
-            >
-                <Masonry
-                    className={styles['dashboard-masonry']}
-                >
+            <ResponsiveMasonry columnsCountBreakPoints={{0: 1, 960: 2}}>
+                <Masonry style={{ gap: 24 }} itemStyle={{ gap: 24 }}>
                     {WIDGETS.map(widget => (
                         <Widget
                             key={widget.title}
