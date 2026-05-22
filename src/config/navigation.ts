@@ -2,6 +2,7 @@ import type { NavigationLink, NavigationPart, NavigationState } from '../types/n
 
 const openLinks: NavigationLink[] = [
     { label: 'Hem', href: '/' },
+    { label: 'Sök bostad', href: '/apartment' },
 ]
 
 const loggedInLinks: NavigationLink[] = [
