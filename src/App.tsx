@@ -2,6 +2,7 @@ import { Link, Routes, Route } from 'react-router-dom'
 import Auth from './pages/Auth'
 import { signOut } from './lib/supabase'
 import useAuth from './hooks/useAuth'
+import { hasAdminAccess } from './utils/accessControl'
 
 // Import route guards here, like PrivateRoute and AdminRoute, if you want to use them in this file.
 import { PublicOnlyRoute, AdminRoute } from './routing'
@@ -12,7 +13,6 @@ import AdminPage from './pages/AdminPage'
 function App() {
     // Add profile in here if you want to send profile info to route guards, like AdminRoute.
     const { user, loading, profile } = useAuth()
-    const isAdmin = profile?.role === 'admin'
 
     return (
         <Routes>
@@ -32,7 +32,7 @@ function App() {
                     {!user && <p><Link to="/auth" className="text-neutral-900 hover:underline">Logga in</Link> för att se mer.</p>}
                     {user && <div className="mt-4 flex flex-col gap-2">
                         <p>Inloggad som <Link to="/profile" className="text-neutral-900 hover:underline">{profile?.full_name}</Link>.</p>
-                        {isAdmin && <p>Du har adminbehörighet. Gå till <Link to="/admin" className="text-neutral-900 hover:underline">adminsidan</Link>.</p>}
+                        {hasAdminAccess(profile) && <p>Du har adminbehörighet. Gå till <Link to="/admin" className="text-neutral-900 hover:underline">adminsidan</Link>.</p>}
                         <button onClick={async () => { await signOut(); window.location.reload(); }} className="py-2 px-4 mr-auto bg-red-600 text-white rounded cursor-pointer hover:bg-red-700">Logga ut</button>
                     </div>
                     }

@@ -15,6 +15,7 @@ const SortButton = ({ onClick, children, value, isActive }: { onClick: () => voi
 
     return (
         <button
+            type="button"
             className={classNames}
             onClick={onClick} 
             value={value}

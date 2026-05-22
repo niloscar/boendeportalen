@@ -12,6 +12,11 @@ const WIDGETS = [
         title: 'Exempelwidget 2',
         description: 'Denna widget är bara en demonstration och har ingen verklig funktionalitet.',
         component: () => <p>Widget-innehåll</p>, // Replace with actual component when ready.
+    },
+    {
+        title: 'Exempelwidget 3',
+        description: 'Denna widget är bara en demonstration och har ingen verklig funktionalitet.',
+        component: () => <p>Widget-innehåll</p>, // Replace with actual component when ready.
     }
 ]
 
