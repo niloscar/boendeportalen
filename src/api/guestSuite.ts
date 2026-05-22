@@ -18,7 +18,7 @@ export async function fetchBookedSlots() {
         }));
 
     } catch (err) {
-        console.error("Fel vid bookings-hämtning:", err);
+        console.error("Fel vid bookings-hämtning: ", err);
         throw err;
     }
 }
@@ -43,7 +43,7 @@ export async function deleteBooking(id: number) {
         // fallback för andra typer av fel
         return {
             success: false,
-            error: "Unexpected error"
+            error: "Oväntat fel"
         };
     }
 }
@@ -59,7 +59,7 @@ export async function createBooking(user: string, date: string) {
         return response.data;
 
     } catch (error) {
-        console.error("Error creating booking:", error);
+        console.error("Fel vid skapande av ny bokning: ", error);
         throw error;
     }
 }
