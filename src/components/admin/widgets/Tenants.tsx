@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { GearSixIcon } from '@phosphor-icons/react'
 import SortButton from '../../ui/SortButton'
 
 const MOCK_RESIDENTS = [
@@ -147,6 +148,7 @@ export default function AdminTenants() {
                     <table className="search-results w-full table-auto">
                         <thead>
                             <tr className="search-filters">
+                                <th></th>
                                 {Object.entries(RESIDENT_KEY_MAP).map(([key, label]) => {
                                     const sortField = key as SortField
                                     const isActive = searchResultOrder.field === sortField
@@ -178,6 +180,9 @@ export default function AdminTenants() {
                                     key={resident.id}
                                     className="border-b border-gray-200 hover:bg-gray-100"
                                 >
+                                    <td>
+                                        <GearSixIcon />
+                                    </td>
                                     {Object.keys(RESIDENT_KEY_MAP).map((key) => (
                                         <td key={key}>{resident[key as keyof Resident]}</td>
                                     ))}
