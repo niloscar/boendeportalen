@@ -15,6 +15,7 @@ import {
     createErrorReport,
     createServiceRequest,
     getApartmentDocuments,
+    getApartmentEquipment,
     getApartmentForUser,
     getApartmentFileSignedUrl,
     getContractSignedUrl,
@@ -22,7 +23,7 @@ import {
     uploadErrorReportAttachment,
     uploadAvatar,
 } from '../api/profilepageApi';
-import type { ApartmentDocument, ContractSummary, UserProfile } from '../api/profilepageApi';
+import type { ApartmentDocument, ApartmentEquipment, ContractSummary, UserProfile } from '../api/profilepageApi';
 
 const ProfilePage = () => {
     const [activeForm, setActiveForm] = useState<ActiveForm>(null);
@@ -33,6 +34,7 @@ const ProfilePage = () => {
     const [contract, setContract] = useState<ContractSummary | null>(null);
     const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
     const [documentUrls, setDocumentUrls] = useState<Record<number, string>>({});
+    const [equipment, setEquipment] = useState<ApartmentEquipment[]>([]);
 
     const { user, loading } = useAuth();
     const userId = user?.id ?? '';
@@ -69,9 +71,17 @@ const ProfilePage = () => {
         return [profile.full_name, profile.email, profile.phone].filter(isNonEmptyString);
     }, [profile]);
 
+    const equipmentTypes = useMemo(
+        () => new Set(equipment.map((e) => e.equipment_type)),
+        [equipment]
+    );
+
     const manualDocuments = useMemo(
-        () => documents.filter((doc) => doc.document_type === 'manual'),
-        [documents]
+        () => documents.filter(
+            (doc) => doc.document_type === 'manual' &&
+                (doc.equipment_type === null || equipmentTypes.has(doc.equipment_type))
+        ),
+        [documents, equipmentTypes]
     );
 
     const floorPlanDocument = useMemo(
@@ -100,8 +110,12 @@ const ProfilePage = () => {
                 setContract(contractData);
 
                 if (contractData?.apartment_id) {
-                    const documentsData = await getApartmentDocuments(contractData.apartment_id);
+                    const [documentsData, equipmentData] = await Promise.all([
+                        getApartmentDocuments(contractData.apartment_id),
+                        getApartmentEquipment(contractData.apartment_id),
+                    ]);
                     setDocuments(documentsData);
+                    setEquipment(equipmentData);
 
                     const signedUrls = await Promise.all(
                         documentsData.map(async (doc) => ({

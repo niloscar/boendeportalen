@@ -37,7 +37,14 @@ export type ApartmentDocument = {
     title: string;
     file_path: string;
     document_type: 'floor_plan' | 'manual' | 'other';
+    equipment_type: string | null;
     created_at: string;
+};
+
+export type ApartmentEquipment = {
+    id: number;
+    apartment_id: number;
+    equipment_type: string;
 };
 
 export type ErrorReportRecord = {
@@ -135,9 +142,20 @@ export const getApartmentForUser = async (userId: string) => {
 export const getApartmentDocuments = async (apartmentId: number) => {
     const response = await apiConfig.get<ApartmentDocument[]>('/apartment_documents', {
         params: {
-            select: 'id,apartment_id,title,file_path,document_type,created_at',
+            select: 'id,apartment_id,title,file_path,document_type,equipment_type,created_at',
             apartment_id: `eq.${apartmentId}`,
             order: 'created_at.desc',
+        },
+    });
+
+    return response.data;
+};
+
+export const getApartmentEquipment = async (apartmentId: number) => {
+    const response = await apiConfig.get<ApartmentEquipment[]>('/apartment_equipment', {
+        params: {
+            select: 'id,apartment_id,equipment_type',
+            apartment_id: `eq.${apartmentId}`,
         },
     });
 
