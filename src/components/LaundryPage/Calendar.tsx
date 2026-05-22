@@ -9,6 +9,7 @@ import useAuth from "../../hooks/useAuth";
 import { deleteBooking, createBooking } from "../../api/laundry";
 import type { NewBooking, Booking, CalendarProps } from "../../types/laundry";
 import ConfirmDialog from "../ui/ConfirmDialog";
+import { Skeleton, Box } from "@mui/material";
 
 export default function Calendar({ bookings, timeslots, refreshBookings }: CalendarProps) {
 
@@ -22,6 +23,8 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
     const [delBooking, setDelBooking] = useState<Booking | null>(null);
     const [newBooking, setNewBooking] = useState<NewBooking | null>(null);
 
+    //Loading states
+    const [isBuildingEvents, setIsBuildingEvents] = useState(true);
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Will hold all events to be displayed in calendar
@@ -34,12 +37,18 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
     const calMaxDate = new Date();
     calMaxDate.setDate(today.getDate() + 30);
 
+
     // useEffect to render all calendar events
     useEffect(() => {
 
         if (loading || !user) return;
 
         const buildEvents = async () => {
+            
+            //Loading
+            setIsBuildingEvents(true);
+
+            //Buillding
             const events: EventInput[] = [];
 
             //Loop through bookings
@@ -108,6 +117,9 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
 
             //Update state that holds events
             setCalendarEvents(events);
+
+            //Loading off
+            setIsBuildingEvents(false);
         };
 
         buildEvents();
@@ -219,6 +231,18 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
         setIsProcessing(false);
         setNewBooking(null);
         await refreshBookings();
+    }
+
+    //Render skeleton if loading
+    if (isBuildingEvents) {
+        return (
+            <Box sx={{ p: 2 }}>
+                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
+                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
+                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
+                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
+            </Box>
+        );
     }
 
     return (
