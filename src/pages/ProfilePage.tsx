@@ -20,6 +20,7 @@ import {
     getApartmentFileSignedUrl,
     getContractSignedUrl,
     getUserProfile,
+    updateUserProfile,
     uploadErrorReportAttachment,
     uploadAvatar,
 } from '../api/profilepageApi';
@@ -65,11 +66,6 @@ const ProfilePage = () => {
 
         return [address, area, rooms, rent].filter(isNonEmptyString);
     }, [contract]);
-
-    const personalInfo = useMemo(() => {
-        if (!profile) return null;
-        return [profile.full_name, profile.email, profile.phone].filter(isNonEmptyString);
-    }, [profile]);
 
     const equipmentTypes = useMemo(
         () => new Set(equipment.map((e) => e.equipment_type)),
@@ -225,6 +221,12 @@ const ProfilePage = () => {
         window.open(url, '_blank', 'noreferrer');
     };
 
+    const handleProfileSave = async (data: { email: string; phone: string }) => {
+        const updated = await updateUserProfile(userId, { email: data.email, phone: data.phone });
+        if (updated) setProfile(updated);
+        setSubmitMessage('Dina uppgifter är uppdaterade.');
+    };
+
     const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
 
@@ -304,9 +306,11 @@ const ProfilePage = () => {
                         />
 
                         <PersonalInfoSection
-                            personalInfo={personalInfo}
+                            name={profile?.full_name ?? null}
+                            email={profile?.email ?? null}
+                            phone={profile?.phone ?? null}
                             avatarUrl={profile?.avatar_url ?? null}
-                            onEditProfile={() => showUnavailableMessage('Ändra uppgifter')}
+                            onSave={handleProfileSave}
                             onAvatarUpload={handleAvatarUpload}
                         />
                     </>
