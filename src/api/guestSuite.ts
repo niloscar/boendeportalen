@@ -1,25 +1,6 @@
 import axios from "axios";
 import apiConfig from "./axiosConfig";
-import type { TimeslotRow, Timeslot, BookingRow, Booking } from "../types/laundry";
-
-//Fetch timeslots from Supabase
-export async function fetchLaundrySlots() {
-    try {
-        const { data } = await apiConfig.get<TimeslotRow[]>(
-            "laundry_time_slots?select=*"
-        );
-
-        return data.map((row:TimeslotRow): Timeslot => ({
-            id: row.id,
-            start: row.slot_start,
-            end: row.slot_end
-        }));
-
-    } catch (err) {
-        console.error("Fel vid slots-hämtning: ", err);
-        throw err;
-    }
-}
+import type { BookingRow, Booking } from "../types/guestSuite";
 
 //Fetch today's and future bookings from Supabase
 export async function fetchBookedSlots() {
@@ -27,13 +8,12 @@ export async function fetchBookedSlots() {
         const today = new Date().toISOString().split("T")[0];
 
         const { data } = await apiConfig.get<BookingRow[]>(
-            `laundry_bookings?select=*&date=gte.${today}`
+            `guest_suite_bookings?select=*&date=gte.${today}`
         );
 
         return data.map((row:BookingRow): Booking => ({
             id: row.id,
             date: row.date,
-            slot: row.slot,
             user: row.user
         }));
 
@@ -46,7 +26,7 @@ export async function fetchBookedSlots() {
 //Delete booking from Supabase based on id
 export async function deleteBooking(id: number) {
     try {
-        const response = await apiConfig.delete("laundry_bookings", {
+        const response = await apiConfig.delete("guest_suite_bookings", {
             params: { id: `eq.${id}` }
         });
 
@@ -69,11 +49,10 @@ export async function deleteBooking(id: number) {
 }
 
 //Create a new booking
-export async function createBooking(user: number, slot: number, date: string) {
+export async function createBooking(user: string, date: string) {
     try {
-        const response = await apiConfig.post<BookingRow[]>("laundry_bookings", {
+        const response = await apiConfig.post<BookingRow[]>("guest_suite_bookings", {
             user,
-            slot,
             date
         });
 

@@ -7,3 +7,11 @@ export type ConfirmDialogProps = {
     onCancel: () => void;
     confirmColor: "green" | "red";
 };
+
+export type AlertDialogProps = {
+    open: boolean;
+    title?: string;
+    message?: string;
+    onConfirm: () => void;
+    confirmColor: "green" | "red";
+};
