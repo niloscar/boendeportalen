@@ -2,6 +2,18 @@
     box-sizing: border-box;
 }
 
+.admin-subpage.dashboard {
+    /* Specific styles for the dashboard page */
+}
+
 .dashboard-masonry {
     --dashboard-masonry-gap: 1rem;
+}
+
+.admin-subpage.users {
+    /* Specific styles for the users page */
+}
+
+.admin-subpage.settings {
+    /* Specific styles for the settings page */
 }

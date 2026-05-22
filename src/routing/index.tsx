@@ -33,7 +33,7 @@ export function AdminRoute({ children, user, loading, profile }: RouteGuardProps
     if (loading) return <RouteLoadingFallback />
     if (!user) return <Navigate to='/auth' replace />
     if (!hasAdminAccess(profile)) return <Navigate to='/' replace />
-    console.log('Admin access granted for user:', user.email)
+
     return children
 }
 

@@ -1,5 +1,4 @@
 import { Navigate, useParams } from 'react-router-dom'
-import AdminLoginForm from '../components/admin/LoginForm'
 import AdminNav from '../components/admin/Nav'
 import AdminDashboard from './admin/DashboardPage'
 import AdminUsers from './admin/UsersPage'
@@ -8,8 +7,14 @@ import Breadcrumbs from '../components/ui/Breadcrumbs'
 
 import type { Profile } from '../types/profile'
 import type { AdminSubPage } from '../types/admin'
+import type { AuthError } from '@supabase/supabase-js'
 
 import styles from './AdminPage.module.css'
+
+type AdminPageProps = {
+    profile: Profile | null
+    signOut: () => Promise<{ error: AuthError | null }>
+}
 
 const ADMIN_SUB_PAGES = [
     { slug: 'dashboard', title: 'Kontrollpanel', component: AdminDashboard, authRequired: true },
@@ -17,19 +22,18 @@ const ADMIN_SUB_PAGES = [
     { slug: 'settings', title: 'Inställningar', component: AdminSettings, authRequired: true },
 ] satisfies readonly AdminSubPage[]
 
-const loginPage = { slug: 'auth', title: 'Logga in', component: AdminLoginForm, authRequired: false }
 const dashboardPage = ADMIN_SUB_PAGES[0]
 
 const CRUMBS = [
     { title: 'Administration', href: '/admin' }
 ]
 
-export default function AdminPage({ profile, signOut }: { profile: Profile | null; signOut: () => void }) {
+export default function AdminPage({ profile, signOut }: AdminPageProps) {
     const isAuthenticated = Boolean(profile?.isAdmin || profile?.role === 'admin')
     const { '*': slug } = useParams<{ '*'?: string }>()
 
-    if (!isAuthenticated && slug !== loginPage.slug) return <Navigate to={`/${loginPage.slug}`} replace />
-    if (isAuthenticated && (!slug || slug === loginPage.slug)) return <Navigate to={`/admin/${dashboardPage.slug}`} replace />
+    if (!isAuthenticated) return <Navigate to={`/auth`} replace />
+    if (isAuthenticated && !slug) return <Navigate to={`/admin/${dashboardPage.slug}`} replace />
 
     const currentPage = ADMIN_SUB_PAGES.find(page => page.slug === slug) || dashboardPage
     const SubPageComponent = currentPage.component

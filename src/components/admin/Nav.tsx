@@ -1,9 +1,14 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import styles from './Nav.module.css'
+import type { AuthError } from '@supabase/supabase-js'
 import type { Profile } from '../../types/profile'
 
 type AdminSubPage = { slug: string, title: string }
-type AdminNavProps = { pages: AdminSubPage[]; signOut: () => void; profile: Profile | null }
+type AdminNavProps = {
+    pages: AdminSubPage[]
+    signOut: () => Promise<{ error: AuthError | null }>
+    profile: Profile | null
+}
 
 export default function AdminNav({ pages, signOut, profile }: AdminNavProps) {
     const navigate = useNavigate()

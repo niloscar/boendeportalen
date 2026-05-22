@@ -11,11 +11,11 @@ const SortButton = ({ onClick, children, value, isActive }: { onClick: () => voi
         'cursor-pointer',
         'hover:underline',
         isActive && 'underline'
-    ]
+    ].filter(Boolean).join(' ')
 
     return (
         <button
-            className={classNames.join(' ')}
+            className={classNames}
             onClick={onClick} 
             value={value}
         >

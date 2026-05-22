@@ -14,11 +14,6 @@ function App() {
     const { user, loading, profile } = useAuth()
     const isAdmin = profile?.role === 'admin'
 
-    console.log('App component - user:', user)
-    console.log('App component - profile:', profile)
-
-
-
     return (
         <Routes>
             <Route path="/auth" element={<PublicOnlyRoute user={user} loading={loading}><Auth /></PublicOnlyRoute>} />
