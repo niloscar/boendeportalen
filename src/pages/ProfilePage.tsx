@@ -37,16 +37,33 @@ const ProfilePage = () => {
     const { user, loading } = useAuth();
     const userId = user?.id ?? '';
 
+    // Formatera postnummer till 'xxx xx'
+    const formatPostcode = (postcode?: string | number) => {
+        if (postcode === undefined || postcode === null) return '';
+        const str = String(postcode);
+        const cleaned = str.replace(/\s+/g, '');
+        if (cleaned.length === 5) return `${cleaned.slice(0, 3)} ${cleaned.slice(3)}`;
+        if (cleaned.length === 6) return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 5)}`;
+        return str;
+    };
+
+    // Formatera hyra med tusentalsavgränsare
+    const formatRent = (rent?: number) => {
+        if (typeof rent !== 'number') return '';
+        return rent.toLocaleString('sv-SE');
+    };
+
     const apartmentInfo = useMemo(() => {
         if (!contract?.apartments) {
             return null;
         }
 
         const { apartments } = contract;
-        const address = `${apartments.street}, ${apartments.postcode} ${apartments.city}`;
-        const area = apartments.area ? `${apartments.area} kvm` : null;
-        const rooms = apartments.rooms ? `${apartments.rooms} rum` : null;
-        const rent = contract.rent ? `${contract.rent} kr/mån` : null;
+        const formattedPostcode = formatPostcode(apartments.postcode);
+        const address = `Adress: ${apartments.street}, ${formattedPostcode} ${apartments.city}`;
+        const area = `Storlek: ${apartments.area ? `${apartments.area} kvm` : null}`;
+        const rooms = `Rum: ${apartments.rooms ? `${apartments.rooms} rum` : null}`;
+        const rent = `Hyra: ${contract.rent ? `${formatRent(contract.rent)} kr/mån` : null}`;
 
         return [address, area, rooms, rent].filter(isNonEmptyString);
     }, [contract]);
@@ -202,17 +219,6 @@ const ProfilePage = () => {
 
     return (
         <div className='min-h-screen bg-neutral-100 text-neutral-900'>
-            <header className='flex items-center justify-between px-6 py-5 sm:px-10'>
-                <div className='text-lg font-semibold tracking-wide'>Logo</div>
-                <Button
-                    variant='primary'
-                    size='md'
-                    className='px-5 py-2 text-sm'
-                    onClick={() => showUnavailableMessage('Meny')}
-                >
-                    Meny
-                </Button>
-            </header>
 
             <main className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-16 sm:px-10'>
                 <section className='pt-2 text-center'>
