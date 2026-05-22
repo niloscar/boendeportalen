@@ -6,8 +6,8 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
 import useAuth from "../../hooks/useAuth";
-import { deleteBooking, createBooking } from "../../api/laundry";
 import type { NewBooking, Booking, CalendarProps } from "../../types/laundry";
+import { useBookingActions } from "../../hooks/useBookingActions";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import { Skeleton, Box } from "@mui/material";
 
@@ -25,7 +25,6 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
 
     //Loading states
     const [isBuildingEvents, setIsBuildingEvents] = useState(true);
-    const [isProcessing, setIsProcessing] = useState(false);
 
     // Will hold all events to be displayed in calendar
     const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
@@ -36,6 +35,20 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
     const today = useMemo(() => new Date(), []);
     const calMaxDate = new Date();
     calMaxDate.setDate(today.getDate() + 30);
+
+    const {
+        createNewBooking,
+        deleteExistingBooking,
+        isProcessing
+    } = useBookingActions({
+        user,
+        bookings,
+        refreshBookings,
+        setOpenBookDialog,
+        setOpenDeleteDialog,
+        setNewBooking,
+        setDelBooking
+    });
 
 
     // useEffect to render all calendar events
@@ -167,72 +180,6 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
         }
     };
 
-    // Delete booking and close dialog, re-render calendar.
-    async function handleDeleteBooking() {
-
-        //Wait for user info
-        if (loading || !user) {
-            return null; // eller en spinner
-        }
-
-        //Prevents multiple clicks
-        if (isProcessing) return; 
-        setIsProcessing(true);
-
-        if (!delBooking || !delBooking.id) {
-            setIsProcessing(false);
-            return;
-        }
-
-        //Delete booking
-        const result = await deleteBooking(delBooking.id);
-        console.log(result);
-
-        //Cleanup
-        setOpenDeleteDialog(false);
-        setIsProcessing(false);
-        setDelBooking(null);
-        refreshBookings();
-    }
-
-    // Create booking and close dialog, re-render calendar.
-    async function handleNewBooking() {
-
-        //Wait for user info
-        if (loading || !user) {
-            return null; // eller en spinner
-        }
-
-        //Prevents multiple clicks
-        if (isProcessing) return; 
-        setIsProcessing(true);
-
-        if (!newBooking?.slot || !newBooking?.date) {
-            setIsProcessing(false); 
-            return;
-        }
-
-        //Find current booking/-s
-        const userBookings = bookings.filter(b => b.user === user.id);
-
-        //Book new slot
-        const result = await createBooking(newBooking.user, newBooking.slot, newBooking.date);
-        console.log(result);
-
-        //Delete old bookings
-        for (const b of userBookings) {
-            if (b.id) {
-                await deleteBooking(b.id);
-            }
-        }
-
-        //Cleanup
-        setOpenBookDialog(false);
-        setIsProcessing(false);
-        setNewBooking(null);
-        await refreshBookings();
-    }
-
     //Render skeleton if loading
     if (isBuildingEvents) {
         return (
@@ -299,7 +246,7 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
                 title="Radera bokning"
                 message={deleteDialogMessage}
                 isProcessing={isProcessing}
-                onConfirm={handleDeleteBooking}
+                onConfirm={async () => { await deleteExistingBooking(delBooking); }}
                 onCancel={() => {
                     setOpenDeleteDialog(false);
                     setDelBooking(null);
@@ -312,7 +259,7 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
                 title="Bekräfta bokning"
                 message={bookDialogMessage}
                 isProcessing={isProcessing}
-                onConfirm={handleNewBooking}
+                onConfirm={async () => {await createNewBooking(newBooking);}}
                 onCancel={() => {
                     setOpenBookDialog(false);
                     setNewBooking(null);
