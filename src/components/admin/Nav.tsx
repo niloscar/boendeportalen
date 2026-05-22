@@ -19,7 +19,7 @@ export default function AdminNav({ pages, signOut, profile }: AdminNavProps) {
     ].join(' ')
 
     return (
-        <nav className="my-4 flex items-center">
+        <nav className={`${styles['admin-nav']} m-0 flex items-center`}>
             <ul className="flex space-x-2">
                 {pages.map((page) => (
                     <li key={page.slug}>

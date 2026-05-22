@@ -2,29 +2,6 @@
     box-sizing: border-box;
 }
 
-.admin-subpage.dashboard {
-
-    --gap: 1rem;
-
-    & .widget-area {
-        display: flex;
-        width: auto;
-        gap: var(--gap);
-    }
-
-    & .widget-area-column {
-        background-clip: padding-box;
-    }
-
-    & .widget-area-column > section {
-        margin-bottom: var(--gap);
-    }
-}
-
-.admin-subpage.users {
-    /* Specific styles for the users page */
-}
-
-.admin-subpage.settings {
-    /* Specific styles for the settings page */
+.dashboard-masonry {
+    --dashboard-masonry-gap: 1rem;
 }

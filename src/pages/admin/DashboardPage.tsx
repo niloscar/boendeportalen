@@ -1,59 +1,44 @@
-import Masonry from 'react-masonry-css'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import Widget from '../../components/admin/Widget'
-import Tenants from '../../components/admin/widgets/Tenants'
 import type { AdminSubPageProps } from '../../types/admin'
 
 const WIDGETS = [
     {
-        title: 'Boende',
-        description: 'Här kan du se och hantera alla boende i föreningen.',
-        component: Tenants,
+        title: 'Exempelwidget 1',
+        description: 'Denna widget är bara en demonstration och har ingen verklig funktionalitet.',
+        component: () => <p>Widget-innehåll</p>, // Replace with actual component when ready.
     },
     {
-        title: 'Meddelanden',
-        description: 'Här kan du skicka meddelanden till boende i föreningen.',
-        component: () => <p>Test</p>,
-    },
-    {
-        title: 'Inkomna problem / störningar',
-        description: 'Här kan du se och hantera inkomna problem och störningar i föreningen.',
-        component: () => <p>Test</p>,
-    },
-    {
-        title: 'Hantera resurser',
-        description: 'Här kan du hantera disponibla bostäder, förrådsutrymmen, lokaler, garage och parkeringar som ska vara tillgängliga för uthyrning eller bokning för föreningens medlemmar.',
-        component: () => <p>Test</p>,
-    },
-    {
-        title: 'Evenemang',
-        description: 'Här kan du lägga till och redigera evenemang och händelser.',
-        component: () => <p>Test</p>,
-    },
-    {
-        title: 'Våra funktioner',
-        description: 'Här kan du välja vilka funktioner som ska vara tillgängliga för denna förening.',
-        component: () => <p>Test</p>,
-    },
+        title: 'Exempelwidget 2',
+        description: 'Denna widget är bara en demonstration och har ingen verklig funktionalitet.',
+        component: () => <p>Widget-innehåll</p>, // Replace with actual component when ready.
+    }
 ]
 
 export default function DashboardPage({ styles }: AdminSubPageProps) {
 
     return (
         <main className={`${styles['admin-subpage']} ${styles['dashboard']}`}>
-            <Masonry
-                breakpointCols={2}
-                className={styles['widget-area']}
-                columnClassName={styles['widget-area-column']}>
-            {WIDGETS.map(widget => (
-                <Widget
-                    key={widget.title}
-                    title={widget.title}
-                    description={widget.description}
+            <ResponsiveMasonry
+                columnsCountBreakPoints={{0: 1, 960: 2}}
+                gutterBreakPoints={{
+                    0: 'var(--dashboard-masonry-gap)',
+                } as unknown as Record<number, number>}
+            >
+                <Masonry
+                    className={styles['dashboard-masonry']}
                 >
-                    {widget.component()}
-                </Widget>
-            ))}
-            </Masonry>
+                    {WIDGETS.map(widget => (
+                        <Widget
+                            key={widget.title}
+                            title={widget.title}
+                            description={widget.description}
+                        >
+                            {widget.component()}
+                        </Widget>
+                    ))}
+                </Masonry>
+            </ResponsiveMasonry>
         </main>
     )
 }

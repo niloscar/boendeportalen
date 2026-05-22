@@ -39,10 +39,10 @@ export default function AdminPage({ profile, signOut }: { profile: Profile | nul
     ))
 
     return (
-        <div className="fakeBody h-screen flex bg-neutral-200 justify-center">
-            <div className="fakeApp w-full max-w-7xl bg-white p-8">
+        <div className="fakeBody min-h-screen flex bg-neutral-200 justify-center">
+            <div className="fakeApp w-full max-w-7xl bg-white p-6 flex flex-col gap-6">
 
-                <h1 className="text-2xl font-bold mb-4">
+                <h1 className="text-2xl font-bold m-0">
                     Administration {/* → {currentPage.title} */}
                 </h1>
 
