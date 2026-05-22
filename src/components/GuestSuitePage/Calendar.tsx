@@ -1,0 +1,272 @@
+import { useState, useEffect, useMemo } from "react";
+
+import type { EventInput, EventClickArg } from "@fullcalendar/core";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from "@fullcalendar/interaction";
+import svLocale from "@fullcalendar/core/locales/sv";
+
+import { deleteBooking, createBooking } from "../../api/guestSuite";
+import type { NewBooking, Booking, CalendarProps } from "../../types/guestSuite";
+import ConfirmDialog from "../ui/ConfirmDialog";
+import AlertDialog from "../ui/AlertDialog";
+
+export default function Calendar({ bookings, currentUser, refreshBookings }: CalendarProps) {
+
+    // States
+
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
+    const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>("");
+    const [openBookDialog, setOpenBookDialog] = useState<boolean>(false);
+    const [bookDialogMessage, setBookDialogMessage] = useState<string>("");
+    const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
+    const [alertDialogMessage, setAlertDialogMessage] = useState<string>("");
+
+    const [delBooking, setDelBooking] = useState<Booking | null>(null);
+    const [newBooking, setNewBooking] = useState<NewBooking | null>(null);
+
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    // Will hold all events to be displayed in calendar
+    const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
+
+    // Defines a 30 day window for the calendar.
+    const today = useMemo(() => new Date(), []);
+    const calMaxDate = new Date();
+    calMaxDate.setDate(today.getDate() + 30);
+
+    // useEffect to render all calendar events
+    useEffect(() => {
+        const buildEvents = () => {
+            const events: EventInput[] = [];
+
+            // Create an array containing every date for 1 year
+            const days: string[] = [];
+            for (let i = 0; i <= 365; i++) {
+                const d = new Date();
+                d.setDate(today.getDate() + i);
+                days.push(d.toISOString().split("T")[0]);
+            }
+
+            // Loop through each date
+            days.forEach((date) => {
+                const booking = bookings.find((b) => b.date === date);
+
+                if (booking) {
+                    // Check if there is a booking and who booked it.
+                    const isOwner = booking.user === currentUser;
+
+                    events.push({
+                        id: String(booking.id),
+                        title: isOwner ? "Bokad" : "Upptaget",
+                        start: date, // ingen tid → hela dagen
+                        allDay: true,
+                        extendedProps: {
+                            user: isOwner ? booking.user : null,
+                            date,
+                            isOwner,
+                            isAvailable: false
+                        }
+                    });
+                } else {
+                    // If there is no booking.
+                    events.push({
+                        id: `free-${date}`,
+                        title: "Ledig",
+                        start: date,
+                        allDay: true,
+                        extendedProps: {
+                            date,
+                            isOwner: false,
+                            isAvailable: true
+                        }
+                    });
+                }
+            });
+
+            setCalendarEvents(events);
+        };
+
+        buildEvents();
+    }, [bookings, currentUser, today]);
+
+
+    // Handles click on events
+    const handleEventClick = (e: EventClickArg) => {
+
+        const props = e.event.extendedProps;
+        const isOwner = props.isOwner;
+
+        // If slot is available
+        if (props.isAvailable) {
+
+            const userBookings = bookings.filter(b => b.user === currentUser);
+
+            // Prevent user from booking more than 5 dates
+            if (userBookings.length >= 5) {
+                //Set message and show pop-up dialog
+                setAlertDialogMessage(`Du har redan fem aktiva bokningar. Avboka ett datum för att kunna boka ett nytt.`);
+                setOpenAlertDialog(true);
+                return;
+            }
+
+            //Set message and show pop-up dialog
+            setBookDialogMessage(`Vill du boka ${props.date}?\n\nTänk på att du endast kan ha 5 aktiva bokningar åt gången.`);
+            setOpenBookDialog(true);
+
+            //Prepare data for new booking
+            setNewBooking({ date: props.date, user: currentUser });
+            return;
+        }
+
+        // If slot is booked by someone else
+        if (!isOwner) {
+            e.jsEvent.preventDefault();
+            return;
+        }
+
+        //If slot is booked by the logged in user 
+        if (isOwner) {
+
+            //Set message and show pop-up dialog
+            setDeleteDialogMessage(`Vill du ta bort bokningen för\n${props.date}?\n\nDen här åtgärden går inte att ångra.`);
+            setOpenDeleteDialog(true);
+
+            //Prepare data for deletion
+            setDelBooking({ id: Number(e.event.id), date: props.date, user: currentUser });
+        }
+    };
+
+    // Delete booking and close dialog, re-render calendar.
+    async function handleDeleteBooking() {
+
+        //Prevents multiple clicks
+        if (isProcessing) return; 
+        setIsProcessing(true);
+
+        if (!delBooking || !delBooking.id) {
+            setIsProcessing(false);
+            return;
+        }
+
+        //Delete booking
+        const result = await deleteBooking(delBooking.id);
+        console.log(result);
+
+        //Cleanup
+        setOpenDeleteDialog(false);
+        setIsProcessing(false);
+        setDelBooking(null);
+        refreshBookings();
+    }
+
+    // Create booking and close dialog, re-render calendar.
+    async function handleNewBooking() {
+
+        //Prevents multiple clicks
+        if (isProcessing) return; 
+        setIsProcessing(true);
+
+        if (!newBooking?.date) {
+            setIsProcessing(false); 
+            return;
+        }
+
+        //Book new slot
+        const result = await createBooking(newBooking.user, newBooking.date);
+        console.log(result);
+
+        //Cleanup
+        setOpenBookDialog(false);
+        setIsProcessing(false);
+        setNewBooking(null);
+        await refreshBookings();
+    }
+
+    async function handleAlertConfirm() {
+        //Cleanup
+        setOpenAlertDialog(false);
+        setAlertDialogMessage("");
+    }
+
+    return (
+        <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
+            <FullCalendar
+                plugins={[dayGridPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                headerToolbar={{
+                    left: "today",
+                    center: "title",
+                    right: "prev,next"
+                }}
+                events={calendarEvents}
+                eventClassNames={(arg) => {
+                    const { isOwner, isAvailable } = arg.event.extendedProps;
+
+                    if (isAvailable) {
+                        return "!bg-neutral-200 hover:!bg-green-300 transition duration-200 !border-0 !rounded-sm p-6 !text-gray-700 !cursor-pointer !h-full flex items-center px-2";
+                    }
+
+                    if (isOwner) {
+                        return "!bg-green-500 hover:!bg-green-700 transition duration-200 !border-0 !rounded-sm p-6 !text-white !cursor-pointer !h-full flex items-center px-2";
+                    }
+
+                    return "!bg-neutral-100 !border-0 !rounded-sm p-6 !text-neutral-100 !pointer-events-none !h-full flex items-center px-2";
+                }}
+                eventContent={(arg) => {
+                    const { isAvailable, isOwner } = arg.event.extendedProps;
+
+                    let textColor = "text-gray-700"; // default för lediga
+                    if (isOwner) textColor = "text-white cursor-pointer";
+                    if (!isAvailable && !isOwner) textColor = "text-neutral-500";
+
+                    return {
+                        html: `<div class="w-full ${textColor}">${arg.event.title}</div>`
+                    };
+                }}
+                eventClick={handleEventClick}
+                firstDay={1}
+                locale={svLocale}
+                allDaySlot={true}
+                height="auto"
+                validRange={{
+                    start: today.toISOString().split("T")[0]
+                }}
+            />
+
+            <ConfirmDialog
+                open={openDeleteDialog}
+                title="Radera bokning"
+                message={deleteDialogMessage}
+                isProcessing={isProcessing}
+                onConfirm={handleDeleteBooking}
+                onCancel={() => {
+                    setOpenDeleteDialog(false);
+                    setDelBooking(null);
+                }}
+                confirmColor="red"
+            />
+
+            <ConfirmDialog
+                open={openBookDialog}
+                title="Bekräfta bokning"
+                message={bookDialogMessage}
+                isProcessing={isProcessing}
+                onConfirm={handleNewBooking}
+                onCancel={() => {
+                    setOpenBookDialog(false);
+                    setNewBooking(null);
+                }}
+                confirmColor="green"
+            />
+
+            <AlertDialog
+                open={openAlertDialog}
+                title="Information"
+                message={alertDialogMessage}
+                onConfirm={handleAlertConfirm}
+                confirmColor="green"
+            />
+        </div>
+    );
+}
