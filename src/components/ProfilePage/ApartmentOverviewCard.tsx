@@ -1,3 +1,4 @@
+import { HouseLineIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
 interface ApartmentOverviewCardProps {
@@ -22,10 +23,10 @@ const ApartmentOverviewCard = ({
             <div className='flex flex-col gap-6'>
                 <div className='flex items-start gap-4'>
                     <div
-                        className='mt-1 flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-2xl text-neutral-500'
+                        className='mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100'
                         aria-hidden='true'
                     >
-                        ⌂
+                        <HouseLineIcon size={20} className='text-neutral-500' />
                     </div>
                     <div>
                         <h2 className='text-lg font-semibold'>Bostadsinformation</h2>

@@ -7,23 +7,22 @@ import ApartmentOverviewCard from '../components/ProfilePage/ApartmentOverviewCa
 import ApartmentDocumentsSection from '../components/ProfilePage/ApartmentDocumentsSection';
 import PersonalInfoSection from '../components/ProfilePage/PersonalInfoSection';
 import ProfileFormsSection from '../components/ProfilePage/ProfileFormsSection';
+import ProfilePageSkeleton from '../components/ProfilePage/ProfilePageSkeleton';
 import type { ActiveForm } from '../components/ProfilePage/ProfileFormsSection';
 import useAuth from '../hooks/useAuth';
+import { isNonEmptyString } from '../utils/strings';
 import {
     createErrorReport,
     createServiceRequest,
     getApartmentDocuments,
     getApartmentForUser,
-    getPublicApartmentFileUrl,
-    getPublicContractUrl,
+    getApartmentFileSignedUrl,
+    getContractSignedUrl,
     getUserProfile,
     uploadErrorReportAttachment,
     uploadAvatar,
 } from '../api/profilepageApi';
 import type { ApartmentDocument, ContractSummary, UserProfile } from '../api/profilepageApi';
-
-const isNonEmptyString = (value: string | null | undefined): value is string =>
-    Boolean(value && value.trim().length > 0);
 
 const ProfilePage = () => {
     const [activeForm, setActiveForm] = useState<ActiveForm>(null);
@@ -33,11 +32,11 @@ const ProfilePage = () => {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [contract, setContract] = useState<ContractSummary | null>(null);
     const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
+    const [documentUrls, setDocumentUrls] = useState<Record<number, string>>({});
 
     const { user, loading } = useAuth();
     const userId = user?.id ?? '';
 
-    // Formatera postnummer till 'xxx xx'
     const formatPostcode = (postcode?: string | number) => {
         if (postcode === undefined || postcode === null) return '';
         const str = String(postcode);
@@ -47,16 +46,13 @@ const ProfilePage = () => {
         return str;
     };
 
-    // Formatera hyra med tusentalsavgränsare
     const formatRent = (rent?: number) => {
         if (typeof rent !== 'number') return '';
         return rent.toLocaleString('sv-SE');
     };
 
     const apartmentInfo = useMemo(() => {
-        if (!contract?.apartments) {
-            return null;
-        }
+        if (!contract?.apartments) return null;
 
         const { apartments } = contract;
         const formattedPostcode = formatPostcode(apartments.postcode);
@@ -69,10 +65,7 @@ const ProfilePage = () => {
     }, [contract]);
 
     const personalInfo = useMemo(() => {
-        if (!profile) {
-            return null;
-        }
-
+        if (!profile) return null;
         return [profile.full_name, profile.email, profile.phone].filter(isNonEmptyString);
     }, [profile]);
 
@@ -88,9 +81,7 @@ const ProfilePage = () => {
 
     useEffect(() => {
         const loadProfileData = async () => {
-            if (loading) {
-                return;
-            }
+            if (loading) return;
             if (!userId) {
                 setLoadError('Du behöver logga in för att se sidan.');
                 return;
@@ -111,8 +102,21 @@ const ProfilePage = () => {
                 if (contractData?.apartment_id) {
                     const documentsData = await getApartmentDocuments(contractData.apartment_id);
                     setDocuments(documentsData);
+
+                    const signedUrls = await Promise.all(
+                        documentsData.map(async (doc) => ({
+                            id: doc.id,
+                            url: await getApartmentFileSignedUrl(doc.file_path),
+                        }))
+                    );
+                    const urlMap: Record<number, string> = {};
+                    for (const { id, url } of signedUrls) {
+                        if (url) urlMap[id] = url;
+                    }
+                    setDocumentUrls(urlMap);
                 } else {
                     setDocuments([]);
+                    setDocumentUrls({});
                 }
             } catch {
                 setLoadError('Kunde inte hämta profilinformation. Försök igen senare.');
@@ -181,8 +185,8 @@ const ProfilePage = () => {
         setSubmitMessage(`${label} är inte tillgänglig ännu.`);
     };
 
-    const openContract = () => {
-        const contractUrl = getPublicContractUrl(contract?.contract_file_path ?? null);
+    const openContract = async () => {
+        const contractUrl = await getContractSignedUrl(contract?.contract_file_path ?? null);
 
         if (!contractUrl) {
             showUnavailableMessage('Mitt kontrakt');
@@ -192,21 +196,25 @@ const ProfilePage = () => {
         window.open(contractUrl, '_blank', 'noreferrer');
     };
 
-    const openFloorPlan = () => {
+    const openFloorPlan = async () => {
         if (!floorPlanDocument) {
             showUnavailableMessage('Planlösning');
             return;
         }
 
-        window.open(getPublicApartmentFileUrl(floorPlanDocument.file_path), '_blank', 'noreferrer');
+        const url = await getApartmentFileSignedUrl(floorPlanDocument.file_path);
+        if (!url) {
+            showUnavailableMessage('Planlösning');
+            return;
+        }
+
+        window.open(url, '_blank', 'noreferrer');
     };
 
     const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
 
-        if (!file || !userId) {
-            return;
-        }
+        if (!file || !userId) return;
 
         try {
             const avatarUrl = await uploadAvatar(userId, file);
@@ -219,7 +227,6 @@ const ProfilePage = () => {
 
     return (
         <div className='min-h-screen bg-neutral-100 text-neutral-900'>
-
             <main className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-16 sm:px-10'>
                 <section className='pt-2 text-center'>
                     <h1 className='text-3xl font-semibold tracking-tight sm:text-4xl'>
@@ -242,12 +249,6 @@ const ProfilePage = () => {
                     </section>
                 )}
 
-                {isLoading && (
-                    <section className='rounded-2xl border border-neutral-200 bg-white p-4 text-sm text-gray-700'>
-                        Hämtar dina uppgifter...
-                    </section>
-                )}
-
                 {loadError && (
                     <section
                         className='rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-900'
@@ -263,32 +264,39 @@ const ProfilePage = () => {
                     </section>
                 )}
 
-                <ApartmentOverviewCard
-                    apartmentInfo={apartmentInfo}
-                    onErrorReport={() => toggleForm('error')}
-                    onServiceRequest={() => toggleForm('service')}
-                    onOpenContract={openContract}
-                    onOpenFloorPlan={openFloorPlan}
-                    imageSrc={profilePageImage}
-                />
+                {isLoading ? (
+                    <ProfilePageSkeleton />
+                ) : (
+                    <>
+                        <ApartmentOverviewCard
+                            apartmentInfo={apartmentInfo}
+                            onErrorReport={() => toggleForm('error')}
+                            onServiceRequest={() => toggleForm('service')}
+                            onOpenContract={openContract}
+                            onOpenFloorPlan={openFloorPlan}
+                            imageSrc={profilePageImage}
+                        />
 
-                <ProfileFormsSection
-                    activeForm={activeForm}
-                    onCloseForm={() => setActiveForm(null)}
-                    onErrorSubmit={handleErrorSubmit}
-                    onServiceSubmit={handleServiceSubmit}
-                />
+                        <ProfileFormsSection
+                            activeForm={activeForm}
+                            onCloseForm={() => setActiveForm(null)}
+                            onErrorSubmit={handleErrorSubmit}
+                            onServiceSubmit={handleServiceSubmit}
+                        />
 
-                <ApartmentDocumentsSection
-                    documents={manualDocuments}
-                    getDocumentUrl={getPublicApartmentFileUrl}
-                />
+                        <ApartmentDocumentsSection
+                            documents={manualDocuments}
+                            documentUrls={documentUrls}
+                        />
 
-                <PersonalInfoSection
-                    personalInfo={personalInfo}
-                    onEditProfile={() => showUnavailableMessage('Ändra uppgifter')}
-                    onAvatarUpload={handleAvatarUpload}
-                />
+                        <PersonalInfoSection
+                            personalInfo={personalInfo}
+                            avatarUrl={profile?.avatar_url ?? null}
+                            onEditProfile={() => showUnavailableMessage('Ändra uppgifter')}
+                            onAvatarUpload={handleAvatarUpload}
+                        />
+                    </>
+                )}
             </main>
         </div>
     );

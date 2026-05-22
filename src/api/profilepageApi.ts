@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { supabase } from '../lib/supabase';
 import apiConfig from './axiosConfig.ts';
 
 export type UserProfile = {
@@ -65,21 +65,9 @@ export type ServiceRequestPayload = {
     description: string;
 };
 
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-
-const supabaseBaseUrl = (() => {
-    const baseUrl = apiConfig.defaults.baseURL ?? '';
-    return baseUrl.replace(/\/rest\/v1\/?$/, '');
-})();
-
-const storageBaseUrl = `${supabaseBaseUrl}/storage/v1`;
-
-const getFirst = <T,>(items: T[]) => (items.length > 0 ? items[0] : null);
-
 const toFileName = (name: string) => name.trim().replace(/\s+/g, '-');
 
-const buildPublicUrl = (bucket: string, path: string) =>
-    `${storageBaseUrl}/object/public/${bucket}/${encodeURI(path)}`;
+const getFirst = <T,>(items: T[]) => (items.length > 0 ? items[0] : null);
 
 export const getUserProfile = async (userId: string) => {
     const response = await apiConfig.get<UserProfile[]>('/users', {
@@ -108,19 +96,17 @@ export const updateUserProfile = async (userId: string, updates: Partial<UserPro
 
 export const uploadAvatar = async (userId: string, file: File) => {
     const filePath = `${userId}/${Date.now()}-${toFileName(file.name)}`;
-    const uploadUrl = `${storageBaseUrl}/object/avatars/${filePath}`;
 
-    await axios.post(uploadUrl, file, {
-        headers: {
-            'Content-Type': file.type || 'application/octet-stream',
-            apikey: anonKey,
-            Authorization: `Bearer ${anonKey}`,
-        },
-    });
+    const { error } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true });
 
-    const publicUrl = buildPublicUrl('avatars', filePath);
+    if (error) throw error;
+
+    const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+    const publicUrl = data.publicUrl;
+
     await updateUserProfile(userId, { avatar_url: publicUrl });
-
     return publicUrl;
 };
 
@@ -185,22 +171,16 @@ export const createErrorReport = async (
 
 export const uploadErrorReportAttachment = async (reportId: number, file: File) => {
     const filePath = `${reportId}/${Date.now()}-${toFileName(file.name)}`;
-    const uploadUrl = `${storageBaseUrl}/object/report-attachments/${filePath}`;
 
-    await axios.post(uploadUrl, file, {
-        headers: {
-            'Content-Type': file.type || 'application/octet-stream',
-            apikey: anonKey,
-            Authorization: `Bearer ${anonKey}`,
-        },
-    });
+    const { error } = await supabase.storage
+        .from('report-attachments')
+        .upload(filePath, file);
+
+    if (error) throw error;
 
     const response = await apiConfig.post(
         '/error_report_attachments',
-        {
-            report_id: reportId,
-            file_path: filePath,
-        },
+        { report_id: reportId, file_path: filePath },
         { headers: { Prefer: 'return=representation' } }
     );
 
@@ -227,13 +207,23 @@ export const createServiceRequest = async (
     return getFirst(response.data);
 };
 
-export const getPublicContractUrl = (filePath: string | null) => {
-    if (!filePath) {
-        return null;
-    }
+// Signed URL (1 timme) för kontrakt — fungerar oavsett om bucket är privat eller publik
+export const getContractSignedUrl = async (filePath: string | null): Promise<string | null> => {
+    if (!filePath) return null;
 
-    return buildPublicUrl('contract-files', filePath);
+    const { data, error } = await supabase.storage
+        .from('contract-files')
+        .createSignedUrl(filePath, 3600);
+
+    if (error || !data) return null;
+    return data.signedUrl;
 };
 
-export const getPublicApartmentFileUrl = (filePath: string) =>
-    buildPublicUrl('apartment-files', filePath);
+export const getApartmentFileSignedUrl = async (filePath: string): Promise<string | null> => {
+    const { data, error } = await supabase.storage
+        .from('apartment-files')
+        .createSignedUrl(filePath, 3600);
+
+    if (error || !data) return null;
+    return data.signedUrl;
+};

@@ -1,24 +1,32 @@
 import type { ChangeEvent } from 'react';
+import { UserIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
 interface PersonalInfoSectionProps {
     personalInfo: string[] | null;
+    avatarUrl: string | null;
     onEditProfile: () => void;
     onAvatarUpload: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const PersonalInfoSection = ({
     personalInfo,
+    avatarUrl,
     onEditProfile,
     onAvatarUpload,
 }: PersonalInfoSectionProps) => (
     <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
         <div className='flex items-start gap-4'>
-            <div
-                className='flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-lg text-neutral-500'
-                aria-hidden='true'
-            >
-                ⍰
+            <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100' aria-hidden='true'>
+                {avatarUrl ? (
+                    <img
+                        src={avatarUrl}
+                        alt='Profilbild'
+                        className='h-10 w-10 rounded-full object-cover'
+                    />
+                ) : (
+                    <UserIcon size={20} className='text-neutral-500' />
+                )}
             </div>
             <div>
                 <h2 className='text-lg font-semibold'>Mina uppgifter</h2>

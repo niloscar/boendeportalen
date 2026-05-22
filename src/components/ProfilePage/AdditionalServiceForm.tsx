@@ -15,18 +15,12 @@ const SERVICE_TYPES = [
     'Övriga tjänster',
 ];
 
-export const AdditionalServiceForm = ({ onCancel, onSubmit }: AdditionalServiceFormProps) => {
-    const handleSubmit = (data: ReportFormData) => {
-        onSubmit(data);
-    };
-
-    return (
-        <ReportForm
-            categories={SERVICE_TYPES}
-            submitLabel="Skicka förfrågan"
-            descriptionPlaceholder="Beskriv vilken tilläggsservice du är intresserad av..."
-            onSubmit={handleSubmit}
-            onCancel={onCancel}
-        />
-    );
-};
+export const AdditionalServiceForm = ({ onCancel, onSubmit }: AdditionalServiceFormProps) => (
+    <ReportForm
+        categories={SERVICE_TYPES}
+        submitLabel="Skicka förfrågan"
+        descriptionPlaceholder="Beskriv vilken tilläggsservice du är intresserad av..."
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+    />
+);

@@ -15,19 +15,13 @@ const ERROR_CATEGORIES = [
     'Övriga fel',
 ];
 
-export const ErrorReportForm = ({ onCancel, onSubmit }: ErrorReportFormProps) => {
-    const handleSubmit = (data: ReportFormData) => {
-        onSubmit(data);
-    };
-
-    return (
-        <ReportForm
-            categories={ERROR_CATEGORIES}
-            submitLabel="Skicka felanmälan"
-            descriptionPlaceholder="Beskriv vad som är trasigt..."
-            onSubmit={handleSubmit}
-            onCancel={onCancel}
-            showExtras={true}
-        />
-    );
-};
+export const ErrorReportForm = ({ onCancel, onSubmit }: ErrorReportFormProps) => (
+    <ReportForm
+        categories={ERROR_CATEGORIES}
+        submitLabel="Skicka felanmälan"
+        descriptionPlaceholder="Beskriv vad som är trasigt..."
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+        showExtras={true}
+    />
+);
