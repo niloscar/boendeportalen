@@ -244,13 +244,7 @@ const ProfilePage = () => {
     return (
         <div className='min-h-screen bg-neutral-100 text-neutral-900'>
             <main className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-16 sm:px-10'>
-                <section className='pt-2 text-center'>
-                    <h1 className='text-3xl font-semibold tracking-tight sm:text-4xl'>
-                        Min lägenhet
-                    </h1>
-                </section>
-
-                {submitMessage && (
+{submitMessage && (
                     <section
                         className='rounded-2xl border border-green-200 bg-green-50 p-4 text-sm text-green-900'
                         role='status'
