@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase';
+﻿import { supabase } from '../lib/supabase';
 import apiConfig from './axiosConfig.ts';
 
 export type UserProfile = {
@@ -72,7 +72,14 @@ export type ServiceRequestPayload = {
     description: string;
 };
 
-const toFileName = (name: string) => name.trim().replace(/\s+/g, '-');
+const toFileName = (name: string) =>
+    name
+        .trim()
+        .normalize('NFD')
+        .replace(/\p{Mn}/gu, '')
+        .replace(/[^a-zA-Z0-9._-]/g, '-')
+        .replace(/-{2,}/g, '-')
+        .replace(/^-|-$/g, '');
 
 const getFirst = <T,>(items: T[]) => (items.length > 0 ? items[0] : null);
 
@@ -106,7 +113,7 @@ export const uploadAvatar = async (userId: string, file: File) => {
 
     const { error } = await supabase.storage
         .from('avatars')
-        .upload(filePath, file, { upsert: true });
+        .upload(filePath, file);
 
     if (error) throw error;
 
