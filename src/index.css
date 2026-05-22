@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "@fontsource/inter";
 @import "tailwindcss";
 
 body {
@@ -8,11 +8,13 @@ body {
 /* Calendar - - - - - - - - - */
 
 /* Text */
-.fc .fc-toolbar-title, .fc .fc-col-header-cell-cushion, .fc .fc-timegrid-slot-label-cushion {
+.fc .fc-toolbar-title,
+.fc .fc-col-header-cell-cushion,
+.fc .fc-timegrid-slot-label-cushion {
     @apply text-neutral-900 font-normal;
 }
 
-.fc .fc-timegrid-slot-label-cushion{
+.fc .fc-timegrid-slot-label-cushion {
     @apply !text-xs;
 }
 
@@ -30,4 +32,8 @@ body {
 .fc .fc-button:disabled,
 .fc .fc-button.fc-button-disabled {
     @apply bg-neutral-300 text-gray-500 cursor-not-allowed;
+}
+
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+    margin-bottom: 0.1em;
 }
