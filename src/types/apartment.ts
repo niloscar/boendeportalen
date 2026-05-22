@@ -1,3 +1,5 @@
+import type React from 'react';
+
 export interface ApartmentData {
     id: number,
     street: string,
@@ -12,9 +14,9 @@ export interface ApartmentData {
     images: ApartmentImages[]
 }
 export interface Detail {
-    id: number,
+    id: string,
     title: string,
-    content: string
+    content: string | number
 }
 
 export interface ApartmentImages {

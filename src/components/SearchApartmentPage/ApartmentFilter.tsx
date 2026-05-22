@@ -25,7 +25,7 @@ const ApartmentFilter = ({ rooms, maxRent, district, filtersVisibility, selected
                         </div>
                     </div>
                     <div className="pt-2 pb-2">
-                        <label htmlFor="rent" className="font-semibold">Maxhyra</label>
+                        <label htmlFor="rentRange" className="font-semibold">Maxhyra</label>
                         <div className="flex gap-2">
                             <input type="range" min="1000" max="20000" value={maxRent} id="rentRange" onChange={(e) => changeRent(e)} />
                             <p>{maxRent}</p>
