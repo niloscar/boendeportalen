@@ -278,6 +278,14 @@ const ProfilePage = () => {
                     <ProfilePageSkeleton />
                 ) : (
                     <>
+                        <PersonalInfoSection
+                            name={profile?.full_name ?? null}
+                            email={profile?.email ?? null}
+                            phone={profile?.phone ?? null}
+                            avatarUrl={profile?.avatar_url ?? null}
+                            onSave={handleProfileSave}
+                            onAvatarUpload={handleAvatarUpload}
+                        />
                         <ApartmentOverviewCard
                             apartmentInfo={apartmentInfo}
                             onErrorReport={() => toggleForm('error')}
@@ -299,14 +307,6 @@ const ProfilePage = () => {
                             documentUrls={documentUrls}
                         />
 
-                        <PersonalInfoSection
-                            name={profile?.full_name ?? null}
-                            email={profile?.email ?? null}
-                            phone={profile?.phone ?? null}
-                            avatarUrl={profile?.avatar_url ?? null}
-                            onSave={handleProfileSave}
-                            onAvatarUpload={handleAvatarUpload}
-                        />
                     </>
                 )}
             </main>
