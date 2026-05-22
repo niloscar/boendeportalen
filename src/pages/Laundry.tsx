@@ -6,7 +6,6 @@ import type { Timeslot, Booking } from "../types/laundry";
 export default function Laundry() {
     const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
     const [bookings, setBookings] = useState<Booking[]>([]);
-    const currentUser = 1;
 
     const refreshBookings = useCallback(async () => {
         const data = await fetchBookedSlots();
@@ -27,7 +26,6 @@ export default function Laundry() {
         <Calendar
             bookings={bookings}
             timeslots={timeslots}
-            currentUser={currentUser}
             refreshBookings={refreshBookings}
         />
     );

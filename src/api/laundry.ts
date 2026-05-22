@@ -69,7 +69,7 @@ export async function deleteBooking(id: number) {
 }
 
 //Create a new booking
-export async function createBooking(user: number, slot: number, date: string) {
+export async function createBooking(user: string, slot: number, date: string) {
     try {
         const response = await apiConfig.post<BookingRow[]>("laundry_bookings", {
             user,

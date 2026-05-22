@@ -5,12 +5,12 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
-
+import useAuth from "../../hooks/useAuth";
 import { deleteBooking, createBooking } from "../../api/laundry";
 import type { NewBooking, Booking, CalendarProps } from "../../types/laundry";
 import ConfirmDialog from "../ui/ConfirmDialog";
 
-export default function Calendar({ bookings, timeslots, currentUser, refreshBookings }: CalendarProps) {
+export default function Calendar({ bookings, timeslots, refreshBookings }: CalendarProps) {
 
     // States
 
@@ -27,6 +27,8 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
     // Will hold all events to be displayed in calendar
     const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
 
+    const { user, loading } = useAuth()
+
     // Defines a 30 day window for the calendar.
     const today = useMemo(() => new Date(), []);
     const calMaxDate = new Date();
@@ -34,6 +36,9 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
     // useEffect to render all calendar events
     useEffect(() => {
+
+        if (loading || !user) return;
+
         const buildEvents = async () => {
             const events: EventInput[] = [];
 
@@ -44,7 +49,9 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
 
                 if (!slot) return;
 
-                const isOwner = booking.user === currentUser;
+                const isOwner = booking.user === user.id;
+                console.log(booking.user)
+                console.log(user.id)
 
                 // Add bookings to the events array
                 events.push({
@@ -104,7 +111,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
         };
 
         buildEvents();
-    }, [bookings, timeslots, currentUser, today]);
+    }, [bookings, timeslots, user, loading, today]);
 
     // Handles click on events
     const handleEventClick = (e: EventClickArg) => {
@@ -112,6 +119,11 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
         const props = e.event.extendedProps;
         const isOwner = props.isOwner;
         const slot = timeslots.find(s => s.id === props.slot);
+
+        //Wait for user info
+        if (loading || !user) {
+            return null; // eller en spinner
+        }
 
         // If slot is available
         if (props.isAvailable) {
@@ -121,7 +133,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
             setOpenBookDialog(true);
 
             //Prepare data for new booking
-            setNewBooking({ date: props.date, slot: props.slot, user: currentUser });
+            setNewBooking({ date: props.date, slot: props.slot, user: user.id });
             return;
         }
 
@@ -139,12 +151,17 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
             setOpenDeleteDialog(true);
 
             //Prepare data for deletion
-            setDelBooking({ id: Number(e.event.id), slot: props.slot, date: props.date, user: currentUser });
+            setDelBooking({ id: Number(e.event.id), slot: props.slot, date: props.date, user: user.id });
         }
     };
 
     // Delete booking and close dialog, re-render calendar.
     async function handleDeleteBooking() {
+
+        //Wait for user info
+        if (loading || !user) {
+            return null; // eller en spinner
+        }
 
         //Prevents multiple clicks
         if (isProcessing) return; 
@@ -169,6 +186,11 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
     // Create booking and close dialog, re-render calendar.
     async function handleNewBooking() {
 
+        //Wait for user info
+        if (loading || !user) {
+            return null; // eller en spinner
+        }
+
         //Prevents multiple clicks
         if (isProcessing) return; 
         setIsProcessing(true);
@@ -179,7 +201,7 @@ export default function Calendar({ bookings, timeslots, currentUser, refreshBook
         }
 
         //Find current booking/-s
-        const userBookings = bookings.filter(b => b.user === currentUser);
+        const userBookings = bookings.filter(b => b.user === user.id);
 
         //Book new slot
         const result = await createBooking(newBooking.user, newBooking.slot, newBooking.date);
