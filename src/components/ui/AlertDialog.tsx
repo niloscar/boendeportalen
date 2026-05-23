@@ -34,19 +34,23 @@ export default function AlertDialog({
             />
 
             {/* Dialog */}
-            <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm animate-[fadeIn_0.15s_ease-out]">
-                <h2 className="text-xl text-neutral-900 font-semibold mb-2">{title}</h2>
-                <p className="whitespace-pre-line text-gray-700 mb-6">{message}</p>
 
-                <div className="flex justify-end gap-3">
+            <div className="p-6 relative bg-white rounded-2xl shadow-xl w-full max-w-[600px] max-h-[80vh] flex flex-col animate-[fadeIn_0.15s_ease-out]">
 
+                {/* Scrollbart innehåll */}
+                <div className="p-2 overflow-y-auto flex-1">
+                    <h2 className="text-xl text-neutral-900 font-semibold mb-2">{title}</h2>
+                    <p className="whitespace-pre-line text-gray-700" dangerouslySetInnerHTML={{ __html: message }}></p>
+                </div>
+
+                {/* Fast footer */}
+                <div className="pt-6 rounded-b-2xl flex justify-end bg-white">
                     <button
                         onClick={onConfirm}
                         className={`px-4 py-2 rounded-xl text-white transition ${colorMap[confirmColor]}`}>
                         OK
                     </button>
                 </div>
-            </div>
-        </div >
-    );
+            </div>            
+        </div>);
 }
