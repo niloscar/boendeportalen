@@ -11,11 +11,6 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
     const details = [
         {
             id: crypto.randomUUID(),
-            title: "id",
-            content: apartmentArray[0]
-        },
-        {
-            id: crypto.randomUUID(),
             title: "Kvadratmeter",
             content: apartmentArray[4]
         },
