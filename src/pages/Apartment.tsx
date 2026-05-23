@@ -14,7 +14,6 @@ const Apartment = () => {
 
     const apartment: ApartmentData | null = state?.apartment ?? null;
     const details: Detail[] | null = state?.details ?? null;
-
     if (!apartment || !details) {
         return (
             <div className="max-w-3xl">
@@ -33,7 +32,7 @@ const Apartment = () => {
         saved,
         applied,
         deleted } = SignUpCalls({ apartment });
-        
+
     return (
         <section className="flex flex-col gap-6 p-6 max-w-3xl">
             <div className="flex justify-between">

@@ -43,25 +43,27 @@ export function SignUpCalls({ apartment }: ApartmentProp) {
         }
     }, [loading, session?.access_token, applied])
     const getApartmentStatus = useCallback(async () => {
-        if (loading) return;
-        try {
-            setLoading(true);
-            setError('');
-            const data = await getApartmentSignupStatus(session?.access_token, apartment.id, activeUntil);
-            setApplied(data);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setError(error.message);
+        if (session?.access_token != undefined) {
+            if (loading) return;
+            try {
+                setLoading(true);
+                setError('');
+                const data = await getApartmentSignupStatus(session?.access_token, apartment.id, activeUntil);
+                setApplied(data);
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    setError(error.message);
+                }
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
         }
     }, [loading, session?.access_token, apartment.id, activeUntil])
     useEffect(() => {
         (async () => {
             await getApartmentStatus();
         })();
-    });
+    }, []);
 
     return {
         signUp,
