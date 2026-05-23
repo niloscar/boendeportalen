@@ -1,8 +1,6 @@
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import Widget from '../../components/admin/Widget'
 
-import type { AdminSubPageProps } from '../../types/admin'
-
 const WIDGETS = [
     {
         title: 'Exempelwidget 1',
@@ -21,10 +19,9 @@ const WIDGETS = [
     }
 ]
 
-export default function DashboardPage({ styles }: AdminSubPageProps) {
-
+export default function DashboardPage() {
     return (
-        <main className={`${styles['admin-subpage']} ${styles['dashboard']}`}>
+        <main>
             <ResponsiveMasonry columnsCountBreakPoints={{0: 1, 960: 2}}>
                 <Masonry style={{ gap: 24 }} itemStyle={{ gap: 24 }}>
                     {WIDGETS.map(widget => (

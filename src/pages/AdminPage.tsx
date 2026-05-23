@@ -12,8 +12,6 @@ import type { Profile } from '../types/profile'
 import type { AdminSubPage } from '../types/admin'
 import type { AuthError } from '@supabase/supabase-js'
 
-import styles from './AdminPage.module.css'
-
 type AdminPageProps = {
     profile: Profile | null
     signOut: () => Promise<{ error: AuthError | null }>
@@ -51,15 +49,13 @@ export default function AdminPage({ signOut }: AdminPageProps) {
         <div className="fakeBody min-h-screen flex bg-neutral-200 justify-center">
             <div className="fakeApp w-full max-w-7xl bg-white p-6 flex flex-col gap-6">
 
-                <h1 className="text-2xl font-bold m-0">
-                    Administration {/* → {currentPage.title} */}
-                </h1>
+                <h1 className="text-2xl font-bold m-0">Administration</h1>
 
                 {isAdmin && <AdminNav pages={navPages} signOut={signOut} />}
 
                 <Breadcrumbs crumbs={[...CRUMBS, { title: currentPage.title }]} />
 
-                <SubPageComponent styles={styles} />
+                <SubPageComponent />
             </div>
         </div>
     );

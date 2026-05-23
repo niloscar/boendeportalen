@@ -1,8 +1,6 @@
-import type { AdminSubPageProps } from '../../types/admin'
-
-export default function SettingsPage({ styles }: AdminSubPageProps) {
+export default function SettingsPage() {
     return (
-        <main className={`${styles['admin-subpage']} ${styles['settings']}`}>
+        <main>
             <p>Här kan du se och hantera alla inställningar i boendeportalen.</p>
         </main>
     )

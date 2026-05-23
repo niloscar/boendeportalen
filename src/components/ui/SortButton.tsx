@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline'
 import styles from './SortButton.module.css'
 
 const SortButton = ({ onClick, children, value, isActive }: { onClick: () => void; children: ReactNode; value: string; isActive: boolean }) => {
@@ -22,7 +23,7 @@ const SortButton = ({ onClick, children, value, isActive }: { onClick: () => voi
         >
             {children} 
             <span className={`text-xs ${styles['sort-order']}`}>
-                {isActive && (direction === 'asc' ? '↑' : '↓')}
+                {isActive && (direction === 'asc' ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />)}
             </span>
         </button>
     );

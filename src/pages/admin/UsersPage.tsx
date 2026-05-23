@@ -1,8 +1,6 @@
-import type { AdminSubPageProps } from '../../types/admin'
-
-export default function UsersPage({ styles }: AdminSubPageProps) {
+export default function UsersPage() {
     return (
-        <main className={`${styles['admin-subpage']} ${styles['users']}`}>
+        <main>
             <p>Här kan du se och hantera alla användare i boendeportalen.</p>
         </main>
     )

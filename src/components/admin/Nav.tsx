@@ -5,8 +5,6 @@ import { hasAdminAccess } from '../../utils/accessControl'
 import type { AuthError } from '@supabase/supabase-js'
 import type { AdminSubPage } from '../../types/admin'
 
-import styles from './Nav.module.css'
-
 type AdminNavProps = {
     pages: Pick<AdminSubPage, 'slug' | 'title'>[]
     signOut: () => Promise<{ error: AuthError | null }>
@@ -21,16 +19,18 @@ export default function AdminNav({ pages, signOut }: AdminNavProps) {
     }
 
     const isAdmin = hasAdminAccess(profile)
-    const classNames = [styles.link].filter(Boolean).join(' ')
 
     return (
-        <nav className={`${styles['admin-nav']} m-0 flex items-center`}>
-            <ul className="flex space-x-2">
+        <nav className={`flex flex-col md:flex-row items-start md:items-center gap-2 m-0`}>
+            <ul className="flex flex-col md:flex-row space-x-2">
                 {pages.map((page) => (
                     <li key={page.slug}>
                         <NavLink
                             to={`/admin/${page.slug}`}
-                            className={({ isActive }) => isActive ? `${styles.active} ${classNames}` : classNames}
+                            className={({ isActive }) => [
+                                'text-decoration-none text-neutral-900 cursor-pointer hover:underline',
+                                isActive && 'underline'
+                            ].filter(Boolean).join(' ')}
                         >
                             {page.title}
                         </NavLink>
@@ -38,19 +38,19 @@ export default function AdminNav({ pages, signOut }: AdminNavProps) {
                 ))}
             </ul>
             {isAdmin && profile && (
-                <ul className="flex space-x-2 ml-auto">
+                <ul className="flex flex-col md:flex-row space-x-2 ml-0 md:ml-auto">
                     <li className="text-gray-500">
                         Inloggad som{' '}
                         {profile.full_name 
-                            ? <span className={styles.link}>{profile.full_name}</span>
+                            ? <span className='text-neutral-900'>{profile.full_name}</span>
                             : 'gäst'
-                        }
+                        }.
                     </li>
                     <li>
                         <button
                             type="button"
                             onClick={handleSignOut}
-                            className={styles.link}
+                            className='text-decoration-none text-neutral-900 cursor-pointer hover:underline'
                         >
                             Logga ut
                         </button>
