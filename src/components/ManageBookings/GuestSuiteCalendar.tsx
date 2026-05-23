@@ -211,7 +211,7 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
     }
 
     return (
-        <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
+        <div>
             <FullCalendar
                 plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
                 initialView="dayGridMonth"

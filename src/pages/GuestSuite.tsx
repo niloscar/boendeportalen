@@ -30,8 +30,8 @@ export default function GuestSuite() {
     return (
         <>
             <div class="h-screen">
-                <h1 class="text-5xl p-6">Bokning av gästlägenheten</h1>
-                <div class="p-6">Välkommen att boka vår gästlägenhet! Gästlägenheten är tillgänglig för dig som hyresgäst när du får besök av familj eller vänner och behöver extra utrymme. <a href="" onClick={(e) => { e.preventDefault(); setOpenAlertDialog(true) }}>Här</a> hittar du all viktig information inför din bokning.</div>
+                <h1 class="text-5xl mb-6">Bokning av gästlägenheten</h1>
+                <div class="mb-6">Välkommen att boka vår gästlägenhet! Gästlägenheten är tillgänglig för dig som hyresgäst när du får besök av familj eller vänner och behöver extra utrymme. <a href="" onClick={(e) => { e.preventDefault(); setOpenAlertDialog(true) }}>Här</a> hittar du all viktig information inför din bokning.</div>
                 <GuestSuiteCalendar
                     bookings={bookings}
                     refreshBookings={refreshBookings}

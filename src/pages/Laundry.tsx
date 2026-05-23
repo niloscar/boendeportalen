@@ -25,8 +25,8 @@ export default function Laundry() {
 
     return (
         <>
-            <h1 class="text-5xl p-6">Bokning av tvättstugan</h1 >
-            <div class="p-6">Välkommen att boka tid i tvättstugan. För att alla hyresgäster ska ha möjlighet att tvätta på ett rättvist sätt gäller följande regler:
+            <h1 class="text-5xl mb-6">Bokning av tvättstugan</h1 >
+            <div class="mb-6">Välkommen att boka tid i tvättstugan. För att alla hyresgäster ska ha möjlighet att tvätta på ett rättvist sätt gäller följande regler:
 
                 <ul class="list-disc list-inside text-gray-700 p-0"><li>Du kan endast ha en aktiv bokning åt gången.</li>
 
