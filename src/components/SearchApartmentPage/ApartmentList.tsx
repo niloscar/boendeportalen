@@ -1,16 +1,16 @@
-import ApartmentCard from './ApartmentCard.tsx'
-import type { ApartmentData } from "../../types/Apartment.ts";
-type Props = {
-    apartments: ApartmentData[]
-}
+import ApartmentCard from './ApartmentCard.tsx';
+import ListItem from './ListItem.tsx';
+import type { ApartmentListProp } from "../../types/apartment.ts";
 
-const ApartmentList = ({ apartments }: Props)  => {
+const ApartmentList = (props: ApartmentListProp) => {
     return (
-        <div className="flex flex-row gap-4 items-center">
-            {apartments.map(( apartment : ApartmentData) => (
-                <ApartmentCard key={apartment.id} apartment={apartment} />
-            ))}
-        </div>
+        props.variant === 'div' ?
+            props.items.map((item) => (
+                <ApartmentCard key={item.id} apartment={item} />
+            )) :
+            props.items.map((item) => (
+                <ListItem key={item.id} detail={item} />
+            ))
     )
 }
 
