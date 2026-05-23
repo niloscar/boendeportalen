@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { createBooking, deleteBooking } from "../api/laundry";
-import type { Booking, NewBooking, BookingRow } from "../types/laundry";
+import { createLaundryRoomBooking, deleteLaundryRoomBooking } from "../api/laundry";
+import { createGuestSuiteBooking, deleteGuestSuiteBooking } from "../api/guestSuite";
+import type { Booking, NewBooking } from "../types/booking";
+import type { User } from '@supabase/supabase-js'
 
 type UseBookingActionsProps = {
-    user: string | null;
-    bookings: BookingRow[];
+    user: User | null;
+    bookings: Booking[];
     refreshBookings: () => Promise<void>;
     setOpenBookDialog: (value: boolean) => void;
     setOpenDeleteDialog: (value: boolean) => void;
-    setNewBooking: (NewBooking | null);
-    setDelBooking: (Booking | null);
+    setNewBooking: (value: NewBooking | null) => void;
+    setDelBooking: (value: Booking | null) => void;
+    bookingType: "GuestSuite" | "LaundryRoom";
 };
 
 export function useBookingActions({
@@ -19,16 +22,17 @@ export function useBookingActions({
     setOpenBookDialog,
     setOpenDeleteDialog,
     setNewBooking,
-    setDelBooking
+    setDelBooking,
+    bookingType
 }: UseBookingActionsProps) {
     
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Create booking and close dialog, re-render calendar.
-    async function createNewBooking(newBooking:NewBooking) {
+    async function createNewBooking(newBooking: NewBooking | null) {
 
         //Make sure all of the info needed is provided
-        if (!user || !newBooking?.slot || !newBooking?.date) return;
+        if (!user || !newBooking?.date) return;
 
         //Prevents multiple clicks
         if (isProcessing) return;
@@ -36,16 +40,32 @@ export function useBookingActions({
 
         //Find current booking/-s
         const userBookings = bookings.filter(b => b.user === user.id);
+        
+        //Create booking
+        switch (bookingType) {
+            case "LaundryRoom":
 
-        //Book new slot
-        await createBooking(newBooking.user, newBooking.slot, newBooking.date);
+                //Book new slot
+                if (newBooking.slot !== null) {
+                    await createLaundryRoomBooking(newBooking.user, newBooking.slot, newBooking.date);
+                }
 
-        //Delete old bookings
-        for (const b of userBookings) {
-            if (b.id) {
-                await deleteBooking(b.id);
-            }
+                //Delete old bookings
+                for (const b of userBookings) {
+                    if (b.id) {
+                        await deleteLaundryRoomBooking(b.id);
+                    }
+                }
+                break;
+
+            case "GuestSuite":
+                await createGuestSuiteBooking(newBooking.user, newBooking.date);
+                break;
+
+            default:
+                console.warn("Unknown booking type:", bookingType);
         }
+        
 
         // Cleanup
         setOpenBookDialog(false);
@@ -58,7 +78,7 @@ export function useBookingActions({
 
     // Delete booking and close dialog, re-render calendar.
 
-    async function deleteExistingBooking(delBooking:Booking) {
+    async function deleteExistingBooking(delBooking: Booking | null) {
 
         //Make sure all of the info needed is provided
         if (!user || !delBooking?.id) return;
@@ -68,7 +88,19 @@ export function useBookingActions({
         setIsProcessing(true);
 
         //Delete booking
-        await deleteBooking(delBooking.id);
+        switch (bookingType) {
+            case "LaundryRoom":
+                await deleteLaundryRoomBooking(delBooking.id);
+                break;
+
+            case "GuestSuite":
+                await deleteGuestSuiteBooking(delBooking.id);
+                break;
+
+            default:
+                console.warn("Unknown booking type:", bookingType);
+        }
+
 
         // Cleanup
         setOpenDeleteDialog(false);

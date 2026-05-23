@@ -5,13 +5,15 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
+import { Skeleton, Box } from "@mui/material";
 
-import { deleteBooking, createBooking } from "../../api/guestSuite";
-import type { NewBooking, Booking, CalendarProps } from "../../types/guestSuite";
+import useAuth from "../../hooks/useAuth";
+import { useBookingActions } from "../../hooks/useBookingActions";
+import type { NewBooking, Booking, GuestSuiteCalendarProps } from "../../types/booking";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import AlertDialog from "../ui/AlertDialog";
 
-export default function Calendar({ bookings, currentUser, refreshBookings }: CalendarProps) {
+export default function Calendar({ bookings, refreshBookings }: GuestSuiteCalendarProps) {
 
     // States
 
@@ -25,19 +27,49 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
     const [delBooking, setDelBooking] = useState<Booking | null>(null);
     const [newBooking, setNewBooking] = useState<NewBooking | null>(null);
 
-    const [isProcessing, setIsProcessing] = useState(false);
-
     // Will hold all events to be displayed in calendar
     const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
 
-    // Defines a 30 day window for the calendar.
+    //Loading state
+        const [isBuildingEvents, setIsBuildingEvents] = useState(true);
+    
+    //Auth
+    const { user, loading } = useAuth()
+
+    // Defines a 365 day window for the calendar.
     const today = useMemo(() => new Date(), []);
     const calMaxDate = new Date();
-    calMaxDate.setDate(today.getDate() + 30);
+    calMaxDate.setDate(today.getDate() + 365);
+
+    //Defines what type of booking
+    const bookingType: "GuestSuite" | "LaundryRoom" = "GuestSuite";
+
+    const {
+        createNewBooking,
+        deleteExistingBooking,
+        isProcessing
+    } = useBookingActions({
+        user,
+        bookings,
+        refreshBookings,
+        setOpenBookDialog,
+        setOpenDeleteDialog,
+        setNewBooking,
+        setDelBooking,
+        bookingType
+    });
 
     // useEffect to render all calendar events
     useEffect(() => {
-        const buildEvents = () => {
+
+        if (loading || !user) return;
+
+        const buildEvents = async () => {
+
+            //Loading
+            setIsBuildingEvents(true);
+
+            //Building
             const events: EventInput[] = [];
 
             // Create an array containing every date for 1 year
@@ -54,7 +86,7 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
 
                 if (booking) {
                     // Check if there is a booking and who booked it.
-                    const isOwner = booking.user === currentUser;
+                    const isOwner = booking.user === user.id;
 
                     events.push({
                         id: String(booking.id),
@@ -84,11 +116,15 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
                 }
             });
 
+            //Update state that holds events
             setCalendarEvents(events);
+
+            //Loading off
+            setIsBuildingEvents(false);
         };
 
         buildEvents();
-    }, [bookings, currentUser, today]);
+    }, [bookings, user, loading, today]);
 
 
     // Handles click on events
@@ -97,10 +133,15 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
         const props = e.event.extendedProps;
         const isOwner = props.isOwner;
 
+        //Wait for user info
+        if (loading || !user) {
+            return null; // eller en spinner
+        }
+
         // If slot is available
         if (props.isAvailable) {
 
-            const userBookings = bookings.filter(b => b.user === currentUser);
+            const userBookings = bookings.filter(b => b.user === user.id);
 
             // Prevent user from booking more than 5 dates
             if (userBookings.length >= 5) {
@@ -115,7 +156,7 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
             setOpenBookDialog(true);
 
             //Prepare data for new booking
-            setNewBooking({ date: props.date, user: currentUser });
+            setNewBooking({ date: props.date, slot: null, user: user.id });
             return;
         }
 
@@ -133,60 +174,26 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
             setOpenDeleteDialog(true);
 
             //Prepare data for deletion
-            setDelBooking({ id: Number(e.event.id), date: props.date, user: currentUser });
+            setDelBooking({ id: Number(e.event.id), date: props.date, slot: null, user: user.id });
         }
     };
-
-    // Delete booking and close dialog, re-render calendar.
-    async function handleDeleteBooking() {
-
-        //Prevents multiple clicks
-        if (isProcessing) return; 
-        setIsProcessing(true);
-
-        if (!delBooking || !delBooking.id) {
-            setIsProcessing(false);
-            return;
-        }
-
-        //Delete booking
-        const result = await deleteBooking(delBooking.id);
-        console.log(result);
-
-        //Cleanup
-        setOpenDeleteDialog(false);
-        setIsProcessing(false);
-        setDelBooking(null);
-        refreshBookings();
-    }
-
-    // Create booking and close dialog, re-render calendar.
-    async function handleNewBooking() {
-
-        //Prevents multiple clicks
-        if (isProcessing) return; 
-        setIsProcessing(true);
-
-        if (!newBooking?.date) {
-            setIsProcessing(false); 
-            return;
-        }
-
-        //Book new slot
-        const result = await createBooking(newBooking.user, newBooking.date);
-        console.log(result);
-
-        //Cleanup
-        setOpenBookDialog(false);
-        setIsProcessing(false);
-        setNewBooking(null);
-        await refreshBookings();
-    }
 
     async function handleAlertConfirm() {
         //Cleanup
         setOpenAlertDialog(false);
         setAlertDialogMessage("");
+    }
+
+    //Render skeleton if loading
+    if (isBuildingEvents) {
+        return (
+            <Box sx={{ p: 2 }}>
+                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
+                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
+                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
+                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
+            </Box>
+        );
     }
 
     return (
@@ -230,7 +237,8 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
                 allDaySlot={true}
                 height="auto"
                 validRange={{
-                    start: today.toISOString().split("T")[0]
+                    start: today.toISOString().split("T")[0],
+                    end: calMaxDate.toISOString().split("T")[0]
                 }}
             />
 
@@ -239,7 +247,7 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
                 title="Radera bokning"
                 message={deleteDialogMessage}
                 isProcessing={isProcessing}
-                onConfirm={handleDeleteBooking}
+                onConfirm={async () => { await deleteExistingBooking(delBooking); }}
                 onCancel={() => {
                     setOpenDeleteDialog(false);
                     setDelBooking(null);
@@ -252,7 +260,7 @@ export default function Calendar({ bookings, currentUser, refreshBookings }: Cal
                 title="Bekräfta bokning"
                 message={bookDialogMessage}
                 isProcessing={isProcessing}
-                onConfirm={handleNewBooking}
+                onConfirm={async () => { await createNewBooking(newBooking); }}
                 onCancel={() => {
                     setOpenBookDialog(false);
                     setNewBooking(null);

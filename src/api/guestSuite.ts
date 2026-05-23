@@ -1,6 +1,6 @@
 import axios from "axios";
 import apiConfig from "./axiosConfig";
-import type { BookingRow, Booking } from "../types/guestSuite";
+import type { BookingRow, Booking } from "../types/booking";
 
 //Fetch today's and future bookings from Supabase
 export async function fetchBookedSlots() {
@@ -11,9 +11,10 @@ export async function fetchBookedSlots() {
             `guest_suite_bookings?select=*&date=gte.${today}`
         );
 
-        return data.map((row:BookingRow): Booking => ({
+        return data.map((row: BookingRow): Booking => ({
             id: row.id,
             date: row.date,
+            slot: null,
             user: row.user
         }));
 
@@ -24,7 +25,7 @@ export async function fetchBookedSlots() {
 }
 
 //Delete booking from Supabase based on id
-export async function deleteBooking(id: number) {
+export async function deleteGuestSuiteBooking(id: number) {
     try {
         const response = await apiConfig.delete("guest_suite_bookings", {
             params: { id: `eq.${id}` }
@@ -49,7 +50,7 @@ export async function deleteBooking(id: number) {
 }
 
 //Create a new booking
-export async function createBooking(user: string, date: string) {
+export async function createGuestSuiteBooking(user: string, date: string) {
     try {
         const response = await apiConfig.post<BookingRow[]>("guest_suite_bookings", {
             user,

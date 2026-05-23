@@ -1,6 +1,6 @@
 import axios from "axios";
 import apiConfig from "./axiosConfig";
-import type { TimeslotRow, Timeslot, BookingRow, Booking } from "../types/laundry";
+import type { TimeslotRow, Timeslot, BookingRow, Booking } from "../types/booking";
 
 //Fetch timeslots from Supabase
 export async function fetchLaundrySlots() {
@@ -30,7 +30,7 @@ export async function fetchBookedSlots() {
             `laundry_bookings?select=*&date=gte.${today}`
         );
 
-        return data.map((row:BookingRow): Booking => ({
+        return data.map((row: BookingRow): Booking => ({
             id: row.id,
             date: row.date,
             slot: row.slot,
@@ -44,7 +44,7 @@ export async function fetchBookedSlots() {
 }
 
 //Delete booking from Supabase based on id
-export async function deleteBooking(id: number) {
+export async function deleteLaundryRoomBooking(id: number) {
     try {
         const response = await apiConfig.delete("laundry_bookings", {
             params: { id: `eq.${id}` }
@@ -69,7 +69,7 @@ export async function deleteBooking(id: number) {
 }
 
 //Create a new booking
-export async function createBooking(user: string, slot: number, date: string) {
+export async function createLaundryRoomBooking(user: string, slot: number, date: string) {
     try {
         const response = await apiConfig.post<BookingRow[]>("laundry_bookings", {
             user,

@@ -5,16 +5,16 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
-import useAuth from "../../hooks/useAuth";
-import type { NewBooking, Booking, CalendarProps } from "../../types/laundry";
-import { useBookingActions } from "../../hooks/useBookingActions";
-import ConfirmDialog from "../ui/ConfirmDialog";
 import { Skeleton, Box } from "@mui/material";
 
-export default function Calendar({ bookings, timeslots, refreshBookings }: CalendarProps) {
+import useAuth from "../../hooks/useAuth";
+import { useBookingActions } from "../../hooks/useBookingActions";
+import type { NewBooking, Booking, LaundryRoomCalendarProps } from "../../types/booking";
+import ConfirmDialog from "../ui/ConfirmDialog";
+
+export default function Calendar({ bookings, timeslots, refreshBookings }: LaundryRoomCalendarProps) {
 
     // States
-
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
     const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>("");
     const [openBookDialog, setOpenBookDialog] = useState<boolean>(false);
@@ -23,18 +23,22 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
     const [delBooking, setDelBooking] = useState<Booking | null>(null);
     const [newBooking, setNewBooking] = useState<NewBooking | null>(null);
 
-    //Loading states
-    const [isBuildingEvents, setIsBuildingEvents] = useState(true);
-
     // Will hold all events to be displayed in calendar
     const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
 
+    //Loading state
+    const [isBuildingEvents, setIsBuildingEvents] = useState(true);
+
+    //Auth
     const { user, loading } = useAuth()
 
     // Defines a 30 day window for the calendar.
     const today = useMemo(() => new Date(), []);
     const calMaxDate = new Date();
     calMaxDate.setDate(today.getDate() + 30);
+
+    //Defines what type of booking
+    const bookingType: "GuestSuite" | "LaundryRoom" = "LaundryRoom";
 
     const {
         createNewBooking,
@@ -47,7 +51,8 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
         setOpenBookDialog,
         setOpenDeleteDialog,
         setNewBooking,
-        setDelBooking
+        setDelBooking,
+        bookingType
     });
 
 
@@ -61,13 +66,13 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
             //Loading
             setIsBuildingEvents(true);
 
-            //Buillding
+            //Building
             const events: EventInput[] = [];
 
             //Loop through bookings
             bookings.forEach((booking) => {
 
-                const slot = timeslots.find((s) => s.id === booking.slot);
+                const slot = timeslots?.find((s) => s.id === booking.slot);
 
                 if (!slot) return;
 
@@ -143,7 +148,7 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Calen
 
         const props = e.event.extendedProps;
         const isOwner = props.isOwner;
-        const slot = timeslots.find(s => s.id === props.slot);
+        const slot = timeslots?.find(s => s.id === props.slot);
 
         //Wait for user info
         if (loading || !user) {

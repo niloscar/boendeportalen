@@ -20,7 +20,7 @@ export type Booking = {
 export type BookingRow = {
     id: number;
     date: string;
-    slot: number;
+    slot: number | null;
     user: string;
 };
 
@@ -30,8 +30,13 @@ export type NewBooking = {
     user: string;
 };
 
-export type CalendarProps = {
+export type GuestSuiteCalendarProps = {
+    bookings: Booking[];
+    refreshBookings: () => Promise<void>;
+};
+
+export type LaundryRoomCalendarProps = {
     bookings: Booking[];
     timeslots: Timeslot[];
-    refreshBookings: () => void;
+    refreshBookings: () => Promise<void>;
 };
