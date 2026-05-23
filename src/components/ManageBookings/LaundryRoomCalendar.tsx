@@ -5,14 +5,14 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
-import { Skeleton, Box } from "@mui/material";
 
 import useAuth from "../../hooks/useAuth";
 import { useBookingActions } from "../../hooks/useBookingActions";
 import type { NewBooking, Booking, LaundryRoomCalendarProps } from "../../types/booking";
 import ConfirmDialog from "../ui/ConfirmDialog";
+import LoadingSkeleton from "./LoadingSkeleton";
 
-export default function Calendar({ bookings, timeslots, refreshBookings }: LaundryRoomCalendarProps) {
+export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookings }: LaundryRoomCalendarProps) {
 
     // States
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
@@ -187,14 +187,7 @@ export default function Calendar({ bookings, timeslots, refreshBookings }: Laund
 
     //Render skeleton if loading
     if (isBuildingEvents) {
-        return (
-            <Box sx={{ p: 2 }}>
-                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
-                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
-                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
-                <Skeleton variant="rectangular" height={40} sx={{ mb: 2 }} />
-            </Box>
-        );
+        return (<LoadingSkeleton />);
     }
 
     return (

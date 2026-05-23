@@ -1,6 +1,6 @@
-import Calendar from "../components/LaundryPage/Calendar";
+import LaundryRoomCalendar from "../components/ManageBookings/LaundryRoomCalendar";
 import { useEffect, useState, useCallback } from "react";
-import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundry";
+import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundryRoom";
 import type { Timeslot, Booking } from "../types/booking";
 
 export default function Laundry() {
@@ -23,7 +23,7 @@ export default function Laundry() {
     }, [refreshBookings]);
 
     return (
-        <Calendar
+        <LaundryRoomCalendar
             bookings={bookings}
             timeslots={timeslots}
             refreshBookings={refreshBookings}

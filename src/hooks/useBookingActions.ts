@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createLaundryRoomBooking, deleteLaundryRoomBooking } from "../api/laundry";
+import { createLaundryRoomBooking, deleteLaundryRoomBooking } from "../api/laundryRoom";
 import { createGuestSuiteBooking, deleteGuestSuiteBooking } from "../api/guestSuite";
 import type { Booking, NewBooking } from "../types/booking";
 import type { User } from '@supabase/supabase-js'

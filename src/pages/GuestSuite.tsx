@@ -1,4 +1,4 @@
-import Calendar from "../components/GuestSuitePage/Calendar";
+import GuestSuiteCalendar from "../components/ManageBookings/GuestSuiteCalendar";
 import { useEffect, useState, useCallback } from "react";
 import { fetchBookedSlots } from "../api/guestSuite";
 import type { Booking } from "../types/booking";
@@ -18,7 +18,7 @@ export default function GuestSuite() {
     }, [refreshBookings]);
 
     return (
-        <Calendar
+        <GuestSuiteCalendar
             bookings={bookings}
             refreshBookings={refreshBookings}
         />
