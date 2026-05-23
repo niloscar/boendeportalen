@@ -40,11 +40,7 @@ export default function AdminNav({ pages, signOut }: AdminNavProps) {
             {isAdmin && profile && (
                 <ul className="flex flex-col md:flex-row space-x-2 ml-0 md:ml-auto">
                     <li className="text-gray-500">
-                        Inloggad som{' '}
-                        {profile.full_name 
-                            ? <span className='text-neutral-900'>{profile.full_name}</span>
-                            : 'gäst'
-                        }.
+                        Inloggad som administratör.
                     </li>
                     <li>
                         <button
