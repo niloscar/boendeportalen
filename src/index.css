@@ -44,3 +44,16 @@ body {
 .fc .fc-daygrid-body-natural .fc-daygrid-day-events {
     margin-bottom: 0.1em;
 }
+
+.fc-list-event-time, .fc-list-event-graphic{
+    display: none;
+}
+
+.fc .fc-list-event:hover td{
+    background-color: transparent;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th{
+    border: 0;
+}

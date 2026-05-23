@@ -1,8 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
-import type { EventInput, EventClickArg } from "@fullcalendar/core";
+import type { EventInput, EventClickArg, CalendarApi } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list"
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
 
@@ -16,6 +18,7 @@ import LoadingSkeleton from "./LoadingSkeleton";
 export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestSuiteCalendarProps) {
 
     // States
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
     const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>("");
@@ -31,10 +34,28 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
     const [calendarEvents, setCalendarEvents] = useState<EventInput[]>([]);
 
     //Loading state
-        const [isBuildingEvents, setIsBuildingEvents] = useState(true);
-    
+    const [isBuildingEvents, setIsBuildingEvents] = useState(true);
+
     //Auth
     const { user, loading } = useAuth()
+
+    //Handle window resizing
+    const calendarRef = useRef<FullCalendar | null>(null);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        handleResize(); // sätt initialt värde
+        window.addEventListener("resize", handleResize);
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    useEffect(() => {
+        const api: CalendarApi | undefined = calendarRef.current?.getApi();
+        if (!api) return;
+
+        api.changeView(isMobile ? "listWeek" : "dayGridMonth");
+    }, [isMobile]);
 
     // Defines a 365 day window for the calendar.
     const today = useMemo(() => new Date(), []);
@@ -185,15 +206,16 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
     }
 
     //Render skeleton if loading
-    if (isBuildingEvents) {
+    if (isBuildingEvents || loading) {
         return (<LoadingSkeleton />);
     }
 
     return (
         <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
             <FullCalendar
-                plugins={[dayGridPlugin, interactionPlugin]}
+                plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
+                ref={calendarRef}
                 headerToolbar={{
                     left: "today",
                     center: "title",
@@ -216,7 +238,7 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
                 eventContent={(arg) => {
                     const { isAvailable, isOwner } = arg.event.extendedProps;
 
-                    let textColor = "text-gray-700"; // default för lediga
+                    let textColor = "text-gray-700";
                     if (isOwner) textColor = "text-white cursor-pointer";
                     if (!isAvailable && !isOwner) textColor = "text-neutral-500";
 

@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
-import type { EventInput, EventClickArg } from "@fullcalendar/core";
+import type { EventInput, EventClickArg, CalendarApi } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import listPlugin from "@fullcalendar/list"
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
 
@@ -13,6 +14,8 @@ import ConfirmDialog from "../ui/ConfirmDialog";
 import LoadingSkeleton from "./LoadingSkeleton";
 
 export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookings }: LaundryRoomCalendarProps) {
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     // States
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
@@ -31,6 +34,24 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
 
     //Auth
     const { user, loading } = useAuth()
+
+    //Handle window resizing
+    const calendarRef = useRef<FullCalendar | null>(null);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        handleResize(); // sätt initialt värde
+        window.addEventListener("resize", handleResize);
+        
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    useEffect(() => {
+        const api: CalendarApi | undefined = calendarRef.current?.getApi();
+        if (!api) return;
+
+        api.changeView(isMobile ? "listWeek" : "timeGridWeek");
+    }, [isMobile]);
 
     // Defines a 30 day window for the calendar.
     const today = useMemo(() => new Date(), []);
@@ -62,7 +83,7 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
         if (loading || !user) return;
 
         const buildEvents = async () => {
-            
+
             //Loading
             setIsBuildingEvents(true);
 
@@ -193,8 +214,9 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
     return (
         <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
             <FullCalendar
-                plugins={[timeGridPlugin, interactionPlugin]}
+                plugins={[timeGridPlugin, listPlugin, interactionPlugin]}
                 initialView="timeGridWeek"
+                ref={calendarRef}
                 headerToolbar={{
                     left: "today",
                     center: "title",
@@ -257,7 +279,7 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
                 title="Bekräfta bokning"
                 message={bookDialogMessage}
                 isProcessing={isProcessing}
-                onConfirm={async () => {await createNewBooking(newBooking);}}
+                onConfirm={async () => { await createNewBooking(newBooking); }}
                 onCancel={() => {
                     setOpenBookDialog(false);
                     setNewBooking(null);

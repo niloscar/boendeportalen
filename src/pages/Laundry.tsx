@@ -4,6 +4,7 @@ import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundryRoom";
 import type { Timeslot, Booking } from "../types/booking";
 
 export default function Laundry() {
+    
     const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
     const [bookings, setBookings] = useState<Booking[]>([]);
 
