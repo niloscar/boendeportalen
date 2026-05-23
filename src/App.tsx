@@ -1,8 +1,7 @@
-import { Link, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Auth from './pages/Auth'
 import { signOut } from './lib/supabase'
 import useAuth from './hooks/useAuth'
-import { hasAdminAccess } from './utils/accessControl'
 
 // Import route guards here, like PrivateRoute and AdminRoute, if you want to use them in this file.
 import { PublicOnlyRoute, AdminRoute } from './routing'
@@ -17,7 +16,6 @@ import Apartment from "./pages/Apartment";
 function App() {
     // Add profile in here if you want to send profile info to route guards, like AdminRoute.
     const { user, loading, profile } = useAuth()
-    const isAdmin = hasAdminAccess(profile)
 
     return (
         <div className="min-h-screen flex flex-col">
