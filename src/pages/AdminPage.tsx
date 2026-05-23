@@ -41,17 +41,13 @@ export default function AdminPage({ signOut }: AdminPageProps) {
     const currentPage = ADMIN_SUB_PAGES.find(page => page.slug === slug) || dashboardPage
     const SubPageComponent = currentPage.component
 
-    const navPages = ADMIN_SUB_PAGES.filter(page => (
-        isAdmin ? page.authRequired : !page.authRequired
-    ))
-
     return (
         <div className="container p-6 flex flex-col gap-6">
-            <h1 className="text-2xl font-bold m-0">Administration</h1>
-
-            {isAdmin && <AdminNav pages={navPages} signOut={signOut} />}
-
+            <h1 className="text-3xl md:text-5xl m-0">Administration</h1>
+            
             <Breadcrumbs crumbs={[...CRUMBS, { title: currentPage.title }]} />
+
+            <AdminNav pages={ADMIN_SUB_PAGES} signOut={signOut} />
 
             <SubPageComponent />
         </div>
