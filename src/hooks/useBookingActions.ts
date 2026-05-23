@@ -1,19 +1,7 @@
 import { useState } from "react";
 import { createLaundryRoomBooking, deleteLaundryRoomBooking } from "../api/laundryRoom";
 import { createGuestSuiteBooking, deleteGuestSuiteBooking } from "../api/guestSuite";
-import type { Booking, NewBooking } from "../types/booking";
-import type { User } from '@supabase/supabase-js'
-
-type UseBookingActionsProps = {
-    user: User | null;
-    bookings: Booking[];
-    refreshBookings: () => Promise<void>;
-    setOpenBookDialog: (value: boolean) => void;
-    setOpenDeleteDialog: (value: boolean) => void;
-    setNewBooking: (value: NewBooking | null) => void;
-    setDelBooking: (value: Booking | null) => void;
-    bookingType: "GuestSuite" | "LaundryRoom";
-};
+import type { UseBookingActionsProps, Booking, NewBooking } from "../types/booking";
 
 export function useBookingActions({
     user,

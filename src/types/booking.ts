@@ -1,3 +1,5 @@
+import type { User } from '@supabase/supabase-js'
+
 export type Timeslot = {
     id: number;
     start: string;
@@ -39,4 +41,15 @@ export type LaundryRoomCalendarProps = {
     bookings: Booking[];
     timeslots: Timeslot[];
     refreshBookings: () => Promise<void>;
+};
+
+export type UseBookingActionsProps = {
+    user: User | null;
+    bookings: Booking[];
+    refreshBookings: () => Promise<void>;
+    setOpenBookDialog: (value: boolean) => void;
+    setOpenDeleteDialog: (value: boolean) => void;
+    setNewBooking: (value: NewBooking | null) => void;
+    setDelBooking: (value: Booking | null) => void;
+    bookingType: "GuestSuite" | "LaundryRoom";
 };
