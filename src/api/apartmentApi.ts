@@ -11,9 +11,13 @@ export const getAvailableApartments = async () => {
     }
 };
 
-export const getSigned = async () => {
+// Fetch if already signed up for apartment
+export const getApartmentSignupStatus = async (bearer: string | undefined, apartment_id: number, end_date: string) => {
+    const config = {
+        headers: { Authorization: `Bearer ${bearer}` }
+    }
     try {
-        const response = await apiConfig.get(`/apartment_sign_up`);
+        const response = await apiConfig.get(`/apartment_sign_up?select=id,apartment_id,end_date,sign_up_date&apartment_id=eq.${apartment_id}&end_date=eq.${end_date}`, config);
         return response.data;
     } catch (err) {
         console.log(`Kunde inte hitta tidigare intresseanmälningar, ${err}`);
@@ -21,8 +25,8 @@ export const getSigned = async () => {
     }
 };
 //Sign up for apartment
-export async function apartmentSignUp(bearer: string, apartment_id: number, end_date: string) {
-    let config = {
+export async function createApartmentSignUp(bearer: string | undefined, apartment_id: number, end_date: string) {
+    const config = {
         headers: { Authorization: `Bearer ${bearer}` }
     }
     try {
@@ -30,9 +34,7 @@ export async function apartmentSignUp(bearer: string, apartment_id: number, end_
             apartment_id: apartment_id,
             end_date: end_date
         }, config);
-        console.log(response)
         return response.status;
-
     } catch (error) {
         console.error("Kunde inte skapa intresseanmälan: ", error);
         throw error;
@@ -40,10 +42,13 @@ export async function apartmentSignUp(bearer: string, apartment_id: number, end_
 }
 
 //Delete sign up to apartment
-export const deleteSignUp = async () => {
+export const deleteApartmentSignUp = async (bearer: string | undefined, signUpId: number) => {
+    const config = {
+        headers: { Authorization: `Bearer ${bearer}` }
+    }
     try {
-        const response = await apiConfig.delete(`/apartment_sign_up`, { params: { user_id: `eq.${user}` } });
-        return response.data;
+        const response = await apiConfig.delete(`/apartment_sign_up?id=eq.${signUpId}`, config);
+        return response;
     } catch (err) {
         console.log(`Kunde inte ta bort intresseanmälan ${err}`);
         throw err;

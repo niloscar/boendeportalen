@@ -4,10 +4,10 @@ import Button from '../components/ui/Button.tsx';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import type { ApartmentData, Detail } from '../types/apartment.ts';
 import ApartmentSignUp from '../components/SearchApartmentPage/ApartmentSignUp.tsx';
+import { SignUpCalls } from '../hooks/SignUpCalls.tsx';
 
 const Apartment = () => {
     const location = useLocation();
-
     const state = location.state as
         | { apartment: ApartmentData; details: Detail[] }
         | undefined;
@@ -25,11 +25,20 @@ const Apartment = () => {
             </div>
         )
     }
+    const {
+        signUp,
+        deleteSignUp,
+        loading,
+        error,
+        saved,
+        applied,
+        deleted } = SignUpCalls({ apartment });
+        
     return (
         <section className="flex flex-col gap-6 p-6 max-w-3xl">
             <div className="flex justify-between">
                 <h1 className="text-5xl">{apartment.street}</h1>
-                <ApartmentSignUp apartment={apartment} />
+                <ApartmentSignUp error={error} loading={loading} saved={saved} applied={applied} deleted={deleted} deleteSignUp={deleteSignUp} signUp={signUp} />
             </div>
             <ImageCarousel images={apartment.images} size="large" />
             <h2 className="text-2xl">Om bostaden</h2>
@@ -40,7 +49,7 @@ const Apartment = () => {
             <ul className="max-w-md">
                 <ApartmentList variant="ul" items={details} />
             </ul>
-            <ApartmentSignUp apartment={apartment} />
+            <ApartmentSignUp error={error} loading={loading} saved={saved} applied={applied} deleted={deleted} deleteSignUp={deleteSignUp} signUp={signUp} />
         </section>
     )
 }

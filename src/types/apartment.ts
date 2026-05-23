@@ -56,3 +56,20 @@ export type ApartmentImagesProp = {
 export type ListProp = {
     detail: Detail,
 }
+
+export interface SignedUpData {
+    id: number,
+    sign_up_date: string,
+    apartment_id: number,
+    end_date: string,
+}
+
+export type SignUp ={ 
+    error: string,
+    loading: boolean,
+    saved: number,
+    applied: SignedUpData[],
+    deleted: number,
+    deleteSignUp: () => Promise<void>,
+    signUp: () => Promise<void>
+}

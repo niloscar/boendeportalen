@@ -1,37 +1,8 @@
-import { useState, useEffect } from 'react';
-import type { ApartmentProp } from '../../types/apartment.ts';
-import { apartmentSignUp } from '../../api/apartmentApi.ts';
-import { useSession } from '../../hooks/useAuth';
+import type { SignUp } from '../../types/apartment.ts';
 import Button from '../../components/ui/Button.tsx';
 
-const ApartmentSignUp = ({ apartment }: ApartmentProp) => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [saved, setSaved] = useState(400);
-    const endDate = Temporal.PlainDate.from(apartment.end_date);
-    const activeUntil = endDate.add({ weeks: 2 });
-    const session = useSession();
+const ApartmentSignUp = ({ error, loading, saved, applied, deleted, deleteSignUp, signUp }: SignUp) => {
 
-    const signUp = async () => {
-        try {
-            setLoading(true);
-            setError('');
-            const data = await apartmentSignUp(session?.access_token, apartment.id, activeUntil);
-            setSaved(data);
-            console.log(saved)
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setError(error.message);
-            }
-        } finally {
-            setLoading(false);
-        }
-    }
-    // useEffect(() => {
-    //     (async () => {
-    //         await signUp();
-    //     })();
-    // }, []);
     if (error) {
         return (<div>Kunde inte skapa intresseanmälan. Vänligen försök igen.</div>)
     }
@@ -40,6 +11,13 @@ const ApartmentSignUp = ({ apartment }: ApartmentProp) => {
     }
     if (saved == 200 || saved == 201) {
         return (<div>Intresseanmälan inskickad!</div>)
+    }
+    if (applied.length > 0) {
+        return (<div>
+            {deleted != 204 ?
+                <Button variant="primary" size="md" type="button" children="Ta bort intresseanmälan" onClick={deleteSignUp} /> :
+                <Button variant="primary" size="md" type="button" children="Anmäl intresse" onClick={signUp} />}
+        </div>)
     }
     return (
         <div>
