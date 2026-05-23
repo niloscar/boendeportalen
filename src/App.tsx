@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Link, Routes, Route } from 'react-router-dom'
 import Auth from './pages/Auth'
 import { signOut } from './lib/supabase'
 import useAuth from './hooks/useAuth'
@@ -34,7 +34,7 @@ function App() {
                             </AdminRoute>
                         } 
                     />
-                    <Route path="/" element={<div>Detta är en placeholder. Gå till <a href="/auth" className="text-blue-500 hover:underline">Inloggning</a>
+                    <Route path="/" element={<div>Detta är en placeholder. Gå till <Link to="/auth" className="text-blue-500 hover:underline">Inloggning</Link>
                         {user && <div className="mt-4">
                             <div className="text-green-600">Inloggad som {user?.email}</div>
                             <button onClick={async () => { await signOut(); window.location.reload(); }} className="py-2 px-4 bg-red-600 text-white rounded cursor-pointer hover:bg-red-700">Logga ut</button>
