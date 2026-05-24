@@ -3,8 +3,8 @@ import type { AlertDialogProps } from "../../types/ui";
 
 export default function AlertDialog({
     open,
-    title = "Är du säker?",
-    message = "Vill du verkligen fortsätta?",
+    title,
+    message,
     onConfirm,
     confirmColor
 }: AlertDialogProps) {
@@ -40,7 +40,7 @@ export default function AlertDialog({
                 {/* Scrollbart innehåll */}
                 <div className="p-2 overflow-y-auto flex-1">
                     <h2 className="text-xl text-neutral-900 font-semibold mb-2">{title}</h2>
-                    <p className="whitespace-pre-line text-gray-700" dangerouslySetInnerHTML={{ __html: message }}></p>
+                    <p className="whitespace-pre-line text-gray-700">{message}</p>
                 </div>
 
                 {/* Fast footer */}

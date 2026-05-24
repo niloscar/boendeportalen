@@ -2,9 +2,12 @@ import LaundryRoomCalendar from "../components/ManageBookings/LaundryRoomCalenda
 import { useEffect, useState, useCallback } from "react";
 import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundryRoom";
 import type { Timeslot, Booking } from "../types/booking";
+import LaundryRoomInfo from "../components/ManageBookings/LaundryRoomInfo";
+import AlertDialog from "../components/ui/AlertDialog";
 
 export default function Laundry() {
-    
+
+    const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
     const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
     const [bookings, setBookings] = useState<Booking[]>([]);
 
@@ -25,23 +28,19 @@ export default function Laundry() {
 
     return (
         <>
-            <h1 class="text-5xl mb-6">Bokning av tvättstugan</h1 >
-            <div class="mb-6">Välkommen att boka tid i tvättstugan. För att alla hyresgäster ska ha möjlighet att tvätta på ett rättvist sätt gäller följande regler:
-
-                <ul class="list-disc list-inside text-gray-700 p-0"><li>Du kan endast ha en aktiv bokning åt gången.</li>
-
-                    <li>Det går att boka max en månad i förväg.</li>
-
-                    <li>Bokningen är personlig och får inte överlåtas.</li>
-
-                    <li>Se till att städa och lämna tvättstugan i gott skick efter användning.</li></ul>
-
-                Genom att följa reglerna hjälper du till att hålla tvättstugan trivsam och tillgänglig för alla i föreningen.
-            </div>
+            <h1 className="text-3xl mb-6">Bokning av tvättstugan</h1 >
+            <div className="mb-6">Välkommen att boka tid i tvättstugan. Genom att följa <a href="" onClick={(e) => { e.preventDefault(); setOpenAlertDialog(true) }} className="text-green-500 hover:text-green-700">reglerna</a> hjälper du till att hålla tvättstugan trivsam och tillgänglig för alla i föreningen.</div>
             <LaundryRoomCalendar
                 bookings={bookings}
                 timeslots={timeslots}
                 refreshBookings={refreshBookings}
+            />
+            <AlertDialog
+                open={openAlertDialog}
+                title="🧺 Tvättstuga - Bokningsinformation"
+                message={<LaundryRoomInfo />}
+                onConfirm={() => { setOpenAlertDialog(false); }}
+                confirmColor="green"
             />
         </>
     );
