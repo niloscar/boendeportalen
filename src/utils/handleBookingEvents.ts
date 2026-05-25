@@ -22,7 +22,7 @@ export function handleGuestSuiteEventClick({
 
     // Available slot
     if (props.isAvailable) {
-        const userBookings = bookings.filter(b => b.user === user.id);
+        const userBookings = bookings.filter(b => b.user_id === user.id);
 
         if (userBookings.length >= 5) {
             setAlertDialogMessage("Du har redan fem aktiva bokningar. Avboka ett datum för att kunna boka ett nytt.");
@@ -32,7 +32,7 @@ export function handleGuestSuiteEventClick({
 
         setBookDialogMessage(`Vill du boka ${props.date}?\n\nTänk på att du endast kan ha 5 aktiva bokningar åt gången.`);
         setOpenBookDialog(true);
-        setNewBooking({ date: props.date, slot: null, user: user.id });
+        setNewBooking({ date: props.date, slot: null, user_id: user.id });
         return;
     }
 
@@ -45,7 +45,7 @@ export function handleGuestSuiteEventClick({
     // Booked by logged‑in user
     setDeleteDialogMessage(`Vill du ta bort bokningen för\n${props.date}?\n\nDen här åtgärden går inte att ångra.`);
     setOpenDeleteDialog(true);
-    setDelBooking({ id: Number(e.event.id), date: props.date, slot: null, user: user.id });
+    setDelBooking({ id: Number(e.event.id), date: props.date, slot: null, user_id: user.id });
 }
 
 export function handleLaundryRoomEventClicks({
@@ -78,7 +78,7 @@ export function handleLaundryRoomEventClicks({
         setOpenBookDialog(true);
 
         //Prepare data for new booking
-        setNewBooking({ date: props.date, slot: props.slot, user: user.id });
+        setNewBooking({ date: props.date, slot: props.slot, user_id: user.id });
         return;
     }
 
@@ -96,6 +96,6 @@ export function handleLaundryRoomEventClicks({
         setOpenDeleteDialog(true);
 
         //Prepare data for deletion
-        setDelBooking({ id: Number(e.event.id), slot: props.slot, date: props.date, user: user.id });
+        setDelBooking({ id: Number(e.event.id), slot: props.slot, date: props.date, user_id: user.id });
     }
 };

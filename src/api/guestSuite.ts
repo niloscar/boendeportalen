@@ -15,7 +15,7 @@ export async function fetchBookedSlots() {
             id: row.id,
             date: row.date,
             slot: null,
-            user: row.user
+            user_id: row.user_id
         }));
 
     } catch (err) {
@@ -50,10 +50,10 @@ export async function deleteGuestSuiteBooking(id: number) {
 }
 
 //Create a new booking
-export async function createGuestSuiteBooking(user: string, date: string) {
+export async function createGuestSuiteBooking(user_id: string, date: string) {
     try {
         const response = await apiConfig.post<BookingRow[]>("guest_suite_bookings", {
-            user,
+            user_id,
             date
         });
 

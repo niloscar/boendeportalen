@@ -30,7 +30,7 @@ export function useGuestSuiteEvents(bookings: Booking[], user: User | null, load
 
                 if (booking) {
                     // Check if there is a booking and who booked it.
-                    const isOwner = booking.user === user.id;
+                    const isOwner = booking.user_id === user.id;
 
                     result.push({
                         id: String(booking.id),

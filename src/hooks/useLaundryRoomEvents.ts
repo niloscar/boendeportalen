@@ -29,7 +29,7 @@ export function useLaundryRoomEvents(bookings: Booking[], timeslots: Timeslot[],
                 const slot = timeslots.find(s => s.id === booking.slot);
                 if (!slot) return;
 
-                const isOwner = booking.user === user.id;
+                const isOwner = booking.user_id === user.id;
 
                 result.push({
                     id: String(booking.id),

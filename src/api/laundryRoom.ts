@@ -34,7 +34,7 @@ export async function fetchBookedSlots() {
             id: row.id,
             date: row.date,
             slot: row.slot,
-            user: row.user
+            user_id: row.user_id
         }));
 
     } catch (err) {
@@ -69,10 +69,10 @@ export async function deleteLaundryRoomBooking(id: number) {
 }
 
 //Create a new booking
-export async function createLaundryRoomBooking(user: string, slot: number, date: string) {
+export async function createLaundryRoomBooking(user_id: string, slot: number, date: string) {
     try {
         const response = await apiConfig.post<BookingRow[]>("laundry_bookings", {
-            user,
+            user_id,
             slot,
             date
         });

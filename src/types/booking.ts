@@ -18,20 +18,20 @@ export type Booking = {
     id: number | null;
     date: string | null;
     slot: number | null;
-    user: string;
+    user_id: string;
 };
 
 export type BookingRow = {
     id: number;
     date: string;
     slot: number | null;
-    user: string;
+    user_id: string;
 };
 
 export type NewBooking = {
     date: string | null;
     slot: number | null;
-    user: string;
+    user_id: string;
 };
 
 export type MyExtendedProps = {

@@ -27,7 +27,7 @@ export function useBookingActions({
         setIsProcessing(true);
 
         //Find current booking/-s
-        const userBookings = bookings.filter(b => b.user === user.id);
+        const userBookings = bookings.filter(b => b.user_id === user.id);
         
         //Create booking
         switch (bookingType) {
@@ -35,7 +35,7 @@ export function useBookingActions({
 
                 //Book new slot
                 if (newBooking.slot !== null) {
-                    await createLaundryRoomBooking(newBooking.user, newBooking.slot, newBooking.date);
+                    await createLaundryRoomBooking(newBooking.user_id, newBooking.slot, newBooking.date);
                 }
 
                 //Delete old bookings
@@ -47,7 +47,7 @@ export function useBookingActions({
                 break;
 
             case "GuestSuite":
-                await createGuestSuiteBooking(newBooking.user, newBooking.date);
+                await createGuestSuiteBooking(newBooking.user_id, newBooking.date);
                 break;
 
             default:
