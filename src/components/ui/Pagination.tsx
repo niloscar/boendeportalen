@@ -1,8 +1,4 @@
-type Props = {
-    totalPages: number
-    currentPage: number
-    onPageChange: (page: number) => void
-}
+import type { PaginationProps } from '../../types/pagination'
 
 const getPageItems = (total: number, current: number) => {
     if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
@@ -21,7 +17,7 @@ const getPageItems = (total: number, current: number) => {
     return pages
 }
 
-export default function Pagination({ totalPages, currentPage, onPageChange }: Props) {
+export default function Pagination({ totalPages, currentPage, onPageChange }: PaginationProps) {
     if (totalPages <= 1) return null
 
     return (
