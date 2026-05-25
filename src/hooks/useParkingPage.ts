@@ -2,13 +2,18 @@ import { useEffect, useMemo, useReducer, useState } from 'react'
 import { fetchParkingSpots } from '../api/parking'
 import type { ParkingSpot } from '../types/parking'
 import { filterParkingSpots, getUniqueOptions, paginateParkingSpots, sortParkingSpots } from '../utils/parking'
-import { initialParkingPageState, parkingPageReducer } from '../reducers/parkingPageReducer'
+import { parkingPageReducer } from '../reducers/parkingPageReducer'
+import { readParkingPageState, saveParkingPageState } from '../storage/parkingStorage'
 
 export default function useParkingPage() {
-    const [pageState, dispatch] = useReducer(parkingPageReducer, initialParkingPageState)
+    const [pageState, dispatch] = useReducer(parkingPageReducer, undefined, readParkingPageState)
     const [parkingSpots, setParkingSpots] = useState<ParkingSpot[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [loadError, setLoadError] = useState<string | null>(null)
+
+    useEffect(() => {
+        saveParkingPageState(pageState)
+    }, [pageState])
 
     useEffect(() => {
         let isActive = true
