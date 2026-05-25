@@ -122,35 +122,43 @@ const ProfilePage = () => {
     };
 
     const openContract = async () => {
-        const contractUrl = await getContractSignedUrl(contract?.contract_file_path ?? null);
-
-        if (!contractUrl) {
+        try {
+            const contractUrl = await getContractSignedUrl(contract?.contract_file_path ?? null);
+            if (!contractUrl) {
+                showUnavailableMessage('Mitt kontrakt');
+                return;
+            }
+            window.open(contractUrl, '_blank', 'noreferrer');
+        } catch {
             showUnavailableMessage('Mitt kontrakt');
-            return;
         }
-
-        window.open(contractUrl, '_blank', 'noreferrer');
     };
 
     const openFloorPlan = async () => {
-        if (!floorPlanDocument) {
+        try {
+            if (!floorPlanDocument) {
+                showUnavailableMessage('Planlösning');
+                return;
+            }
+            const url = await getApartmentFileSignedUrl(floorPlanDocument.file_path);
+            if (!url) {
+                showUnavailableMessage('Planlösning');
+                return;
+            }
+            window.open(url, '_blank', 'noreferrer');
+        } catch {
             showUnavailableMessage('Planlösning');
-            return;
         }
-
-        const url = await getApartmentFileSignedUrl(floorPlanDocument.file_path);
-        if (!url) {
-            showUnavailableMessage('Planlösning');
-            return;
-        }
-
-        window.open(url, '_blank', 'noreferrer');
     };
 
     const handleProfileSave = async (data: { email: string; phone: string }) => {
-        const updated = await updateUserProfile(userId, { email: data.email, phone: data.phone });
-        if (updated) setProfile(updated);
-        setSubmitMessage('Dina uppgifter är uppdaterade.');
+        try {
+            const updated = await updateUserProfile(userId, { email: data.email, phone: data.phone });
+            if (updated) setProfile(updated);
+            setSubmitMessage('Dina uppgifter är uppdaterade.');
+        } catch {
+            setSubmitMessage('Uppgifterna kunde inte sparas. Försök igen senare.');
+        }
     };
 
     const handleAvatarUpload = async (event: ChangeEvent<HTMLInputElement>) => {
