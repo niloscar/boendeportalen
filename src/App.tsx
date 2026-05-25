@@ -10,8 +10,9 @@ import { PublicOnlyRoute, AdminRoute } from './routing'
 import AdminPage from './pages/AdminPage'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
-import SearchApartment from "./pages/SearchApartment";
-import Apartment from "./pages/Apartment";
+import SearchApartment from './pages/SearchApartment'
+import Apartment from "./pages/Apartment"
+import Parking from './pages/Parking'
 
 function App() {
     // Add profile in here if you want to send profile info to route guards, like AdminRoute.
@@ -26,13 +27,15 @@ function App() {
                     <Route path="/apartment" element={<SearchApartment />} />
                     <Route path="/apartment/:apartmentId" element={<Apartment />} />
                     {/* <Route path="/minasidor" element={<PrivateRoute user={user} loading={loading}><div>Detta är en privat sida.</div></PrivateRoute>} /> */}
-                    <Route 
-                        path="/admin/*" 
+                    <Route path="/parking" element={<Parking />} />
+                    <Route path="/parking/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
+                    <Route
+                        path="/admin/*"
                         element={
                             <AdminRoute user={user} loading={loading} profile={profile}>
                                 <AdminPage profile={profile} signOut={signOut} />
                             </AdminRoute>
-                        } 
+                        }
                     />
                     <Route path="/" element={<div>Detta är en placeholder. Gå till <Link to="/auth" className="text-blue-500 hover:underline">Inloggning</Link>
                         {user && <div className="mt-4">
