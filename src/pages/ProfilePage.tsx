@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { ReportFormData } from '../components/ProfilePage/ReportForm';
 import { ArrowLeftIcon } from '@phosphor-icons/react';
@@ -11,137 +11,44 @@ import ProfileFormsSection from '../components/ProfilePage/ProfileFormsSection';
 import ProfilePageSkeleton from '../components/ProfilePage/ProfilePageSkeleton';
 import type { ActiveForm } from '../components/ProfilePage/ProfileFormsSection';
 import useAuth from '../hooks/useAuth';
-import { isNonEmptyString } from '../utils/strings';
+import { useProfileData } from '../hooks/useProfileData';
 import {
     createErrorReport,
     createServiceRequest,
-    getApartmentDocuments,
-    getApartmentEquipment,
-    getApartmentForUser,
     getApartmentFileSignedUrl,
     getContractSignedUrl,
-    getUserProfile,
     updateUserProfile,
     uploadErrorReportAttachment,
     uploadAvatar,
 } from '../api/profilepageApi';
-import type { ApartmentDocument, ApartmentEquipment, ContractSummary, UserProfile } from '../api/profilepageApi';
 
 const ProfilePage = () => {
     const [activeForm, setActiveForm] = useState<ActiveForm>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [loadError, setLoadError] = useState<string | null>(null);
-    const [profile, setProfile] = useState<UserProfile | null>(null);
-    const [contract, setContract] = useState<ContractSummary | null>(null);
-    const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
-    const [documentUrls, setDocumentUrls] = useState<Record<number, string>>({});
-    const [equipment, setEquipment] = useState<ApartmentEquipment[]>([]);
 
     const { user, loading } = useAuth();
     const userId = user?.id ?? '';
 
-    const formatPostcode = (postcode?: string | number) => {
-        if (postcode === undefined || postcode === null) return '';
-        const str = String(postcode);
-        const cleaned = str.replace(/\s+/g, '');
-        if (cleaned.length === 5) return `${cleaned.slice(0, 3)} ${cleaned.slice(3)}`;
-        if (cleaned.length === 6) return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 5)}`;
-        return str;
-    };
+    const {
+        isLoading,
+        loadError,
+        clearLoadError,
+        profile,
+        setProfile,
+        contract,
+        documentUrls,
+        apartmentInfo,
+        manualDocuments,
+        floorPlanDocument,
+    } = useProfileData(userId, loading);
 
-    const formatRent = (rent?: number) => {
-        if (typeof rent !== 'number') return '';
-        return rent.toLocaleString('sv-SE');
-    };
-
-    const apartmentInfo = useMemo(() => {
-        if (!contract?.apartments) return null;
-
-        const { apartments } = contract;
-        const formattedPostcode = formatPostcode(apartments.postcode);
-        const address = `Adress: ${apartments.street}, ${formattedPostcode} ${apartments.city}`;
-        const area = `Storlek: ${apartments.area ? `${apartments.area} kvm` : null}`;
-        const rooms = `Rum: ${apartments.rooms ? `${apartments.rooms} rum` : null}`;
-        const rent = `Hyra: ${contract.rent ? `${formatRent(contract.rent)} kr/mån` : null}`;
-
-        return [address, area, rooms, rent].filter(isNonEmptyString);
-    }, [contract]);
-
-    const equipmentTypes = useMemo(
-        () => new Set(equipment.map((e) => e.equipment_type)),
-        [equipment]
-    );
-
-    const manualDocuments = useMemo(
-        () => documents.filter(
-            (doc) => doc.document_type === 'manual' &&
-                (doc.equipment_type === null || equipmentTypes.has(doc.equipment_type))
-        ),
-        [documents, equipmentTypes]
-    );
-
-    const floorPlanDocument = useMemo(
-        () => documents.find((doc) => doc.document_type === 'floor_plan') ?? null,
-        [documents]
-    );
-
-    useEffect(() => {
-        const loadProfileData = async () => {
-            if (loading) return;
-            if (!userId) {
-                setLoadError('Du behöver logga in för att se sidan.');
-                return;
-            }
-
-            setIsLoading(true);
-            setLoadError(null);
-
-            try {
-                const [profileData, contractData] = await Promise.all([
-                    getUserProfile(userId),
-                    getApartmentForUser(userId),
-                ]);
-
-                setProfile(profileData);
-                setContract(contractData);
-
-                if (contractData?.apartment_id) {
-                    const [documentsData, equipmentData] = await Promise.all([
-                        getApartmentDocuments(contractData.apartment_id),
-                        getApartmentEquipment(contractData.apartment_id),
-                    ]);
-                    setDocuments(documentsData);
-                    setEquipment(equipmentData);
-
-                    const signedUrls = await Promise.all(
-                        documentsData.map(async (doc) => ({
-                            id: doc.id,
-                            url: await getApartmentFileSignedUrl(doc.file_path),
-                        }))
-                    );
-                    const urlMap: Record<number, string> = {};
-                    for (const { id, url } of signedUrls) {
-                        if (url) urlMap[id] = url;
-                    }
-                    setDocumentUrls(urlMap);
-                } else {
-                    setDocuments([]);
-                    setDocumentUrls({});
-                }
-            } catch {
-                setLoadError('Kunde inte hämta profilinformation. Försök igen senare.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        loadProfileData();
-    }, [loading, userId]);
+    // Ref used to scroll the page back to top when a form subview opens
+    const mainRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
         if (activeForm) {
+            mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }, [activeForm]);
@@ -262,7 +169,7 @@ const ProfilePage = () => {
 
     return (
         <div className='min-h-screen bg-neutral-100 text-neutral-900'>
-            <main className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-16 sm:px-10'>
+            <main ref={mainRef} className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-16 sm:px-10'>
                 {submitMessage && (
                     <section
                         className='rounded-2xl border border-green-200 bg-green-50 p-4 text-sm text-green-900'
@@ -286,7 +193,7 @@ const ProfilePage = () => {
                     >
                         <div className='flex items-center justify-between gap-4'>
                             <p>{loadError}</p>
-                            <Button variant='secondary' size='md' onClick={() => setLoadError(null)}>
+                            <Button variant='secondary' size='md' onClick={clearLoadError}>
                                 Stäng
                             </Button>
                         </div>

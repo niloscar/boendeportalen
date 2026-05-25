@@ -72,6 +72,8 @@ export type ServiceRequestPayload = {
     description: string;
 };
 
+// Sanitizes a file name for Supabase Storage: strips diacritics, replaces
+// non-alphanumeric characters with hyphens, and collapses duplicate hyphens.
 const toFileName = (name: string) =>
     name
         .trim()
@@ -81,6 +83,8 @@ const toFileName = (name: string) =>
         .replace(/-{2,}/g, '-')
         .replace(/^-|-$/g, '');
 
+// Returns the first element of an array, or null if the array is empty.
+// PostgREST always returns arrays; single-row queries use this helper.
 const getFirst = <T,>(items: T[]) => (items.length > 0 ? items[0] : null);
 
 export const getUserProfile = async (userId: string) => {
@@ -169,6 +173,8 @@ export const getApartmentEquipment = async (apartmentId: number) => {
     return response.data;
 };
 
+// Inserts a new error report. Requires an RLS policy on error_reports that allows
+// INSERT when tenant_id = (SELECT auth.uid()).
 export const createErrorReport = async (
     userId: string,
     apartmentId: number,
@@ -212,6 +218,8 @@ export const uploadErrorReportAttachment = async (reportId: number, file: File) 
     return getFirst(response.data);
 };
 
+// Inserts a new service request. Requires an RLS policy on service_requests that allows
+// INSERT when tenant_id = (SELECT auth.uid()).
 export const createServiceRequest = async (
     userId: string,
     apartmentId: number,
@@ -232,7 +240,8 @@ export const createServiceRequest = async (
     return getFirst(response.data);
 };
 
-// Signed URL (1 timme) för kontrakt — fungerar oavsett om bucket är privat eller publik
+// Generates a signed URL valid for 1 hour from the private contract storage bucket.
+// Returns null if no file path is stored on the contract.
 export const getContractSignedUrl = async (filePath: string | null): Promise<string | null> => {
     if (!filePath) return null;
 
@@ -244,6 +253,7 @@ export const getContractSignedUrl = async (filePath: string | null): Promise<str
     return data.signedUrl;
 };
 
+// Generates a signed URL valid for 1 hour for apartment documents (manuals, floor plans).
 export const getApartmentFileSignedUrl = async (filePath: string): Promise<string | null> => {
     const { data, error } = await supabase.storage
         .from('apartment-files')
