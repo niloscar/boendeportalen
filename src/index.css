@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "@fontsource/inter";
 @import "tailwindcss";
 
 body {
@@ -15,8 +15,7 @@ body {
 }
 
 .fc .fc-timegrid-slot-label-cushion {
-    font-size: 0.75rem !important;
-    /* text-xs */
+    @apply !text-xs;
 }
 
 /* Buttons */

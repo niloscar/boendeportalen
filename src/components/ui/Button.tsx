@@ -23,8 +23,8 @@ export const Button = ({
         secondary: 'bg-neutral-200 text-neutral-900 hover:bg-neutral-300',
     };
     const sizes: Record<string, string> = {
-        md: 'p-6 text-sm',
-        lg: 'p-8 text-base',
+        md: 'px-5 py-2.5 text-sm',
+        lg: 'px-6 py-3 text-base',
     };
 
     const classes = [base, variants[variant], sizes[size], className].filter(Boolean).join(' ');
