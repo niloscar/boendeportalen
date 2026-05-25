@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import styles from './Breadcrumbs.module.css'
+import { CaretRightIcon } from '@phosphor-icons/react'
 
 type Crumb = {
     title: string
@@ -12,22 +12,36 @@ type BreadcrumbsProps = {
 
 export default function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
     return (
-        <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-            <ol>
+        <nav
+            className="w-full md:w-fit rounded-2xl bg-neutral-100 px-4 py-2 text-sm text-neutral-500"
+            aria-label="Breadcrumb"
+        >
+            <ol className="flex items-center gap-1">
                 {crumbs.map((crumb, index) => {
-                    const isCurrent = index === crumbs.length - 1 // Last provided crumb is the current page
+                    const isCurrent = index === crumbs.length - 1
 
                     return (
-                        <li key={`${crumb.title}-${index}`}>
-                            {index > 0 && <span aria-hidden="true">→</span>}
-                            {/* If breadcrumb has an href and is not the current page, render as a link */}
-                            {/* Otherwise, render as plain text (and apply current page styling if it's the last crumb) */}
-                            {crumb.href && !isCurrent 
-                                ? <Link to={crumb.href} className={styles.link}>{crumb.title}</Link>
-                                : <span 
-                                    className={isCurrent ? styles.current : undefined}
+                        <li
+                            key={`${crumb.title}-${index}`}
+                            className="flex items-center gap-1"
+                        >
+                            {index > 0 && <CaretRightIcon size={16} />}
+
+                            {crumb.href && !isCurrent ? (
+                                <Link
+                                    to={crumb.href}
+                                    className="text-neutral-500 hover:text-neutral-700 hover:underline"
+                                >
+                                    {crumb.title}
+                                </Link>
+                            ) : (
+                                <span
+                                    className={isCurrent ? 'font-medium text-neutral-900' : undefined}
                                     aria-current={isCurrent ? 'page' : undefined}
-                                    >{crumb.title}</span>}
+                                >
+                                    {crumb.title}
+                                </span>
+                            )}
                         </li>
                     )
                 })}
