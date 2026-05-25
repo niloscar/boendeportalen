@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom'
-import type { Profile } from '../types/profile'
+import { hasAdminAccess } from '../utils/accessControl'
 import type { RouteGuardProps } from '../types/routing'
 
 function RouteLoadingFallback() {
@@ -8,11 +8,6 @@ function RouteLoadingFallback() {
             Laddar...
         </div>
     )
-}
-
-function hasAdminAccess(profile?: Profile | null): boolean {
-    const role = String(profile?.role ?? '').toLowerCase()
-    return role === 'admin' || profile?.isAdmin === true
 }
 
 export function PublicOnlyRoute({ children, user, loading }: RouteGuardProps) {
