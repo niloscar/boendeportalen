@@ -1,18 +1,4 @@
-import type { ParkingSortOption } from '../../types/parking'
-
-type Props = {
-    searchQuery: string
-    selectedCities: string[]
-    selectedTypes: string[]
-    sortBy: ParkingSortOption
-    cityOptions: string[]
-    typeOptions: string[]
-    onSearchChange: (value: string) => void
-    onCityChange: (values: string[]) => void
-    onTypeChange: (values: string[]) => void
-    onSortChange: (value: ParkingSortOption) => void
-    onClear: () => void
-}
+import type { ParkingSortOption, FilterProps } from '../../types/parking'
 
 export default function FilterBar({
     searchQuery,
@@ -26,7 +12,7 @@ export default function FilterBar({
     onTypeChange,
     onSortChange,
     onClear,
-}: Props) {
+}: FilterProps) {
     const citySummary = selectedCities.length === 0 ? 'Alla städer' : `${selectedCities.length} valda`
     const typeSummary = selectedTypes.length === 0 ? 'Alla typer' : `${selectedTypes.length} valda`
 
@@ -54,11 +40,7 @@ export default function FilterBar({
                         </summary>
                         <div className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-neutral-300 bg-white shadow-lg p-2">
                             <div className="mb-2 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => onCityChange([])}
-                                    className="text-xs text-neutral-600 hover:text-neutral-900 underline cursor-pointer"
-                                >
+                                <button type="button" onClick={() => onCityChange([])} className="text-xs text-neutral-600 hover:text-neutral-900 underline cursor-pointer">
                                     Rensa
                                 </button>
                             </div>
@@ -71,9 +53,7 @@ export default function FilterBar({
                                             type="checkbox"
                                             checked={checked}
                                             onChange={() => {
-                                                const next = checked
-                                                    ? selectedCities.filter((value) => value !== city)
-                                                    : [...selectedCities, city]
+                                                const next = checked ? selectedCities.filter((value) => value !== city) : [...selectedCities, city]
                                                 onCityChange(next)
                                             }}
                                         />
@@ -94,11 +74,7 @@ export default function FilterBar({
                         </summary>
                         <div className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-neutral-300 bg-white shadow-lg p-2">
                             <div className="mb-2 flex justify-end">
-                                <button
-                                    type="button"
-                                    onClick={() => onTypeChange([])}
-                                    className="text-xs text-neutral-600 hover:text-neutral-900 underline cursor-pointer"
-                                >
+                                <button type="button" onClick={() => onTypeChange([])} className="text-xs text-neutral-600 hover:text-neutral-900 underline cursor-pointer">
                                     Rensa
                                 </button>
                             </div>
@@ -111,9 +87,7 @@ export default function FilterBar({
                                             type="checkbox"
                                             checked={checked}
                                             onChange={() => {
-                                                const next = checked
-                                                    ? selectedTypes.filter((value) => value !== type)
-                                                    : [...selectedTypes, type]
+                                                const next = checked ? selectedTypes.filter((value) => value !== type) : [...selectedTypes, type]
                                                 onTypeChange(next)
                                             }}
                                         />
@@ -143,11 +117,7 @@ export default function FilterBar({
             </div>
 
             <div className="mt-3 flex justify-end">
-                <button
-                    type="button"
-                    onClick={onClear}
-                    className="px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-100 transition-colors cursor-pointer"
-                >
+                <button type="button" onClick={onClear} className="px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-100 transition-colors cursor-pointer">
                     Rensa filter
                 </button>
             </div>

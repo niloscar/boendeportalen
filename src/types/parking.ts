@@ -33,3 +33,17 @@ export type ParkingListProps = {
     loadError: string | null
     hasSpots: boolean
 }
+
+export type FilterProps = {
+    searchQuery: string
+    selectedCities: string[]
+    selectedTypes: string[]
+    sortBy: ParkingSortOption
+    cityOptions: string[]
+    typeOptions: string[]
+    onSearchChange: (value: string) => void
+    onCityChange: (values: string[]) => void
+    onTypeChange: (values: string[]) => void
+    onSortChange: (value: ParkingSortOption) => void
+    onClear: () => void
+}
