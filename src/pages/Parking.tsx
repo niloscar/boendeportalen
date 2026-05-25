@@ -1,4 +1,4 @@
-import FilterBar from '../components/ui/FilterBar'
+import FilterBar from '../components/ui/ParkingFilterContainer'
 import ParkingList from '../components/parking/ParkingList'
 import useParkingPage from '../hooks/useParkingPage'
 
