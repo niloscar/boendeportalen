@@ -1,23 +1,61 @@
 import { Link, Routes, Route } from 'react-router-dom'
-import Auth from './pages/Auth'
+import { Suspense, lazy, type ReactNode } from 'react'
 import { signOut } from './lib/supabase'
 import useAuth from './hooks/useAuth'
 
-// Import route guards here, like PrivateRoute and AdminRoute, if you want to use them in this file.
-import { PublicOnlyRoute, AdminRoute } from './routing'
+import { PublicOnlyRoute, AdminRoute, PrivateRoute } from './routing'
 
-// Import pages here
-import AdminPage from './pages/AdminPage'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
-import SearchApartment from './pages/SearchApartment'
-import Apartment from "./pages/Apartment"
-import Parking from './pages/Parking'
+
+const AuthPage = lazy(() => import('./pages/Auth'))
+const AdminPage = lazy(() => import('./pages/AdminPage'))
+const SearchApartmentPage = lazy(() => import('./pages/SearchApartment'))
+const ApartmentPage = lazy(() => import('./pages/Apartment'))
+const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+
+function RouteFallback() {
+    return (
+        <div className="w-full max-w-6xl p-6 text-sm text-center text-gray-600">
+            Laddar sida...
+        </div>
+    )
+}
+
+function LazyRoute({ children }: { children: ReactNode }) {
+    return <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+}
+
+function HomePage() {
+    const { user } = useAuth()
+
+    return (
+        <div>
+            Detta är en placeholder. Gå till <Link to="/auth" className="text-blue-500 hover:underline">Inloggning</Link>
+            {user && <div className="mt-4">
+                <div className="text-green-600">Inloggad som {user.email}</div>
+                <button onClick={async () => { await signOut(); window.location.reload(); }} className="py-2 px-4 bg-red-600 text-white rounded cursor-pointer hover:bg-red-700">Logga ut</button>
+            </div>}
+        </div>
+    )
+}
+
+function PublicOnlyRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading } = useAuth()
+    return <PublicOnlyRoute user={user} loading={loading}>{children}</PublicOnlyRoute>
+}
+
+function PrivateRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading } = useAuth()
+    return <PrivateRoute user={user} loading={loading}>{children}</PrivateRoute>
+}
+
+function AdminRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading, profile } = useAuth()
+    return <AdminRoute user={user} loading={loading} profile={profile}>{children}</AdminRoute>
+}
 
 function App() {
-    // Add profile in here if you want to send profile info to route guards, like AdminRoute.
-    const { user, loading, profile } = useAuth()
-
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
@@ -31,24 +69,14 @@ function App() {
                     <Route path="/parking/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
                     <Route
                         path="/admin/*"
-                        element={
-                            <AdminRoute user={user} loading={loading} profile={profile}>
-                                <AdminPage profile={profile} signOut={signOut} />
-                            </AdminRoute>
-                        }
+                        element={<AdminRouteWrapper><LazyRoute><AdminPage /></LazyRoute></AdminRouteWrapper>}
                     />
-                    <Route path="/" element={<div>Detta är en placeholder. Gå till <Link to="/auth" className="text-blue-500 hover:underline">Inloggning</Link>
-                        {user && <div className="mt-4">
-                            <div className="text-green-600">Inloggad som {user?.email}</div>
-                            <button onClick={async () => { await signOut(); window.location.reload(); }} className="py-2 px-4 bg-red-600 text-white rounded cursor-pointer hover:bg-red-700">Logga ut</button>
-                        </div>
-                        }
-                    </div>} />
+                    <Route path="/" element={<HomePage />} />
                 </Routes>
             </main>
             <Footer />
         </div>
-    );
+    )
 }
 
 export default App
