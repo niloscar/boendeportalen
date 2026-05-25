@@ -25,7 +25,7 @@ export default function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
                             key={`${crumb.title}-${index}`}
                             className="flex items-center gap-1"
                         >
-                            {index > 0 && <CaretRightIcon size={16} />}
+                            {index > 0 && <CaretRightIcon size={16} aria-hidden="true" focusable="false" />}
 
                             {crumb.href && !isCurrent ? (
                                 <Link
