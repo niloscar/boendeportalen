@@ -18,20 +18,30 @@ export default function DropDown({
 }: DropDownProps) {
     const [isOpen, setIsOpen] = useState(false)
     const navRef = useRef<HTMLElement>(null)
+    const buttonRef = useRef<HTMLButtonElement>(null)
     const location = useLocation()
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (!navRef.current) return
-            if (!navRef.current.contains(event.target as Node)) setIsOpen(false)
+            if (!navRef.current.contains(event.target as Node)) setIsOpen(false); {/* Close dropdown if click is outside the nav */}
+        }
+
+        function handleKeyDown(event: KeyboardEvent) {
+            if (event.key !== 'Escape' || !isOpen) return
+
+            setIsOpen(false)
+            buttonRef.current?.focus()
         }
 
         document.addEventListener('mousedown', handleClickOutside)
+        document.addEventListener('keydown', handleKeyDown)
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
+            document.removeEventListener('keydown', handleKeyDown)
         }
-    }, [])
+    }, [isOpen])
 
     function handleToggle() {
         setIsOpen((current) => !current)
@@ -53,6 +63,7 @@ export default function DropDown({
         >
             <button
                 type='button'
+                ref={buttonRef}
                 onClick={handleToggle}
                 aria-expanded={isOpen}
                 aria-haspopup='true'
@@ -71,7 +82,7 @@ export default function DropDown({
                     <li key={item.to}>
                         <span className='flex items-center justify-between gap-1 whitespace-nowrap'>
                             <span>{item.title}</span>
-                            <span className='w-4 shrink-0' />
+                            <span className='w-4 shrink-0' /> {/* Placeholder for the icon to keep spacing consistent */}
                         </span>
                     </li>
                 ))}
