@@ -2,20 +2,13 @@ import { Navigate, useParams } from 'react-router-dom'
 import { useAuthContext } from '../contexts/useAuthContext'
 import { hasAdminAccess } from '../utils/accessControl'
 
-import AdminNav from '../components/admin/Nav'
 import AdminDashboard from './admin/DashboardPage'
 import AdminUsers from './admin/UsersPage'
 import AdminSettings from './admin/SettingsPage'
 import Breadcrumbs from '../components/ui/Breadcrumbs'
 
-import type { Profile } from '../types/profile'
 import type { AdminSubPage } from '../types/admin'
-import type { AuthError } from '@supabase/supabase-js'
-
-type AdminPageProps = {
-    profile: Profile | null
-    signOut: () => Promise<{ error: AuthError | null }>
-}
+import DropDown from '../components/ui/DropDown'
 
 const ADMIN_SUB_PAGES = [
     { slug: 'dashboard', title: 'Kontrollpanel', component: AdminDashboard, authRequired: true },
@@ -29,7 +22,7 @@ const CRUMBS = [
     { title: 'Administration', href: '/admin' }
 ]
 
-export default function AdminPage({ signOut }: AdminPageProps) {
+export default function AdminPage() {
     const { profile } = useAuthContext()
     const { '*': slug } = useParams<{ '*'?: string }>()
     
@@ -45,11 +38,17 @@ export default function AdminPage({ signOut }: AdminPageProps) {
         <div className="container p-6 flex flex-col gap-6">
             <h1 className="text-3xl md:text-5xl m-0">Administration</h1>
             
-            <Breadcrumbs crumbs={[...CRUMBS, { title: currentPage.title }]} />
-
-            <AdminNav pages={ADMIN_SUB_PAGES} signOut={signOut} />
+            <DropDown
+                fallbackTitle='Administration'
+                items={ADMIN_SUB_PAGES.map((page) => ({
+                    to: `/admin/${page.slug}`,
+                    title: page.title
+                }))}
+            />
 
             <SubPageComponent />
+
+            <Breadcrumbs crumbs={[...CRUMBS, { title: currentPage.title }]} />
         </div>
     );
 }
