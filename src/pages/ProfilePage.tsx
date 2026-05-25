@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import type { ReportFormData } from '../components/ProfilePage/ReportForm';
+import { ArrowLeftIcon } from '@phosphor-icons/react';
 import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';
 import ApartmentOverviewCard from '../components/ProfilePage/ApartmentOverviewCard';
@@ -28,6 +29,7 @@ import type { ApartmentDocument, ApartmentEquipment, ContractSummary, UserProfil
 
 const ProfilePage = () => {
     const [activeForm, setActiveForm] = useState<ActiveForm>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [loadError, setLoadError] = useState<string | null>(null);
@@ -138,8 +140,19 @@ const ProfilePage = () => {
         loadProfileData();
     }, [loading, userId]);
 
-    const toggleForm = (form: ActiveForm) => {
-        setActiveForm((current) => (current === form ? null : form));
+    useEffect(() => {
+        if (activeForm) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [activeForm]);
+
+    const openForm = (form: ActiveForm) => {
+        setSubmitMessage(null);
+        setActiveForm(form);
+    };
+
+    const closeForm = () => {
+        setActiveForm(null);
     };
 
     const handleErrorSubmit = async (data: ReportFormData) => {
@@ -148,6 +161,7 @@ const ProfilePage = () => {
             return;
         }
 
+        setIsSubmitting(true);
         try {
             const report = await createErrorReport(userId, contract.apartment_id, {
                 category: data.category,
@@ -164,10 +178,12 @@ const ProfilePage = () => {
                 await uploadErrorReportAttachment(report.id, data.attachment);
             }
 
-            setSubmitMessage('Felanmälan är mottagen. Vi återkommer inom kort.');
             setActiveForm(null);
+            setSubmitMessage('Felanmälan är mottagen. Vi återkommer inom kort.');
         } catch {
             setSubmitMessage('Felanmälan kunde inte skickas. Försök igen senare.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -177,6 +193,7 @@ const ProfilePage = () => {
             return;
         }
 
+        setIsSubmitting(true);
         try {
             await createServiceRequest(userId, contract.apartment_id, {
                 service_type: data.category,
@@ -184,10 +201,12 @@ const ProfilePage = () => {
                 description: data.description,
             });
 
-            setSubmitMessage('Din förfrågan är mottagen. Vi återkommer inom kort.');
             setActiveForm(null);
+            setSubmitMessage('Din förfrågan är mottagen. Vi återkommer inom kort.');
         } catch {
             setSubmitMessage('Förfrågan kunde inte skickas. Försök igen senare.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -244,7 +263,7 @@ const ProfilePage = () => {
     return (
         <div className='min-h-screen bg-neutral-100 text-neutral-900'>
             <main className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-16 sm:px-10'>
-{submitMessage && (
+                {submitMessage && (
                     <section
                         className='rounded-2xl border border-green-200 bg-green-50 p-4 text-sm text-green-900'
                         role='status'
@@ -276,6 +295,23 @@ const ProfilePage = () => {
 
                 {isLoading ? (
                     <ProfilePageSkeleton />
+                ) : activeForm ? (
+                    <>
+                        <button
+                            onClick={closeForm}
+                            className='flex w-fit items-center gap-1.5 text-sm text-neutral-500 transition-colors duration-200 hover:text-neutral-900'
+                        >
+                            <ArrowLeftIcon size={16} />
+                            Tillbaka
+                        </button>
+                        <ProfileFormsSection
+                            activeForm={activeForm}
+                            onCloseForm={closeForm}
+                            onErrorSubmit={handleErrorSubmit}
+                            onServiceSubmit={handleServiceSubmit}
+                            isSubmitting={isSubmitting}
+                        />
+                    </>
                 ) : (
                     <>
                         <PersonalInfoSection
@@ -288,25 +324,16 @@ const ProfilePage = () => {
                         />
                         <ApartmentOverviewCard
                             apartmentInfo={apartmentInfo}
-                            onErrorReport={() => toggleForm('error')}
-                            onServiceRequest={() => toggleForm('service')}
+                            onErrorReport={() => openForm('error')}
+                            onServiceRequest={() => openForm('service')}
                             onOpenContract={openContract}
                             onOpenFloorPlan={openFloorPlan}
                             imageSrc={profilePageImage}
                         />
-
-                        <ProfileFormsSection
-                            activeForm={activeForm}
-                            onCloseForm={() => setActiveForm(null)}
-                            onErrorSubmit={handleErrorSubmit}
-                            onServiceSubmit={handleServiceSubmit}
-                        />
-
                         <ApartmentDocumentsSection
                             documents={manualDocuments}
                             documentUrls={documentUrls}
                         />
-
                     </>
                 )}
             </main>

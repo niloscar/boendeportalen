@@ -4,6 +4,7 @@ import type { ReportFormData } from './ReportForm';
 interface ErrorReportFormProps {
     onCancel: () => void;
     onSubmit: (data: ReportFormData) => void;
+    isSubmitting?: boolean;
 }
 
 const ERROR_CATEGORIES = [
@@ -15,7 +16,7 @@ const ERROR_CATEGORIES = [
     'Övriga fel',
 ];
 
-export const ErrorReportForm = ({ onCancel, onSubmit }: ErrorReportFormProps) => (
+export const ErrorReportForm = ({ onCancel, onSubmit, isSubmitting }: ErrorReportFormProps) => (
     <ReportForm
         categories={ERROR_CATEGORIES}
         submitLabel="Skicka felanmälan"
@@ -23,5 +24,6 @@ export const ErrorReportForm = ({ onCancel, onSubmit }: ErrorReportFormProps) =>
         onSubmit={onSubmit}
         onCancel={onCancel}
         showExtras={true}
+        isSubmitting={isSubmitting}
     />
 );
