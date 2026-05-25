@@ -4,6 +4,7 @@ import type { ReportFormData } from './ReportForm';
 interface AdditionalServiceFormProps {
     onCancel: () => void;
     onSubmit: (data: ReportFormData) => void;
+    isSubmitting?: boolean;
 }
 
 const SERVICE_TYPES = [
@@ -15,18 +16,13 @@ const SERVICE_TYPES = [
     'Övriga tjänster',
 ];
 
-export const AdditionalServiceForm = ({ onCancel, onSubmit }: AdditionalServiceFormProps) => {
-    const handleSubmit = (data: ReportFormData) => {
-        onSubmit(data);
-    };
-
-    return (
-        <ReportForm
-            categories={SERVICE_TYPES}
-            submitLabel="Skicka förfrågan"
-            descriptionPlaceholder="Beskriv vilken tilläggsservice du är intresserad av..."
-            onSubmit={handleSubmit}
-            onCancel={onCancel}
-        />
-    );
-};
+export const AdditionalServiceForm = ({ onCancel, onSubmit, isSubmitting }: AdditionalServiceFormProps) => (
+    <ReportForm
+        categories={SERVICE_TYPES}
+        submitLabel="Skicka förfrågan"
+        descriptionPlaceholder="Beskriv vilken tilläggsservice du är intresserad av..."
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+        isSubmitting={isSubmitting}
+    />
+);
