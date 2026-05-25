@@ -12,30 +12,7 @@ export type ParkingSpot = {
     application: boolean
 }
 
-export type ParkingFilters = {
-    searchQuery: string
-    selectedCities: string[]
-    selectedTypes: string[]
-    sortBy: ParkingSortOption
-}
-
-export type ParkingPageState = {
-    searchQuery: string
-    selectedCities: string[]
-    selectedTypes: string[]
-    sortBy: ParkingSortOption
-    parkingSpots: ParkingSpot[]
-    isLoading: boolean
-    loadError: string | null
-    currentPage: number
-    cityOptions: string[]
-    typeOptions: string[]
-    totalPages: number
-    currentSpots: ParkingSpot[]
-    spots: ParkingSpot[]
-}
-
-export type Props = {
+export type ParkingListProps = {
     currentSpots: ParkingSpot[]
     totalPages: number
     currentPage: number
