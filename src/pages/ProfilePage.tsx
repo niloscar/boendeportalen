@@ -176,7 +176,7 @@ const ProfilePage = () => {
     };
 
     return (
-        <div className='min-h-screen bg-neutral-100 text-neutral-900'>
+        <div className='w-full text-neutral-900'>
             <main ref={mainRef} className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pb-16 sm:px-10'>
                 {submitMessage && (
                     <section
