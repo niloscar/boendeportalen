@@ -21,7 +21,7 @@ export default function ParkingCard({ spot }: { spot: ParkingSpot }) {
                     <p className="text-gray-600">{spot.city}, {spot.postalCode}</p>
                     <p className="text-gray-600">{spot.type}</p>
                     <p className="text-gray-600">Ledig fr.o.m <strong>{new Date(spot.availableFrom).toLocaleDateString('sv-SE')}</strong></p>
-                    <p className="text-gray-600">Kostnad: <strong>{spot.price.toLocaleString('sv-SE')} kr</strong>/mån</p>
+                    <p className="text-gray-600">Hyra: <strong>{spot.price.toLocaleString('sv-SE')} kr</strong>/mån</p>
 
                     <div className="mt-4 flex items-center justify-between text-sm sm:text-base pt-4 border-t border-neutral-300 text-neutral-900 font-medium">
                         <span>Visa information</span>
