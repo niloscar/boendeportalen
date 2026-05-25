@@ -7,7 +7,7 @@ export type ParkingSpot = {
     price: number
     availableFrom: string
     renter: string | null
-    application: 'Open' | 'Closed'
+    application: boolean
 }
 
 export type ParkingSortOption = 'price-asc' | 'price-desc' | 'date-asc' | 'date-desc' | 'address-asc'
