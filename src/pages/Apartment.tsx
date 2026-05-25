@@ -11,22 +11,8 @@ import { useSession } from '../hooks/useAuth.ts';
 const Apartment = () => {
     const { state } = useLocation();
     const session = useSession();
-    const apartmentState = state as
-        | { apartment: ApartmentData; details: Detail[] }
-        | undefined;
-    const apartment: ApartmentData | null = apartmentState?.apartment ?? null;
-    const details: Detail[] | null = apartmentState?.details ?? null;
-
-    if (!apartment || !details) {
-        return (
-            <div className="max-w-3xl">
-                <Link to="/apartments">
-                    <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
-                </Link>
-                <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>
-            </div>
-        )
-    }
+    const apartment: ApartmentData = state.apartment;
+    const details: Detail[] = state.details;
     const {
         signUp,
         deleteSignUp,
@@ -41,6 +27,18 @@ const Apartment = () => {
             getApartmentStatus();
         }
     }, [session?.access_token]);
+    
+    if (!apartment || !details) {
+        return (
+            <div className="max-w-3xl">
+                <Link to="/apartments">
+                    <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
+                </Link>
+                <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>
+            </div>
+        )
+    }
+
     return (
         <section className="flex flex-col gap-6 p-6 max-w-3xl">
             <div className="flex justify-between">
