@@ -1,55 +1,7 @@
 import { supabase } from '../lib/supabase'
-import type { ParkingSortOption, ParkingSpot } from '../types/parking'
+import type { ParkingSpot, ParkingSpotFilters, ParkingSpotInput, ParkingSpotInsert, ParkingSpotRow, ParkingSpotUpdate, } from '../types/parking'
 
 const parkingSpotSelect = 'id, address, city, postal_code, spot_type, price, available_from, renter, application, created_at, updated_at'
-
-type ParkingSpotRow = {
-    id: number
-    address: string
-    city: string
-    postal_code: string
-    spot_type: string
-    price: number
-    available_from: string
-    renter: string | null
-    application: boolean
-    created_at: string
-    updated_at: string
-}
-
-type ParkingSpotInsert = {
-    address: string
-    city: string
-    postal_code: string
-    spot_type: string
-    price: number
-    available_from: string
-    renter?: string | null
-    application?: boolean
-}
-
-type ParkingSpotUpdate = Partial<ParkingSpotInsert>
-
-export type ParkingSpotFilters = {
-    searchQuery?: string
-    cities?: string[]
-    types?: string[]
-    application?: boolean
-    sortBy?: ParkingSortOption
-    limit?: number
-    offset?: number
-}
-
-export type ParkingSpotInput = {
-    address: string
-    city: string
-    postalCode: string
-    type: string
-    price: number
-    availableFrom: string
-    renter?: string | null
-    application?: boolean
-}
 
 const mapRowToParkingSpot = (row: ParkingSpotRow): ParkingSpot => ({
     id: row.id,
@@ -64,21 +16,11 @@ const mapRowToParkingSpot = (row: ParkingSpotRow): ParkingSpot => ({
 })
 
 export async function fetchParkingSpots(filters: ParkingSpotFilters = {}) {
-    const {
-        searchQuery,
-        cities = [],
-        types = [],
-        application = true,
-        sortBy = 'price-asc',
-        limit,
-        offset,
-    } = filters
+    const { searchQuery, cities = [], types = [], application = true, sortBy = 'price-asc', limit, offset } = filters
 
     let query = supabase.from('parking_spots').select(parkingSpotSelect, { count: 'exact' })
 
-    if (typeof application === 'boolean') {
-        query = query.eq('application', application)
-    }
+    if (typeof application === 'boolean') { query = query.eq('application', application) }
 
     if (searchQuery?.trim()) {
         const term = searchQuery.trim()
@@ -90,14 +32,8 @@ export async function fetchParkingSpots(filters: ParkingSpotFilters = {}) {
         ].join(','))
     }
 
-    if (cities.length > 0) {
-        query = query.in('city', cities)
-    }
-
-    if (types.length > 0) {
-        query = query.in('spot_type', types)
-    }
-
+    if (cities.length > 0) { query = query.in('city', cities) }
+    if (types.length > 0) { query = query.in('spot_type', types) }
     if (sortBy === 'price-asc') query = query.order('price', { ascending: true })
     else if (sortBy === 'price-desc') query = query.order('price', { ascending: false })
     else if (sortBy === 'date-asc') query = query.order('available_from', { ascending: true })
@@ -114,18 +50,11 @@ export async function fetchParkingSpots(filters: ParkingSpotFilters = {}) {
 
     if (error) throw error
 
-    return {
-        data: (data ?? []).map(mapRowToParkingSpot),
-        count: count ?? 0,
-    }
+    return { data: (data ?? []).map(mapRowToParkingSpot), count: count ?? 0 }
 }
 
 export async function fetchParkingSpotById(id: number) {
-    const { data, error } = await supabase
-        .from('parking_spots')
-        .select(parkingSpotSelect)
-        .eq('id', id)
-        .single()
+    const { data, error } = await supabase.from('parking_spots').select(parkingSpotSelect).eq('id', id).single()
 
     if (error) throw error
 
