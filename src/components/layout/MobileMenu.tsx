@@ -1,15 +1,7 @@
 import { useEffect, useState } from 'react'
-import type { User } from '@supabase/supabase-js'
 import { NavLink } from 'react-router-dom'
 import { Bars3Icon, XMarkIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
-import type { NavigationLink } from '../../types/navigation'
-import type { Profile } from '../../types/profile'
-
-type MobileMenuProps = {
-    navigationLinks: NavigationLink[]
-    user: User | null
-    profile: Profile | null
-}
+import type { MobileMenuProps } from '../../types/navigation'
 
 export default function MobileMenu({ navigationLinks, user, profile }: MobileMenuProps) {
     const [isOpen, setIsOpen] = useState(false)
