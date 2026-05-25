@@ -1,24 +1,26 @@
 import { useLocation, Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import ImageCarousel from '../components/SearchApartmentPage/ImageCarousel.tsx';
 import Button from '../components/ui/Button.tsx';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import type { ApartmentData, Detail } from '../types/apartment.ts';
 import ApartmentSignUp from '../components/SearchApartmentPage/ApartmentSignUp.tsx';
-import { SignUpCalls } from '../hooks/SignUpCalls.tsx';
+import { useSignUp } from '../hooks/useSignUp.tsx';
 import { useSession } from '../hooks/useAuth.ts';
 
 const Apartment = () => {
-    const location = useLocation();
+    const { state } = useLocation();
     const session = useSession();
-    const state = location.state as
+    const apartmentState = state as
         | { apartment: ApartmentData; details: Detail[] }
         | undefined;
-    const apartment: ApartmentData | null = state?.apartment ?? null;
-    const details: Detail[] | null = state?.details ?? null;
+    const apartment: ApartmentData | null = apartmentState?.apartment ?? null;
+    const details: Detail[] | null = apartmentState?.details ?? null;
+
     if (!apartment || !details) {
         return (
             <div className="max-w-3xl">
-                <Link to="/apartment">
+                <Link to="/apartments">
                     <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
                 </Link>
                 <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>
@@ -28,17 +30,23 @@ const Apartment = () => {
     const {
         signUp,
         deleteSignUp,
+        getApartmentStatus,
         loading,
         error,
-        saved,
         applied,
-        deleted } = SignUpCalls({ apartment });
+    } = useSignUp({ apartment });
 
+    useEffect(() => {
+        if (session?.access_token) {
+            getApartmentStatus();
+        }
+    }, [session?.access_token]);
     return (
         <section className="flex flex-col gap-6 p-6 max-w-3xl">
             <div className="flex justify-between">
                 <h1 className="text-5xl">{apartment.street}</h1>
-                {session && <ApartmentSignUp error={error} loading={loading} saved={saved} applied={applied} deleted={deleted} deleteSignUp={deleteSignUp} signUp={signUp} />}
+                {session &&
+                    <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} />}
             </div>
             <ImageCarousel images={apartment.images} size="large" />
             <h2 className="text-2xl">Om bostaden</h2>
@@ -50,7 +58,7 @@ const Apartment = () => {
                 <ApartmentList variant="ul" items={details} />
             </ul>
             {session ?
-                <ApartmentSignUp error={error} loading={loading} saved={saved} applied={applied} deleted={deleted} deleteSignUp={deleteSignUp} signUp={signUp} /> :
+                <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} /> :
                 <div>Du måste vara inloggad för att anmäla intressse. Vänligen <a href="/auth" className="text-blue-500 hover:underline">logga in</a> eller registrera ett konto.</div>
             }
         </section>

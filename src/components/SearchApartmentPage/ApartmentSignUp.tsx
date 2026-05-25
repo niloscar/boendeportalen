@@ -1,24 +1,18 @@
 import type { SignUp } from '../../types/apartment.ts';
 import Button from '../../components/ui/Button.tsx';
 
-const ApartmentSignUp = ({ error, loading, saved, applied, deleted, deleteSignUp, signUp }: SignUp) => {
+const ApartmentSignUp = ({ error, loading, applied, deleteSignUp, signUp }: SignUp) => {
     if (error) {
         return (<div>
-            <Button variant="primary" size="md" type="button" children="Anmäl intresse" onClick={signUp} />
-            <p>Kunde inte skapa intresseanmälan. Vänligen försök igen.</p>
+            <p>Någonting gick fel, vänligen ladda om sidan för att anmäla eller ta bort intresseanmälan.</p>
         </div>)
     }
     if (loading) {
-        return (<Button variant="secondary" size="md" type="button" children="Skickar din förfrågan" disabled/>)
-    }
-    if (saved == 200 || saved == 201) {
-        return (<Button variant="primary" size="md" type="button" children="Ta bort intresseanmälan" onClick={deleteSignUp} />)
+        return (<Button variant="secondary" size="md" type="button" children="Skickar din förfrågan" disabled />)
     }
     if (applied.length > 0) {
         return (<>
-            {deleted != 204 ?
-                <Button variant="primary" size="md" type="button" children="Ta bort intresseanmälan" onClick={deleteSignUp} /> :
-                <Button variant="primary" size="md" type="button" children="Anmäl intresse" onClick={signUp} />}
+            <Button variant="secondary" size="md" type="button" children="Ta bort intresseanmälan" onClick={deleteSignUp} />
         </>)
     }
     return (

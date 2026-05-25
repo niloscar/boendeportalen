@@ -67,9 +67,7 @@ export interface SignedUpData {
 export type SignUp ={ 
     error: string,
     loading: boolean,
-    saved: number,
     applied: SignedUpData[],
-    deleted: number,
     deleteSignUp: () => Promise<void>,
     signUp: () => Promise<void>
 }
