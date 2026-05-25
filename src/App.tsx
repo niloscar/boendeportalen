@@ -30,7 +30,7 @@ function App() {
                         path="/admin/*" 
                         element={
                             <AdminRoute user={user} loading={loading} profile={profile}>
-                                <AdminPage profile={profile} signOut={signOut} />
+                                <AdminPage />
                             </AdminRoute>
                         } 
                     />
