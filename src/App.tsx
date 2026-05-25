@@ -1,16 +1,29 @@
 import { Link, Routes, Route } from 'react-router-dom'
-import type { ReactNode } from 'react'
-import Auth from './pages/Auth'
+import { Suspense, lazy, type ReactNode } from 'react'
 import { signOut } from './lib/supabase'
 import useAuth from './hooks/useAuth'
 
 import { PublicOnlyRoute, AdminRoute } from './routing'
 
-import AdminPage from './pages/AdminPage'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
-import SearchApartment from './pages/SearchApartment'
-import Apartment from './pages/Apartment'
+
+const AuthPage = lazy(() => import('./pages/Auth'))
+const AdminPage = lazy(() => import('./pages/AdminPage'))
+const SearchApartmentPage = lazy(() => import('./pages/SearchApartment'))
+const ApartmentPage = lazy(() => import('./pages/Apartment'))
+
+function RouteFallback() {
+    return (
+        <div className="w-full max-w-6xl p-6 text-sm text-center text-gray-600">
+            Laddar sida...
+        </div>
+    )
+}
+
+function LazyRoute({ children }: { children: ReactNode }) {
+    return <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+}
 
 function HomePage() {
     const { user } = useAuth()
@@ -44,12 +57,12 @@ function App() {
             <Header />
             <main className="flex-1 flex justify-center items-start">
                 <Routes>
-                    <Route path="/auth" element={<PublicOnlyRouteWrapper><Auth /></PublicOnlyRouteWrapper>} />
-                    <Route path="/apartment" element={<SearchApartment />} />
-                    <Route path="/apartment/:apartmentId" element={<Apartment />} />
+                    <Route path="/auth" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
+                    <Route path="/apartment" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
+                    <Route path="/apartment/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
                     <Route
                         path="/admin/*"
-                        element={<AdminRouteWrapper><AdminPage /></AdminRouteWrapper>}
+                        element={<AdminRouteWrapper><LazyRoute><AdminPage /></LazyRoute></AdminRouteWrapper>}
                     />
                     <Route path="/" element={<HomePage />} />
                 </Routes>
