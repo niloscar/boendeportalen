@@ -10,11 +10,13 @@ type DropDownItem = {
 type DropDownProps = {
     items: DropDownItem[]
     fallbackTitle?: string
+    ariaLabel?: string
 }
 
 export default function DropDown({
     items,
-    fallbackTitle = 'Meny'
+    fallbackTitle = 'Meny',
+    ariaLabel = 'Dropdown-meny'
 }: DropDownProps) {
     const [isOpen, setIsOpen] = useState(false)
     const navRef = useRef<HTMLElement>(null)
@@ -56,6 +58,7 @@ export default function DropDown({
     return (
         <nav
             ref={navRef}
+            aria-label={ariaLabel}
             className={`
                 relative w-full md:w-max bg-neutral-100 text-sm
                 ${isOpen ? 'rounded-t-2xl' : 'rounded-2xl'}
