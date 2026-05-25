@@ -213,6 +213,7 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
 
     return (
         <div>
+
             <FullCalendar
                 plugins={[timeGridPlugin, listPlugin, interactionPlugin]}
                 initialView="timeGridWeek"

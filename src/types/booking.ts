@@ -53,3 +53,9 @@ export type UseBookingActionsProps = {
     setDelBooking: (value: Booking | null) => void;
     bookingType: "GuestSuite" | "LaundryRoom";
 };
+
+export type MyExtendedProps = {
+    isOwner?: boolean;
+    slot?: number;
+    date?: string;
+};

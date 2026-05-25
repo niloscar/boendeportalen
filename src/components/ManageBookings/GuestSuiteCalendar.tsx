@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { createRoot } from "react-dom/client";
 
 import type { EventInput, EventClickArg, CalendarApi } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
@@ -10,15 +11,17 @@ import svLocale from "@fullcalendar/core/locales/sv";
 
 import useAuth from "../../hooks/useAuth";
 import { useBookingActions } from "../../hooks/useBookingActions";
-import type { NewBooking, Booking, GuestSuiteCalendarProps } from "../../types/booking";
+import type { NewBooking, Booking, GuestSuiteCalendarProps, MyExtendedProps } from "../../types/booking";
 import ConfirmDialog from "../ui/ConfirmDialog";
 import AlertDialog from "../ui/AlertDialog";
+import BookingIndicator from "./BookingIndicator";
 import LoadingSkeleton from "./LoadingSkeleton";
 
 export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestSuiteCalendarProps) {
 
     // States
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
     const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>("");
@@ -148,6 +151,66 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
     }, [bookings, user, loading, today]);
 
 
+    // 1. Sortera användarens bokningar
+    const myEvents = (calendarEvents as (EventInput & { extendedProps?: MyExtendedProps })[])
+        .filter(e => e.extendedProps?.isOwner)
+        .sort((a, b) => {
+            const da = new Date(a.start as string).getTime();
+            const db = new Date(b.start as string).getTime();
+            return da - db;
+        });
+
+
+    const goToBooking = useCallback((index: number) => {
+        const api = calendarRef.current?.getApi();
+        if (!api) return;
+
+        const event = myEvents[index];
+        if (!event) return;
+
+        api.gotoDate(event.start as string);
+        setCurrentIndex(index);
+    }, [myEvents, calendarRef]);
+
+
+
+    // 3. Rendera indikatorn i headern
+    const renderIndicatorInHeader = useCallback(() => {
+        const chunks = document.querySelectorAll<HTMLDivElement>(".fc-toolbar-chunk");
+        const centerChunk = chunks[1];
+        if (!centerChunk) return;
+
+        // Ta bort gammal container
+        const oldContainer = centerChunk.querySelector(".booking-indicator-container");
+        if (oldContainer) oldContainer.remove();
+
+        // Skapa container
+        const container = document.createElement("span");
+        container.className = "booking-indicator-container";
+        centerChunk.appendChild(container);
+
+        // Rendera React-komponenten
+        const root = createRoot(container);
+        root.render(
+            <BookingIndicator
+                total={myEvents.length}
+                currentIndex={currentIndex}
+                onSelect={(i) => goToBooking(i)}
+            />
+        );
+    }, [myEvents.length, currentIndex, goToBooking]);
+
+
+    // 4. Kör när vyn laddas
+    const handleViewDidMount = () => {
+        setTimeout(renderIndicatorInHeader, 0);
+    };
+
+    // 5. Kör när currentIndex ändras
+    useEffect(() => {
+        renderIndicatorInHeader();
+    }, [renderIndicatorInHeader]);
+
     // Handles click on events
     const handleEventClick = (e: EventClickArg) => {
 
@@ -255,8 +318,8 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
                     start: today.toISOString().split("T")[0],
                     end: calMaxDate.toISOString().split("T")[0]
                 }}
+                viewDidMount={handleViewDidMount}
             />
-
             <ConfirmDialog
                 open={openDeleteDialog}
                 title="Radera bokning"
