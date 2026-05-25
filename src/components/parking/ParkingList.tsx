@@ -1,8 +1,8 @@
 import ParkingCard from './ParkingCard'
 import Pagination from '../ui/Pagination'
-import type { Props } from '../../types/parking'
+import type { ParkingListProps } from '../../types/parking'
 
-export default function ParkingList({ currentSpots, totalPages, currentPage, onPageChange, isLoading, loadError, hasSpots }: Props) {
+export default function ParkingList({ currentSpots, totalPages, currentPage, onPageChange, isLoading, loadError, hasSpots }: ParkingListProps) {
     if (isLoading) return <p className="text-gray-600">Laddar parkeringsplatser...</p>
     if (loadError) return <p className="text-red-600">{loadError}</p>
     if (!hasSpots) return <p className="text-gray-600">Inga parkeringsplatser matchar dina filter.</p>
