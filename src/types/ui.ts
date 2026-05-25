@@ -1,3 +1,5 @@
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+
 export type ConfirmDialogProps = {
     open: boolean;
     title?: string;
@@ -14,4 +16,10 @@ export type AlertDialogProps = {
     message?: string;
     onConfirm: () => void;
     confirmColor: "green" | "red";
+};
+
+export type FormButtonProps = {
+    type?: ButtonHTMLAttributes<HTMLButtonElement>['type']
+    children: ReactNode
+    disabled?: boolean
 };
