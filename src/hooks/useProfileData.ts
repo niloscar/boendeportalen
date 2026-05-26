@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { isNonEmptyString } from '../utils/strings';
+import { formatNumber } from '../utils/calc';
 import {
     getApartmentDocuments,
     getApartmentEquipment,
@@ -23,11 +24,6 @@ const formatPostcode = (postcode?: string | number) => {
     if (cleaned.length === 5) return `${cleaned.slice(0, 3)} ${cleaned.slice(3)}`;
     if (cleaned.length === 6) return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 5)}`;
     return str;
-};
-
-const formatRent = (rent?: number) => {
-    if (typeof rent !== 'number') return '';
-    return rent.toLocaleString('sv-SE');
 };
 
 export interface ProfileData {
@@ -125,7 +121,7 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
         const address = `Adress: ${apartments.street}, ${formattedPostcode} ${apartments.city}`;
         const area = `Storlek: ${apartments.area ? `${apartments.area} kvm` : null}`;
         const rooms = `Rum: ${apartments.rooms ? `${apartments.rooms} rum` : null}`;
-        const rent = `Hyra: ${contract.rent ? `${formatRent(contract.rent)} kr/mån` : null}`;
+        const rent = `Hyra: ${contract.rent ? `${formatNumber(contract.rent)} kr/mån` : null}`;
 
         return [address, area, rooms, rent].filter(isNonEmptyString);
     }, [contract]);
