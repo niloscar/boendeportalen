@@ -14,7 +14,7 @@ export function useLaundryRoomEvents(bookings: Booking[], timeslots: Timeslot[],
     const days = useCalendarDays(30);
 
     useEffect(() => {
-        if (loading || !user) return;
+        if (loading || !user || !Array.isArray(bookings) || !Array.isArray(timeslots)) return;
 
         const build = () => {
 

@@ -14,7 +14,7 @@ export function useGuestSuiteEvents(bookings: Booking[], user: User | null, load
     const days = useCalendarDays(365);
 
     useEffect(() => {
-        if (loading || !user) return;
+        if (loading || !user || !Array.isArray(bookings)) return;
 
         const build = () => {
 

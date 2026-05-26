@@ -2,6 +2,18 @@ import type { User } from '@supabase/supabase-js'
 import type { EventInput, EventClickArg } from "@fullcalendar/core";
 import type FullCalendar from "@fullcalendar/react";
 
+export type ApiSuccess<T> = {
+    success: true;
+    data: T;
+};
+
+export type ApiError = {
+    success: false;
+    error: string;
+};
+
+export type ApiResult<T> = ApiSuccess<T> | ApiError;
+
 export type Timeslot = {
     id: number;
     start: string;

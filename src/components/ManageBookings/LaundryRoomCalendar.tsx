@@ -91,7 +91,7 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
         });
 
     //Render skeleton if loading
-    if (isBuildingEvents) {
+    if (isBuildingEvents || loading) {
         return (<LoadingSkeleton />);
     }
 
