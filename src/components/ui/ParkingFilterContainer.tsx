@@ -1,3 +1,4 @@
+import { CaretDownIcon } from '@phosphor-icons/react'
 import type { ParkingSortOption, FilterProps } from '../../types/parking'
 
 export default function FilterBar({
@@ -13,8 +14,8 @@ export default function FilterBar({
     onSortChange,
     onClear,
 }: FilterProps) {
-    const citySummary = selectedCities.length === 0 ? 'Alla städer' : `${selectedCities.length} valda`
-    const typeSummary = selectedTypes.length === 0 ? 'Alla typer' : `${selectedTypes.length} valda`
+    const citySummary = selectedCities.length === 0 ? 'Alla städer' : `${selectedCities.length} ${selectedCities.length === 1 ? 'vald' : 'valda'}`
+    const typeSummary = selectedTypes.length === 0 ? 'Alla typer' : `${selectedTypes.length} ${selectedTypes.length === 1 ? 'vald' : 'valda'}`
 
     return (
         <section className="w-full bg-white border border-neutral-200 rounded-2xl p-4 sm:p-5 shadow-md">
@@ -34,9 +35,9 @@ export default function FilterBar({
                 <div className="flex flex-col gap-1 relative">
                     <span className="text-sm text-neutral-600">Stad (flera val)</span>
                     <details className="group">
-                        <summary className="list-none w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-between">
-                            <span className="text-neutral-800">{citySummary}</span>
-                            <span className="text-neutral-500 text-xs">▼</span>
+                        <summary className="group list-none w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-between">
+                            <span className="min-w-0 flex-1 truncate text-neutral-800">{citySummary}</span>
+                            <CaretDownIcon size={16} className="shrink-0 text-neutral-500 transition-transform duration-200 group-open:rotate-180" aria-hidden="true" />
                         </summary>
                         <div className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-neutral-300 bg-white shadow-md p-2">
                             <div className="mb-2 flex justify-end">
@@ -68,9 +69,9 @@ export default function FilterBar({
                 <div className="flex flex-col gap-1 relative">
                     <span className="text-sm text-neutral-600">Typ (flera val)</span>
                     <details className="group">
-                        <summary className="list-none w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-between">
-                            <span className="text-neutral-800">{typeSummary}</span>
-                            <span className="text-neutral-500 text-xs">▼</span>
+                        <summary className="group list-none w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-between">
+                            <span className="min-w-0 flex-1 truncate text-neutral-800">{typeSummary}</span>
+                            <CaretDownIcon size={16} className="shrink-0 text-neutral-500 transition-transform duration-200 group-open:rotate-180" aria-hidden="true" />
                         </summary>
                         <div className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-neutral-300 bg-white shadow-md p-2">
                             <div className="mb-2 flex justify-end">
@@ -101,18 +102,25 @@ export default function FilterBar({
 
                 <label className="flex flex-col gap-1">
                     <span className="text-sm text-neutral-600">Sortera</span>
-                    <select
-                        value={sortBy}
-                        onChange={(event) => onSortChange(event.target.value as ParkingSortOption)}
-                        className="w-full px-3 py-2.5 border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
-                        aria-label="Sortera parkeringsplatser"
-                    >
-                        <option value="price-asc">Pris: lägst först</option>
-                        <option value="price-desc">Pris: högst först</option>
-                        <option value="date-asc">Tillgänglig: tidigast först</option>
-                        <option value="date-desc">Tillgänglig: senast först</option>
-                        <option value="address-asc">Adress: A-Ö</option>
-                    </select>
+                    <div className="relative">
+                        <select
+                            value={sortBy}
+                            onChange={(event) => onSortChange(event.target.value as ParkingSortOption)}
+                            className="w-full appearance-none overflow-hidden whitespace-nowrap text-ellipsis px-3 py-2.5 pr-10 border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
+                            aria-label="Sortera parkeringsplatser"
+                        >
+                            <option value="price-asc">Pris: lägst först</option>
+                            <option value="price-desc">Pris: högst först</option>
+                            <option value="date-asc">Tillgänglig: tidigast först</option>
+                            <option value="date-desc">Tillgänglig: senast först</option>
+                            <option value="address-asc">Adress: A-Ö</option>
+                        </select>
+                        <CaretDownIcon
+                            size={16}
+                            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 shrink-0 text-neutral-500"
+                            aria-hidden="true"
+                        />
+                    </div>
                 </label>
             </div>
 
