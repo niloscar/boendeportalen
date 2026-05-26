@@ -33,9 +33,16 @@ export function useBookingActions({
         switch (bookingType) {
             case "LaundryRoom":
 
-                //Book new slot
-                if (newBooking.slot !== null) {
-                    await createLaundryRoomBooking(newBooking.user_id, newBooking.slot, newBooking.date);
+                try {
+                    if (newBooking.slot !== null) {
+                        await createLaundryRoomBooking(
+                            newBooking.user_id,
+                            newBooking.slot,
+                            newBooking.date
+                        );
+                    }
+                } catch (error) {
+                    console.error("Fel vid skapande av bokning:", error);
                 }
 
                 //Delete old bookings
