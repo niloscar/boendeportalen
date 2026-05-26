@@ -27,7 +27,7 @@ export default function GuestSuite() {
 
     return (
         <div className='w-full text-neutral-900'>
-            <main className='mx-auto flex w-full flex-col gap-8 px-6 pt-6 pb-16 sm:px-10'>
+            <main className='mx-auto flex w-full flex-col gap-8'>
                 <div className="h-screen">
                     <h1 className="text-3xl mb-6">Bokning av gästlägenheten</h1>
                     <div className="mb-6">Välkommen att boka vår gästlägenhet! Gästlägenheten är tillgänglig för dig som hyresgäst när du får besök av familj eller vänner och behöver extra utrymme. <a href="" onClick={(e) => { e.preventDefault(); setOpenAlertDialog(true) }} className="text-green-500 hover:text-green-700">Här</a> hittar du all viktig information inför din bokning.</div>

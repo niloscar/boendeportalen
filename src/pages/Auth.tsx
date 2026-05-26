@@ -45,7 +45,7 @@ function Auth() {
     const weekday = weekdays[now.getDay()]
 
     return (
-        <div className='min-h-screen flex bg-neutral-200 items-stretch md:items-center justify-center p-0 sm:p-4 md:p-8'>
+        <div className='min-h-screen flex items-stretch md:items-center justify-center'>
             <div className={`flex w-full min-h-screen md:min-h-0 md:max-h-[92vh] md:w-[95%] lg:w-[92%] xl:w-[88%] 2xl:w-3/4 overflow-hidden bg-white md:rounded-2xl shadow-none md:shadow-md ${styles.cardTransition}`}>
                 <div className='hidden lg:block lg:w-1/2 2xl:w-2/3 min-h-full bg-gradient-to-r from-green-700 to-green-500'>
                     <div className='relative h-full flex items-center justify-center'>
