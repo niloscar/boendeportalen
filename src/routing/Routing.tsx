@@ -6,7 +6,7 @@ import type { RouteGuardProps } from '../types/routing'
 
 export function RouteLoadingFallback() {
     return (
-        <div className='min-h-screen grid place-items-center text-sm text-gray-600'>
+        <div className='flex w-full justify-center items-center text-center text-sm text-gray-600'>
             Laddar...
         </div>
     )
