@@ -12,6 +12,11 @@ export default function SettingsPage() {
     const { loadError, features, loading, toggleFeature, saveFeatures } = useFeatures()
     const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
 
+    const handleSwitchChange = (featureSlug: string, isChecked: boolean) => {
+        setSaveStatus('idle')
+        toggleFeature(featureSlug, isChecked)
+    }
+
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
 
@@ -71,13 +76,13 @@ export default function SettingsPage() {
 
                                 {features.map((feature) => (
                                     <tr key={feature.id}>
-                                        <td className="align-middle px-2">
+                                        <td className="px-2">
                                             <div className="flex h-full items-center">
                                                 <FormSwitch
                                                     id={feature.slug}
                                                     name={feature.slug}
                                                     checked={feature.is_active}
-                                                    onSwitchChange={toggleFeature}
+                                                    onSwitchChange={handleSwitchChange}
                                                 />
                                             </div>
                                         </td>
