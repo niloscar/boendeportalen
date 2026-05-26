@@ -1,13 +1,57 @@
 import apiConfig from './axiosConfig.ts';
 
+//Fetch available apartments
 export const getAvailableApartments = async () => {
     try {
-    const response = await apiConfig.get(`/available_apartments`);
+        const response = await apiConfig.get(`/available_apartments`);
         return response.data;
-    } catch(err){
-        console.log(`Kunde inte hämta lägenheter, ${err}`); 
+    } catch (err) {
+        console.log(`Kunde inte hämta lägenheter, ${err}`);
         throw err;
     }
 };
 
+// Fetch if already signed up for apartment
+export const getApartmentSignupStatus = async (bearer: string | undefined, apartment_id: number, end_date: string | null) => {
+    const config = {
+        headers: { Authorization: `Bearer ${bearer}` }
+    }
+    try {
+        const response = await apiConfig.get(`/apartment_sign_up?select=id,apartment_id,end_date,sign_up_date&apartment_id=eq.${apartment_id}&end_date=eq.${end_date}`, config);
+        return response.data;
+    } catch (err) {
+        console.log(`Kunde inte hitta tidigare intresseanmälningar, ${err}`);
+        throw err;
+    }
+};
 
+//Sign up for apartment
+export async function createApartmentSignUp(bearer: string | undefined, apartment_id: number, end_date: string | null) {
+    const config = {
+        headers: { Authorization: `Bearer ${bearer}` }
+    }
+    try {
+        const response = await apiConfig.post("/apartment_sign_up", {
+            apartment_id: apartment_id,
+            end_date: end_date
+        }, config);
+        return response.status;
+    } catch (error) {
+        console.error("Kunde inte skapa intresseanmälan: ", error);
+        throw error;
+    }
+}
+
+//Delete sign up to apartment
+export const deleteApartmentSignUp = async (bearer: string | undefined, signUpId: number) => {
+    const config = {
+        headers: { Authorization: `Bearer ${bearer}` }
+    }
+    try {
+        const response = await apiConfig.delete(`/apartment_sign_up?id=eq.${signUpId}`, config);
+        return response;
+    } catch (err) {
+        console.log(`Kunde inte ta bort intresseanmälan ${err}`);
+        throw err;
+    }
+};
