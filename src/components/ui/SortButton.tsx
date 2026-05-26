@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/outline'
+import { ArrowDownIcon, ArrowUpIcon } from '@phosphor-icons/react'
 import styles from './SortButton.module.css'
 
 const SortButton = ({ onClick, children, value, isActive }: { onClick: () => void; children: ReactNode; value: string; isActive: boolean }) => {

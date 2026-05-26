@@ -53,7 +53,7 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
         )
     }
     return (
-        <section className="border border-solid border-green-500 rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 w-xs">
+        <section className="border border-solid border-green-500 rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 w-full">
             <ImageCarousel images={apartment.images} size="small" />
             <h2 className="text-2xl">{apartment.street}</h2>
             <section className="w-full">
@@ -61,7 +61,7 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
                     <ApartmentList variant="ul" items={details} />
                 </ul>
             </section>
-            <Link to={`/apartment/${apartment.id}`} state={{ apartment: apartment, details: details }} className="self-start">
+            <Link to={`/bostader/${apartment.id}`} state={{ apartment: apartment, details: details }} className="self-start">
                 <Button variant="secondary" size="md" type="button" children="Läs mer" />
             </Link>
         </section>

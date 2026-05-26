@@ -3,6 +3,7 @@
 
 body {
     font-family: "Inter";
+    background-color: oklch(97% 0 0);
 }
 
 /* FullCalendar Styling */
@@ -64,4 +65,12 @@ body {
 /* Center toolbar */
 .fc-toolbar-chunk {
     @apply text-center;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
 }

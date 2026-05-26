@@ -1,8 +1,7 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { Suspense, lazy, type ReactNode } from 'react'
-import useAuth from './hooks/useAuth'
 
-import { PublicOnlyRoute, AdminRoute, PrivateRoute } from './routing'
+import { AdminRouteWrapper, PrivateRouteWrapper, PublicOnlyRouteWrapper, RouteLoadingFallback } from './routing/Routing'
 
 // Import pages here
 import Header from './components/layout/Header'
@@ -18,51 +17,28 @@ const Parking = lazy(() => import('./pages/Parking'))
 const LaundryPage = lazy(() => import('./pages/Laundry'))
 const GuestSuitePage = lazy(() => import('./pages/GuestSuite'))
 
-function RouteFallback() {
-    return (
-        <div className="w-full max-w-6xl p-6 text-sm text-center text-gray-600">
-            Laddar sida...
-        </div>
-    )
-}
-
 function LazyRoute({ children }: { children: ReactNode }) {
-    return <Suspense fallback={<RouteFallback />}>{children}</Suspense>
-}
-
-function PublicOnlyRouteWrapper({ children }: { children: ReactNode }) {
-    const { user, loading } = useAuth()
-    return <PublicOnlyRoute user={user} loading={loading}>{children}</PublicOnlyRoute>
-}
-
-function PrivateRouteWrapper({ children }: { children: ReactNode }) {
-    const { user, loading } = useAuth()
-    return <PrivateRoute user={user} loading={loading}>{children}</PrivateRoute>
-}
-
-function AdminRouteWrapper({ children }: { children: ReactNode }) {
-    const { user, loading, profile } = useAuth()
-    return <AdminRoute user={user} loading={loading} profile={profile}>{children}</AdminRoute>
+    return <Suspense fallback={<RouteLoadingFallback />}>{children}</Suspense>
 }
 
 function App() {
+    const location = useLocation()
+    const isAuthPage = location.pathname === '/inloggning'
+
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="flex-1 flex justify-center items-start">
+            <main className={isAuthPage ? 'flex-1 flex w-full' : 'flex-1 flex py-10 w-full max-w-6xl mx-auto'}>
                 <Routes>
-                    <Route path="/auth" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
+                    <Route path="/inloggning" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
                     <Route path="/minasidor" element={<PrivateRouteWrapper><LazyRoute><ProfilePage /></LazyRoute></PrivateRouteWrapper>} />
                     <Route path="/tvattid" element={<PrivateRouteWrapper><LazyRoute><LaundryPage /></LazyRoute></PrivateRouteWrapper>} />
                     <Route path="/gastlagenhet" element={<PrivateRouteWrapper><LazyRoute><GuestSuitePage /></LazyRoute></PrivateRouteWrapper>} />
-                    <Route path="/apartment" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
-                    <Route path="/apartment/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
-                    <Route path="/parking" element={<LazyRoute><Parking /></LazyRoute>} />
-                    <Route path="/parking/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
-                    <Route
-                        path="/admin/*"
-                        element={<AdminRouteWrapper><LazyRoute><AdminPage /></LazyRoute></AdminRouteWrapper>}
-                    />
+                    <Route path="/bostader" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
+                    <Route path="/bostader/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
+                    <Route path="/parkeringar" element={<LazyRoute><Parking /></LazyRoute>} />
+                    <Route path="/parkeringar/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
+                    <Route path="/admin/*" element={<AdminRouteWrapper><LazyRoute><AdminPage /></LazyRoute></AdminRouteWrapper>} />
                     <Route path="/" element={<HomePage />} />
                 </Routes>
             </main>

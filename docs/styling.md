@@ -53,7 +53,6 @@ w-full p-6 bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring
 ### Breakdown
 - `w-full` - Full width of container
 - `p-6` - Padding of 1.5rem (24px) for comfortable spacing
-- `bg-neutral-200` - Light gray background
 - `rounded-2xl` - Border radius of 16px for smooth edges
 - `focus:outline-none` - Remove default outline
 - `focus:ring-2` - Add 2px focus ring
