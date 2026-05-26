@@ -26,7 +26,7 @@ const ImageCarousel = ({ images, size }: ApartmentImagesProp) => {
     return (
         images.length > 0 ?
             <div className="relative m-auto w-full">
-                <img src={images[nextIndex].url} className={`h-50 ${imageSize} m-auto`} alt={images[nextIndex].description} />
+                <img src={images[nextIndex].url} className={`w-full object-fill rounded-2xl h-50 ${imageSize} m-auto`} alt={images[nextIndex].description} />
                 <button className={`hover:bg-neutral-200 absolute top-[40%] cursor-pointer text-green-500 rounded-l text-2xl p-4`} onClick={(e) => back(e)}>❮</button>
                 <button className={`hover:bg-neutral-200 absolute top-[40%] right-0 cursor-pointer text-green-500 rounded-r text-2xl p-4`} onClick={(e) => forward(e)}>❯</button>
             </div>
