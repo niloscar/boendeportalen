@@ -1,10 +1,10 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useEffect } from 'react';
-import ImageCarousel from '../components/SearchApartmentPage/ImageCarousel.tsx';
+import ImageCarousel from '../components/searchApartmentPage/ImageCarousel.tsx';
 import Button from '../components/ui/Button.tsx';
-import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
+import ApartmentList from '../components/searchApartmentPage/ApartmentList.tsx';
 import type { ApartmentData, Detail } from '../types/apartment.ts';
-import ApartmentSignUp from '../components/SearchApartmentPage/ApartmentSignUp.tsx';
+import ApartmentSignUp from '../components/searchApartmentPage/ApartmentSignUp.tsx';
 import { useApartmentSignUp } from '../hooks/useApartmentSignUp.tsx';
 import { useSession } from '../hooks/useAuth.ts';
 
