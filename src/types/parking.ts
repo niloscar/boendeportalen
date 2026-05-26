@@ -1,3 +1,5 @@
+import type { MapLocation } from "./map"
+
 export type ParkingPageState = {
     searchQuery: string
     selectedCities: string[]
@@ -22,6 +24,20 @@ export type ParkingSpot = {
     availableFrom: string
     renter: string | null
     application: boolean
+    imageUrl: string
+    description: string | null
+}
+
+export type ParkingApplication = {
+    id: string
+    signUpDate: string
+    parkingId: number
+    userId: string
+}
+
+export type UseParkingApplicationParams = {
+    parkingId: number | null | undefined
+    userId: string | null | undefined
 }
 
 export type ParkingListProps = {
@@ -58,6 +74,8 @@ export type ParkingSpotRow = {
     available_from: string
     renter: string | null
     application: boolean
+    image_url: string
+    description: string | null
     created_at: string
     updated_at: string
 }
@@ -71,6 +89,8 @@ export type ParkingSpotInsert = {
     available_from: string
     renter?: string | null
     application?: boolean
+    image_url?: string
+    description?: string | null
 }
 
 export type ParkingSpotUpdate = Partial<ParkingSpotInsert>
@@ -94,4 +114,19 @@ export type ParkingSpotInput = {
     availableFrom: string
     renter?: string | null
     application?: boolean
+    imageUrl?: string
+    description?: string | null
+}
+
+export type ParkingApplicationRow = {
+    id: string
+    sign_up_date: string
+    parking_id: number
+    user_id: string
+}
+
+export type UseParkingLocationResult = {
+    location: MapLocation | null
+    isLoading: boolean
+    hasError: boolean
 }
