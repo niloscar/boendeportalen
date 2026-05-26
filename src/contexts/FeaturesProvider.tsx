@@ -29,10 +29,10 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
         fetchFeatures()
     }, [])
 
-    const toggleFeature = useCallback((featureName: string, isActive: boolean) => {
+    const toggleFeature = useCallback((featureSlug: string, isActive: boolean) => {
         setFeatures((prevFeatures) =>
             prevFeatures.map((feature) =>
-                feature.name === featureName
+                feature.slug === featureSlug
                     ? { ...feature, is_active: isActive }
                     : feature
             )

@@ -12,11 +12,11 @@ export default function SettingsPage() {
     const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        const featureName = e.target.name
+        const featureSlug = e.target.name
         const isChecked = e.target.checked
 
         setSaveStatus('idle')
-        toggleFeature(featureName, isChecked)
+        toggleFeature(featureSlug, isChecked)
     }
 
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
@@ -82,7 +82,7 @@ export default function SettingsPage() {
                                             <label className="flex items-center gap-2 cursor-pointer select-none">
                                                 <input
                                                     type='checkbox'
-                                                    name={feature.name}
+                                                    name={feature.slug}
                                                     className='form-checkbox cursor-pointer accent-neutral-900 hover:accent-neutral-800'
                                                     checked={feature.is_active}
                                                     onChange={handleChange}
