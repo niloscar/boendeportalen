@@ -18,8 +18,10 @@ export type AlertDialogProps = {
     confirmColor: "green" | "red";
 };
 
-export type FormButtonProps = {
-    type?: ButtonHTMLAttributes<HTMLButtonElement>['type']
-    children: ReactNode
+export type FormSwitchProps = {
+    id: string
+    name: string
+    checked: boolean
+    onSwitchChange: (name: string, checked: boolean) => void
     disabled?: boolean
 };
