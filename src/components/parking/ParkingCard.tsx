@@ -12,7 +12,7 @@ export default function ParkingCard({ spot }: { spot: ParkingSpot }) {
         >
             <article className="w-full bg-white border border-neutral-300 rounded-xl shadow-md group hover:shadow-lg transition-shadow duration-150 focus:outline-none focus:ring-2 focus:ring-green-500">
                 <img
-                    src={`https://klimatkommunerna.se/wp-content/uploads/2019/09/parking-5120x3413.jpg`}
+                    src={spot.imageUrl}
                     alt={`${spot.type} vid ${spot.address}`}
                     className="w-full aspect-[4/3] object-cover rounded-t-xl"
                 />
