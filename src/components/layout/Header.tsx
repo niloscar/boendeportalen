@@ -12,7 +12,7 @@ const Header: React.FC = () => {
     return (
         <header className="bg-white border-b border-neutral-200/70">
             <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-4">
-                <h1 className="text-xl text-neutral-900 font-extrabold leading-tight"><a href="/">Boende<span className="text-green-500">Portalen</span></a></h1>
+                <h1 className="text-xl text-neutral-900 font-extrabold leading-tight"><NavLink to="/">Boende<span className="text-green-500">Portalen</span></NavLink></h1>
                 <nav aria-label="Huvudnavigering" className="hidden md:block">
                     <ul className="flex items-center gap-4 text-sm text-neutral-700">
                         {navigationLinks.map((link) => (
