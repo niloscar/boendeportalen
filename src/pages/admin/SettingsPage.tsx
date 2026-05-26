@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useFeatures } from '../../hooks/useFeatures'
 import { Button } from '../../components/ui/Button'
+import FormSwitch from '../../components/ui/FormSwitch'
 
-import type { ChangeEventHandler, SubmitEventHandler } from 'react'
+import type { SubmitEventHandler } from 'react'
 import type { FeaturesByType } from '../../types/admin'
 
 type SaveStatus = 'idle' | 'saving' | 'success' | 'error'
@@ -10,14 +11,6 @@ type SaveStatus = 'idle' | 'saving' | 'success' | 'error'
 export default function SettingsPage() {
     const { loadError, features, loading, toggleFeature, saveFeatures } = useFeatures()
     const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
-
-    const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        const featureSlug = e.target.name
-        const isChecked = e.target.checked
-
-        setSaveStatus('idle')
-        toggleFeature(featureSlug, isChecked)
-    }
 
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
@@ -78,20 +71,18 @@ export default function SettingsPage() {
 
                                 {features.map((feature) => (
                                     <tr key={feature.id}>
-                                        <td className="px-2 py-1">
-                                            <label className="flex items-center gap-2 cursor-pointer select-none">
-                                                <input
-                                                    type='checkbox'
+                                        <td className="align-middle px-2">
+                                            <div className="flex h-full items-center">
+                                                <FormSwitch
+                                                    id={feature.slug}
                                                     name={feature.slug}
-                                                    className='form-checkbox cursor-pointer accent-neutral-900 hover:accent-neutral-800'
                                                     checked={feature.is_active}
-                                                    onChange={handleChange}
+                                                    onSwitchChange={toggleFeature}
                                                 />
-                                                <span className="sr-only">{`Aktivera ${feature.name}`}</span>
-                                                <h3 className="text-md font-bold text-neutral-900">{feature.name}</h3>
-                                            </label>
+                                            </div>
                                         </td>
-                                        <td className="px-2 py-1 text-neutral-600 text-sm">{feature.description}</td>
+                                        <td className="align-middle px-2 py-1 font-medium text-neutral-900">{feature.name}</td>
+                                        <td className="align-middle px-2 py-1 text-neutral-600 text-sm">{feature.description}</td>
                                     </tr>
                                 ))}
 
