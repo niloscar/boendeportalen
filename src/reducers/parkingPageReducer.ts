@@ -9,39 +9,30 @@ export const initialParkingPageState: ParkingPageState = {
 }
 
 export function parkingPageReducer(state: ParkingPageState, action: ParkingPageAction): ParkingPageState {
+    let update: Partial<ParkingPageState> | null
+
     switch (action.type) {
         case 'searchChanged':
-            return {
-                ...state,
-                searchQuery: action.value,
-                currentPage: 1,
-            }
+            update = { searchQuery: action.value }
+            break
         case 'citiesChanged':
-            return {
-                ...state,
-                selectedCities: action.value,
-                currentPage: 1,
-            }
+            update = { selectedCities: action.value }
+            break
         case 'typesChanged':
-            return {
-                ...state,
-                selectedTypes: action.value,
-                currentPage: 1,
-            }
+            update = { selectedTypes: action.value }
+            break
         case 'sortChanged':
-            return {
-                ...state,
-                sortBy: action.value,
-                currentPage: 1,
-            }
+            update = { sortBy: action.value }
+            break
         case 'pageChanged':
-            return {
-                ...state,
-                currentPage: action.value,
-            }
+            return { ...state, currentPage: action.value }
         case 'filtersReset':
             return initialParkingPageState
         default:
             return state
     }
+
+    if (update) return { ...state, ...update, currentPage: 1 }
+
+    return state
 }

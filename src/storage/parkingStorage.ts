@@ -11,19 +11,21 @@ const isParkingPageFilters = (value: unknown): value is ParkingPageFilters => {
     return typeof candidate.searchQuery === 'string' && Array.isArray(candidate.selectedCities) && Array.isArray(candidate.selectedTypes) && typeof candidate.sortBy === 'string'
 }
 
+const getDefaultParkingPageState = (): ParkingPageState => ({ ...defaultParkingPageFilters, currentPage: 1 })
+
 export const readParkingPageState = (): ParkingPageState => {
-    if (typeof window === 'undefined') return { ...defaultParkingPageFilters, currentPage: 1 }
+    if (typeof window === 'undefined') return getDefaultParkingPageState()
 
     const rawValue = window.localStorage.getItem(parkingPageStorageKey)
-    if (!rawValue) return { ...defaultParkingPageFilters, currentPage: 1 }
+    if (!rawValue) return getDefaultParkingPageState()
 
     try {
         const parsedValue = JSON.parse(rawValue) as unknown
-        if (!isParkingPageFilters(parsedValue)) return { ...defaultParkingPageFilters, currentPage: 1 }
+        if (!isParkingPageFilters(parsedValue)) return getDefaultParkingPageState()
 
         return { ...defaultParkingPageFilters, ...parsedValue, currentPage: 1 }
     } catch {
-        return { ...defaultParkingPageFilters, currentPage: 1 }
+        return getDefaultParkingPageState()
     }
 }
 
