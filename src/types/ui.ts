@@ -11,7 +11,7 @@ export type ConfirmDialogProps = {
 export type AlertDialogProps = {
     open: boolean;
     title?: string;
-    message?: string;
+    message?: React.ReactNode;
     onConfirm: () => void;
     confirmColor: "green" | "red";
 };

@@ -14,6 +14,8 @@ const AdminPage = lazy(() => import('./pages/AdminPage'))
 const SearchApartmentPage = lazy(() => import('./pages/SearchApartment'))
 const ApartmentPage = lazy(() => import('./pages/Apartment'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+const LaundryPage = lazy(() => import('./pages/Laundry'))
+const GuestSuitePage = lazy(() => import('./pages/GuestSuite'))
 
 function RouteFallback() {
     return (
@@ -50,6 +52,8 @@ function App() {
                 <Routes>
                     <Route path="/auth" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
                     <Route path="/minasidor" element={<PrivateRouteWrapper><LazyRoute><ProfilePage /></LazyRoute></PrivateRouteWrapper>} />
+                    <Route path="/tvattid" element={<PrivateRouteWrapper><LazyRoute><LaundryPage /></LazyRoute></PrivateRouteWrapper>} />
+                    <Route path="/gastlagenhet" element={<PrivateRouteWrapper><LazyRoute><GuestSuitePage /></LazyRoute></PrivateRouteWrapper>} />
                     <Route path="/apartment" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
                     <Route path="/apartment/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
                     <Route

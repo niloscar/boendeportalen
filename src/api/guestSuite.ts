@@ -1,9 +1,10 @@
 import axios from "axios";
 import apiConfig from "./axiosConfig";
-import type { BookingRow, Booking } from "../types/guestSuite";
+import type { BookingRow, Booking } from "../types/booking";
+import type { ApiResult } from "../types/booking";
 
-//Fetch today's and future bookings from Supabase
-export async function fetchBookedSlots() {
+// Fetch today's and future bookings
+export async function fetchBookedSlots(): Promise<ApiResult<Booking[]>> {
     try {
         const today = new Date().toISOString().split("T")[0];
 
@@ -11,20 +12,27 @@ export async function fetchBookedSlots() {
             `guest_suite_bookings?select=*&date=gte.${today}`
         );
 
-        return data.map((row:BookingRow): Booking => ({
+        const mapped = data.map((row): Booking => ({
             id: row.id,
             date: row.date,
-            user: row.user
+            slot: null,
+            user_id: row.user_id
         }));
 
-    } catch (err) {
-        console.error("Fel vid bookings-hämtning: ", err);
-        throw err;
+        return { success: true, data: mapped };
+
+    } catch (error: unknown) {
+        return {
+            success: false,
+            error: axios.isAxiosError(error)
+                ? error.response?.data ?? error.message
+                : "Kunde inte hämta bokningar"
+        };
     }
 }
 
-//Delete booking from Supabase based on id
-export async function deleteBooking(id: number) {
+// Delete booking
+export async function deleteGuestSuiteBooking(id: number): Promise<ApiResult<any>> {
     try {
         const response = await apiConfig.delete("guest_suite_bookings", {
             params: { id: `eq.${id}` }
@@ -33,33 +41,34 @@ export async function deleteBooking(id: number) {
         return { success: true, data: response.data };
 
     } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-            return {
-                success: false,
-                error: error.response?.data ?? error.message
-            };
-        }
-
-        // fallback för andra typer av fel
         return {
             success: false,
-            error: "Oväntat fel"
+            error: axios.isAxiosError(error)
+                ? error.response?.data ?? error.message
+                : "Kunde inte ta bort bokningen"
         };
     }
 }
 
-//Create a new booking
-export async function createBooking(user: string, date: string) {
+// Create booking
+export async function createGuestSuiteBooking(
+    user_id: string,
+    date: string
+): Promise<ApiResult<BookingRow[]>> {
     try {
         const response = await apiConfig.post<BookingRow[]>("guest_suite_bookings", {
-            user,
+            user_id,
             date
         });
 
-        return response.data;
+        return { success: true, data: response.data };
 
-    } catch (error) {
-        console.error("Fel vid skapande av ny bokning: ", error);
-        throw error;
+    } catch (error: unknown) {
+        return {
+            success: false,
+            error: axios.isAxiosError(error)
+                ? error.response?.data ?? error.message
+                : "Kunde inte skapa bokningen"
+        };
     }
 }
