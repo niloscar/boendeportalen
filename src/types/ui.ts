@@ -11,7 +11,15 @@ export type ConfirmDialogProps = {
 export type AlertDialogProps = {
     open: boolean;
     title?: string;
-    message?: string;
+    message?: React.ReactNode;
     onConfirm: () => void;
     confirmColor: "green" | "red";
+};
+
+export type FormSwitchProps = {
+    id: string
+    name: string
+    checked: boolean
+    onSwitchChange: (name: string, checked: boolean) => void
+    disabled?: boolean
 };

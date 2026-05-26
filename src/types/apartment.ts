@@ -46,7 +46,7 @@ export type ApartmentListProp =
       items: Detail[]
     }
 export type ApartmentProp = {
-    apartment: ApartmentData,
+    apartment: ApartmentData | null,
 }
 export type ApartmentImagesProp = {
     images: ApartmentImages[],
@@ -55,4 +55,19 @@ export type ApartmentImagesProp = {
 
 export type ListProp = {
     detail: Detail,
+}
+
+export interface SignedUpData {
+    id: number,
+    sign_up_date: string,
+    apartment_id: number,
+    end_date: string,
+}
+
+export type SignUp ={ 
+    error: string,
+    loading: boolean,
+    applied: SignedUpData[],
+    deleteSignUp: () => Promise<void>,
+    signUp: () => Promise<void>
 }
