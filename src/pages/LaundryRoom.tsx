@@ -46,7 +46,7 @@ export default function Laundry() {
         <div>
             <div className="flex w-full flex-col items-center gap-6">
                 <h1 className="text-3xl md:text-5xl font-bold">Bokning av tvättstugan</h1 >
-                <div className="mb-6 text-gray-600 text-center">
+                <div className="mb-6 text-gray-600 text-center pb-6">
                     Välkommen att boka tid i tvättstugan. Genom att följa{" "}
                     <a
                         href=""

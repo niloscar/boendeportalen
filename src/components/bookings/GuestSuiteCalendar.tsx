@@ -147,6 +147,7 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
 
     return (
         <div>
+            <div id="parent" className="flex justify-center pb-8"></div>
             <GuestSuiteCalendarView
                 calendarRef={calendarRef}
                 calendarEvents={calendarEvents}

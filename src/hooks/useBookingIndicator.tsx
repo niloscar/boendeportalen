@@ -5,20 +5,18 @@ import BookingIndicator from "../components/bookings/BookingIndicator";
 
 export function useBookingIndicator({ myEvents, currentIndex, goToBooking }: useBookingIndicatorProps) {
 
-    // Render indicator inside FullCalendar header
     const renderIndicatorInHeader = useCallback(() => {
-        const chunks = document.querySelectorAll<HTMLDivElement>(".fc-toolbar-chunk");
-        const centerChunk = chunks[1];
-        if (!centerChunk) return;
+        const parent = document.getElementById("parent") as HTMLDivElement | null;
+        if (!parent) return;
 
         // Remove old indicator
-        const oldContainer = centerChunk.querySelector(".booking-indicator-container");
+        const oldContainer = parent.querySelector(".booking-indicator-container");
         if (oldContainer) oldContainer.remove();
 
         // Create new container
         const container = document.createElement("span");
         container.className = "booking-indicator-container";
-        centerChunk.appendChild(container);
+        parent.appendChild(container);
 
         // Render React component
         const root = createRoot(container);
