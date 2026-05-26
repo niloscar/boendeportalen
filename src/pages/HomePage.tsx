@@ -17,7 +17,7 @@ export default function HomePage() {
 
             {!user && 
                 <p>
-                    <Link to="/auth" className="underline">Logga in</Link> för att se mer av webbplatsen.
+                    <Link to="/inloggning" className="underline">Logga in</Link> för att se mer av webbplatsen.
                 </p>}
 
             {user && loading && <p className="text-sm text-neutral-600">Laddar funktioner...</p> }

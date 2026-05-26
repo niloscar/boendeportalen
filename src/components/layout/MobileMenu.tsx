@@ -81,7 +81,7 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                                     </NavLink>
                                 ) : (
                                     <NavLink
-                                        to="/auth"
+                                        to="/inloggning"
                                         onClick={() => setIsOpen(false)}
                                         className={({ isActive }) => [
                                             'inline-flex w-full items-center justify-between rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-300 hover:bg-neutral-100 hover:text-neutral-950',

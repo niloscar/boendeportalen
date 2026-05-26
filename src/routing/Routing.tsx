@@ -21,15 +21,15 @@ export function PublicOnlyRoute({ children, user, loading }: RouteGuardProps) {
 
 export function PrivateRoute({ children, user, loading }: RouteGuardProps) {
     if (loading) return <RouteLoadingFallback />
-    if (!user) return <Navigate to='/auth' replace />
+    if (!user) return <Navigate to='/inloggning' replace />
 
     return children
 }
 
 export function AdminRoute({ children, user, loading, profile }: RouteGuardProps) {
     if (loading) return <RouteLoadingFallback />
-    if (!user) return <Navigate to='/auth' replace />
-    if (!hasAdminAccess(profile)) return <Navigate to='/' replace />
+    if (!user) return <Navigate to='/inloggning' replace />
+    if (!hasAdminAccess(profile)) return <Navigate to='/inloggning' replace />
 
     return children
 }

@@ -39,7 +39,7 @@ const Header: React.FC = () => {
                             </div>
                         </NavLink>
                     ) : (
-                        <NavLink to="/auth" className={({ isActive }) => `hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-800 hover:text-neutral-950 transition-colors duration-200 ${isActive ? 'font-semibold' : ''}`}>
+                        <NavLink to="/inloggning" className={({ isActive }) => `hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-800 hover:text-neutral-950 transition-colors duration-200 ${isActive ? 'font-semibold' : ''}`}>
                             Logga in
                             <ArrowLongRightIcon className="h-4 w-4" />
                         </NavLink>

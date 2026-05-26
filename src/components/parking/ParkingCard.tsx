@@ -5,7 +5,7 @@ import type { ParkingSpot } from '../../types/parking'
 export default function ParkingCard({ spot }: { spot: ParkingSpot }) {
     return (
         <Link
-            to={`/parking/${spot.id}`}
+            to={`/parkeringar/${spot.id}`}
             aria-label={`Visa information om parkeringsplats ${spot.address}`}
             className="block focus:outline-none focus:ring-2 focus:ring-green-500 rounded-xl"
         >

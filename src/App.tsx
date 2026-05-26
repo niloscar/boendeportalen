@@ -27,14 +27,14 @@ function App() {
             <Header />
             <main className="flex-1 flex justify-center items-start">
                 <Routes>
-                    <Route path="/auth" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
+                    <Route path="/inloggning" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
                     <Route path="/minasidor" element={<PrivateRouteWrapper><LazyRoute><ProfilePage /></LazyRoute></PrivateRouteWrapper>} />
                     <Route path="/tvattid" element={<PrivateRouteWrapper><LazyRoute><LaundryPage /></LazyRoute></PrivateRouteWrapper>} />
                     <Route path="/gastlagenhet" element={<PrivateRouteWrapper><LazyRoute><GuestSuitePage /></LazyRoute></PrivateRouteWrapper>} />
-                    <Route path="/apartment" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
-                    <Route path="/apartment/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
-                    <Route path="/parking" element={<LazyRoute><Parking /></LazyRoute>} />
-                    <Route path="/parking/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
+                    <Route path="/bostader" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
+                    <Route path="/bostader/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
+                    <Route path="/parkeringar" element={<LazyRoute><Parking /></LazyRoute>} />
+                    <Route path="/parkeringar/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
                     <Route path="/admin/*" element={<AdminRouteWrapper><LazyRoute><AdminPage /></LazyRoute></AdminRouteWrapper>} />
                     <Route path="/" element={<HomePage />} />
                 </Routes>

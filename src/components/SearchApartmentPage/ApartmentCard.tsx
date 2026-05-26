@@ -61,7 +61,7 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
                     <ApartmentList variant="ul" items={details} />
                 </ul>
             </section>
-            <Link to={`/apartment/${apartment.id}`} state={{ apartment: apartment, details: details }} className="self-start">
+            <Link to={`/bostader/${apartment.id}`} state={{ apartment: apartment, details: details }} className="self-start">
                 <Button variant="secondary" size="md" type="button" children="Läs mer" />
             </Link>
         </section>
