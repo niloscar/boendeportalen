@@ -84,7 +84,7 @@ const SearchApartment = () => {
     }
 
     return (
-        <div className="flex flex-col items-center gap-6 p-6 max-w-6xl">
+        <div className="flex flex-col items-center gap-6 p-6">
             <h1 className="text-3xl md:text-5xl">Lediga lägenheter</h1>
             <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} filtersVisibility={filtersVisibility} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} setVisibility={setVisibility} />
             {loading ?

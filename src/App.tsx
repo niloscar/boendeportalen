@@ -25,7 +25,7 @@ function App() {
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="flex-1 flex justify-center items-start">
+            <main className="flex-1 flex py-10 w-full max-w-6xl mx-auto">
                 <Routes>
                     <Route path="/inloggning" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
                     <Route path="/minasidor" element={<PrivateRouteWrapper><LazyRoute><ProfilePage /></LazyRoute></PrivateRouteWrapper>} />

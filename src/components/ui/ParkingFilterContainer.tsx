@@ -17,7 +17,7 @@ export default function FilterBar({
     const typeSummary = selectedTypes.length === 0 ? 'Alla typer' : `${selectedTypes.length} valda`
 
     return (
-        <section className="w-full max-w-5xl bg-white border border-neutral-200 rounded-2xl p-4 sm:p-5 shadow-md">
+        <section className="w-full bg-white border border-neutral-200 rounded-2xl p-4 sm:p-5 shadow-md">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 <label className="flex flex-col gap-1 lg:col-span-2">
                     <span className="text-sm text-neutral-600">Sök</span>

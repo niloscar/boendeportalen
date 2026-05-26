@@ -44,7 +44,7 @@ export default function Laundry() {
 
     return (
         <div className='w-full text-neutral-900'>
-            <main className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pt-6 pb-16 sm:px-10'>
+            <main className='mx-auto flex w-full flex-col gap-8 px-6 pt-6 pb-16 sm:px-10'>
                 <h1 className="text-3xl mb-6">Bokning av tvättstugan</h1 >
                 <div className="mb-6">
                     Välkommen att boka tid i tvättstugan. Genom att följa{" "}
