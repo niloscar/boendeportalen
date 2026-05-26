@@ -34,5 +34,9 @@ export const saveParkingPageState = (state: ParkingPageState) => {
 
     const filters: ParkingPageFilters = { searchQuery: state.searchQuery, selectedCities: state.selectedCities, selectedTypes: state.selectedTypes, sortBy: state.sortBy }
 
-    window.localStorage.setItem(parkingPageStorageKey, JSON.stringify(filters))
+    try {
+        window.localStorage.setItem(parkingPageStorageKey, JSON.stringify(filters))
+    } catch (err) {
+        console.warn('Could not save parking page filters to localStorage', err)
+    }
 }
