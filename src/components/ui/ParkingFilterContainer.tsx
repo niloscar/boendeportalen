@@ -17,7 +17,7 @@ export default function FilterBar({
     const typeSummary = selectedTypes.length === 0 ? 'Alla typer' : `${selectedTypes.length} valda`
 
     return (
-        <section className="w-full max-w-5xl bg-neutral-100 border border-neutral-200 rounded-2xl p-4 sm:p-5 shadow-sm">
+        <section className="w-full max-w-5xl bg-neutral-100 border border-neutral-200 rounded-2xl p-4 sm:p-5 shadow-md">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 <label className="flex flex-col gap-1 lg:col-span-2">
                     <span className="text-sm text-neutral-600">Sök</span>
@@ -38,7 +38,7 @@ export default function FilterBar({
                             <span className="text-neutral-800">{citySummary}</span>
                             <span className="text-neutral-500 text-xs">▼</span>
                         </summary>
-                        <div className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-neutral-300 bg-white shadow-lg p-2">
+                        <div className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-neutral-300 bg-white shadow-md p-2">
                             <div className="mb-2 flex justify-end">
                                 <button type="button" onClick={() => onCityChange([])} className="text-xs text-neutral-600 hover:text-neutral-900 underline cursor-pointer">
                                     Rensa
@@ -72,7 +72,7 @@ export default function FilterBar({
                             <span className="text-neutral-800">{typeSummary}</span>
                             <span className="text-neutral-500 text-xs">▼</span>
                         </summary>
-                        <div className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-neutral-300 bg-white shadow-lg p-2">
+                        <div className="absolute z-20 mt-2 w-full max-h-56 overflow-auto rounded-lg border border-neutral-300 bg-white shadow-md p-2">
                             <div className="mb-2 flex justify-end">
                                 <button type="button" onClick={() => onTypeChange([])} className="text-xs text-neutral-600 hover:text-neutral-900 underline cursor-pointer">
                                     Rensa

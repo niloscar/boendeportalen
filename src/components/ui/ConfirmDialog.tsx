@@ -36,7 +36,7 @@ export default function ConfirmDialog({
             />
 
             {/* Dialog */}
-            <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm animate-[fadeIn_0.15s_ease-out]">
+            <div className="relative bg-white rounded-2xl shadow-md p-6 w-full max-w-sm animate-[fadeIn_0.15s_ease-out]">
                 <h2 className="text-xl text-neutral-900 font-semibold mb-2">{title}</h2>
                 <p className="whitespace-pre-line text-gray-700 mb-6">{message}</p>
 

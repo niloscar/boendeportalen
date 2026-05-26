@@ -2,7 +2,7 @@ import Skeleton from '@mui/material/Skeleton'
 
 export default function ParkingSkeletonCards() {
     return (
-        <article className="w-full overflow-hidden rounded-xl border border-neutral-300 bg-neutral-100 shadow-sm">
+        <article className="w-full overflow-hidden rounded-xl border border-neutral-300 bg-neutral-100 shadow-md">
             <Skeleton variant="rounded" animation="wave" height={168} />
 
             <div className="flex flex-col gap-3 p-4">

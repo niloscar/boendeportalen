@@ -24,7 +24,7 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                 aria-expanded={isOpen}
                 aria-controls="mobile-navigation"
                 aria-label={isOpen ? 'Stäng meny' : 'Öppna meny'}
-                className="relative z-[60] inline-flex items-center justify-center rounded-full border border-neutral-200 bg-white p-2 text-neutral-900 shadow-sm transition-colors hover:border-neutral-300 hover:bg-neutral-50 cursor-pointer"
+                className="relative z-[60] inline-flex items-center justify-center rounded-full border border-neutral-200 bg-white p-2 text-neutral-900 shadow-md transition-colors hover:border-neutral-300 hover:bg-neutral-50 cursor-pointer"
             >
                 {isOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
             </button>
@@ -38,7 +38,7 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                     />
 
-                    <div className="absolute right-4 top-20 w-[calc(100%-2rem)] max-w-sm rounded-3xl border border-neutral-200 bg-white p-4 shadow-2xl">
+                    <div className="absolute right-4 top-20 w-[calc(100%-2rem)] max-w-sm rounded-3xl border border-neutral-200 bg-white p-4 shadow-md">
                         <nav id="mobile-navigation" aria-label="Mobilnavigering">
                             <ul className="space-y-1 text-base text-neutral-800">
                                 {navigationLinks.map((link) => (
