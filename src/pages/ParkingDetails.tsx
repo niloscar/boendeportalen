@@ -163,7 +163,7 @@ export default function ParkingDetails() {
                     )}
 
                     <div className="flex flex-1 min-h-0 flex-col gap-4 rounded-2xl border border-neutral-200 bg-neutral-100 p-4">
-                        <h2 className="text-2xl font-bold">Var finns platsen?</h2>
+                        <h2 className="text-2xl font-bold">Var finns parkeringen?</h2>
                         <p className="text-neutral-600">Kartvyn visar var parkeringsplatsen finns.</p>
 
                         <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100">
