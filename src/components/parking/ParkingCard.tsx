@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRightIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon } from '@phosphor-icons/react'
 import type { ParkingSpot } from '../../types/parking'
 import { formatNumber } from '../../utils/calc';
 

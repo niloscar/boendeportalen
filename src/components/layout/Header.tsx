@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 import { getNavigationLinks } from '../../config/navigation'
-import { ArrowLongRightIcon } from '@heroicons/react/24/outline'
+import { ArrowRightIcon } from '@phosphor-icons/react'
 import MobileMenu from './MobileMenu'
 
 const Header: React.FC = () => {
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
                     ) : (
                         <NavLink to="/inloggning" className={({ isActive }) => `hidden md:inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-800 hover:text-neutral-950 transition-colors duration-200 ${isActive ? 'font-semibold' : ''}`}>
                             Logga in
-                            <ArrowLongRightIcon className="h-4 w-4" />
+                            <ArrowRightIcon className="h-4 w-4" />
                         </NavLink>
                     )}
                 </div>

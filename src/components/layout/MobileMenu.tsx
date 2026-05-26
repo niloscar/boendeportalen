@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Bars3Icon, XMarkIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
+import { ListIcon, XIcon, ArrowRightIcon } from '@phosphor-icons/react'
 import type { MobileMenuProps } from '../../types/navigation'
 
 export default function MobileMenu({ navigationLinks, user, profile }: MobileMenuProps) {
@@ -26,7 +26,7 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                 aria-label={isOpen ? 'Stäng meny' : 'Öppna meny'}
                 className="relative z-[60] inline-flex items-center justify-center rounded-full border border-neutral-200 bg-white p-2 text-neutral-900 shadow-md transition-colors hover:border-neutral-300 hover:bg-neutral-50 cursor-pointer"
             >
-                {isOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+                {isOpen ? <XIcon className="h-6 w-6" /> : <ListIcon className="h-6 w-6" />}
             </button>
 
             {isOpen && (
@@ -89,7 +89,7 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                                         ].filter(Boolean).join(' ')}
                                     >
                                         Logga in
-                                        <ArrowLongRightIcon className="h-4 w-4" />
+                                        <ArrowRightIcon className="h-4 w-4" />
                                     </NavLink>
                                 )}
                             </div>
