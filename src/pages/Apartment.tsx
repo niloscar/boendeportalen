@@ -52,7 +52,7 @@ const Apartment = () => {
             <h2 className="text-2xl">Visning</h2>
             <p>Visning sker två veckor innan sista ansökningsdag. Du kommer att få en kallelse. Vänligen notera att visningstiden ej går att boka om. Om du inte kan delta i person går det bra att skicka en ersättare med giltlig legitimation. </p>
             <h2 className="text-2xl">Detaljer</h2>
-            <ul className="max-w-md">
+            <ul className="grid md:grid-cols-2 gap-x-6 md:gap-y-1">
                 <ApartmentList variant="ul" items={details} />
             </ul>
             {session ?
