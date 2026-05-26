@@ -17,7 +17,7 @@ export default function FilterBar({
     const typeSummary = selectedTypes.length === 0 ? 'Alla typer' : `${selectedTypes.length} valda`
 
     return (
-        <section className="w-full max-w-5xl bg-neutral-100 border border-neutral-200 rounded-2xl p-4 sm:p-5 shadow-md">
+        <section className="w-full max-w-5xl bg-white border border-neutral-200 rounded-2xl p-4 sm:p-5 shadow-md">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 <label className="flex flex-col gap-1 lg:col-span-2">
                     <span className="text-sm text-neutral-600">Sök</span>
@@ -26,7 +26,7 @@ export default function FilterBar({
                         value={searchQuery}
                         onChange={(event) => onSearchChange(event.target.value)}
                         placeholder="Adress, stad, postnummer eller typ"
-                        className="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-300"
+                        className="w-full px-3 py-2 bg-white border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                         aria-label="Sök parkeringsplatser"
                     />
                 </label>
@@ -34,7 +34,7 @@ export default function FilterBar({
                 <div className="flex flex-col gap-1 relative">
                     <span className="text-sm text-neutral-600">Stad (flera val)</span>
                     <details className="group">
-                        <summary className="list-none w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-neutral-300 flex items-center justify-between">
+                        <summary className="list-none w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-between">
                             <span className="text-neutral-800">{citySummary}</span>
                             <span className="text-neutral-500 text-xs">▼</span>
                         </summary>
@@ -68,7 +68,7 @@ export default function FilterBar({
                 <div className="flex flex-col gap-1 relative">
                     <span className="text-sm text-neutral-600">Typ (flera val)</span>
                     <details className="group">
-                        <summary className="list-none w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-neutral-300 flex items-center justify-between">
+                        <summary className="list-none w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center justify-between">
                             <span className="text-neutral-800">{typeSummary}</span>
                             <span className="text-neutral-500 text-xs">▼</span>
                         </summary>
@@ -104,7 +104,7 @@ export default function FilterBar({
                     <select
                         value={sortBy}
                         onChange={(event) => onSortChange(event.target.value as ParkingSortOption)}
-                        className="w-full px-3 py-2.5 border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-neutral-300 cursor-pointer"
+                        className="w-full px-3 py-2.5 border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
                         aria-label="Sortera parkeringsplatser"
                     >
                         <option value="price-asc">Pris: lägst först</option>
@@ -117,7 +117,7 @@ export default function FilterBar({
             </div>
 
             <div className="mt-3 flex justify-end">
-                <button type="button" onClick={onClear} className="px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 bg-white hover:bg-neutral-100 transition-colors cursor-pointer">
+                <button type="button" onClick={onClear} className="px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 bg-neutral-100 hover:bg-neutral-200 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500">
                     Rensa filter
                 </button>
             </div>

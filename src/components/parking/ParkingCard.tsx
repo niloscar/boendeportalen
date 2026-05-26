@@ -7,9 +7,9 @@ export default function ParkingCard({ spot }: { spot: ParkingSpot }) {
         <Link
             to={`/parking/${spot.id}`}
             aria-label={`Visa information om parkeringsplats ${spot.address}`}
-            className="block"
+            className="block focus:outline-none focus:ring-2 focus:ring-green-500 rounded-xl"
         >
-            <article className="w-full bg-neutral-100 border border-neutral-300 rounded-xl shadow-md group hover:shadow-lg transition-shadow duration-150 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-neutral-300">
+            <article className="w-full bg-neutral-100 border border-neutral-300 rounded-xl shadow-md group hover:shadow-lg transition-shadow duration-150 focus:outline-none focus:ring-2 focus:ring-green-500">
                 <img
                     src={`https://klimatkommunerna.se/wp-content/uploads/2019/09/parking-5120x3413.jpg`}
                     alt={`${spot.type} vid ${spot.address}`}
