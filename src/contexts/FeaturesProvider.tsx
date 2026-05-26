@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { FeaturesContext } from './FeaturesContext'
+import { FeaturesContext } from './featuresContext'
 import type { ReactNode } from 'react'
 import type { Feature } from '../types/admin'
 import { getFeatures, updateFeatureStatuses } from '../api/settingsApi'

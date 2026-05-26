@@ -1,8 +1,22 @@
 import { useState } from 'react'
-import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import { useFeatures } from '../../hooks/useFeatures'
-import ExpandedWidget from '../../components/admin/ExpandedWidget.tsx'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
+import ExpandedWidget from '../../components/admin/ExpandedWidget'
 import Widget from '../../components/admin/Widget'
+
+import Tenants from '../../components/admin/widgets/Tenants'
+
+import type { ComponentType } from 'react'
+
+const WIDGET_COMPONENTS = {
+    Tenants
+} satisfies Record<string, ComponentType>
+
+function getWidgetComponent(componentName: string | null): ComponentType | null {
+    if (!componentName) return null
+
+    return WIDGET_COMPONENTS[componentName as keyof typeof WIDGET_COMPONENTS] ?? null
+}
 
 export default function DashboardPage() {
     const { loadError, features, loading } = useFeatures()
@@ -12,42 +26,55 @@ export default function DashboardPage() {
     if (loadError) return <p className="text-red-600 text-center w-full">Kunde inte ladda kontrollpanel: {loadError}</p>
 
     const widgets = features
-        .filter((feature) => (feature.is_active && feature.type_slug === 'admin_widgets'))
+        .filter((feature) => (
+            feature.is_active &&
+            feature.type_slug === 'admin_widgets' &&
+            getWidgetComponent(feature.component)
+        ))
         .sort((a, b) => a.name.localeCompare(b.name, 'sv'))
-        .map((feature) => ({
-            title: feature.name,
-            description: feature.description,
-            component: () => <></> // Placeholder content, replace with actual component when ready.
-        }))
 
-    const expandedWidget = widgets.find(widget => widget.title === expandedWidgetTitle)
+    const expandedWidget = widgets.find(widget => widget.name === expandedWidgetTitle)
+
+    console.log('Aktiva widgets:', widgets.map(widget => widget.name))
 
     return (
         <main className="py-6">
-            <ResponsiveMasonry columnsCountBreakPoints={{0: 1, 960: 2}}>
+            <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 960: 2 }}>
                 <Masonry style={{ gap: 24 }} itemStyle={{ gap: 24 }}>
-                    {widgets.map(widget => (
-                        <Widget
-                            key={widget.title}
-                            title={widget.title}
-                            description={widget.description}
-                            onExpand={() => setExpandedWidgetTitle(widget.title)}
-                        >
-                            {widget.component()}
-                        </Widget>
-                    ))}
+                    {widgets.map((widget) => {
+                        const Component = getWidgetComponent(widget.component)
+
+                        if (!Component) return null
+
+                        return (
+                            <Widget
+                                key={widget.name}
+                                title={widget.name}
+                                description={widget.description}
+                                onExpand={() => setExpandedWidgetTitle(widget.name)}
+                            >
+                                <Component />
+                            </Widget>
+                        )
+                    })}
                 </Masonry>
             </ResponsiveMasonry>
 
-            {expandedWidget && (
-                <ExpandedWidget
-                    widgetSlug={expandedWidget.title}
-                    description={expandedWidget.description}
-                    onClose={() => setExpandedWidgetTitle(null)}
-                >
-                    {expandedWidget.component()}
-                </ExpandedWidget>
-            )}
+            {expandedWidget && (() => {
+                const Component = getWidgetComponent(expandedWidget.component)
+
+                if (!Component) return null
+
+                return (
+                    <ExpandedWidget
+                        widgetSlug={expandedWidget.name}
+                        description={expandedWidget.description}
+                        onClose={() => setExpandedWidgetTitle(null)}
+                    >
+                        <Component />
+                    </ExpandedWidget>
+                )
+            })()}
         </main>
     )
 }

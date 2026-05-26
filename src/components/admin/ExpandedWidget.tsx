@@ -13,7 +13,7 @@ export default function ExpandedWidget({ widgetSlug, description, onClose, child
                 </button>
                 <h2 className="text-2xl font-bold mb-2">{widgetSlug}</h2>
                 {description && <p className="text-gray-600 mb-4">{description}</p>}
-                <div className="max-h-[70vh] overflow-y-auto">
+                <div className="max-h-[70vh] flex flex-col gap-3">
                     {children}
                 </div>
             </div>

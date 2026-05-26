@@ -16,6 +16,7 @@ export type Feature = {
     type_slug: string
     type_description: string | null
     is_active: boolean
+    component: string | null
 }
 
 export type FeaturesByType = Record<string, {
