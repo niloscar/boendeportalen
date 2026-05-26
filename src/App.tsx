@@ -13,6 +13,7 @@ const AdminPage = lazy(() => import('./pages/AdminPage'))
 const SearchApartmentPage = lazy(() => import('./pages/SearchApartment'))
 const ApartmentPage = lazy(() => import('./pages/Apartment'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+const Parking = lazy(() => import('./pages/Parking'))
 
 function RouteFallback() {
     return (
@@ -61,10 +62,10 @@ function App() {
             <Header />
             <main className="flex-1 flex justify-center items-start">
                 <Routes>
-                    <Route path="/auth" element={<PublicOnlyRoute user={user} loading={loading}><Auth /></PublicOnlyRoute>} />
-                    <Route path="/apartment" element={<SearchApartment />} />
-                    <Route path="/apartment/:apartmentId" element={<Apartment />} />
-                    {/* <Route path="/minasidor" element={<PrivateRoute user={user} loading={loading}><div>Detta är en privat sida.</div></PrivateRoute>} /> */}
+                    <Route path="/auth" element={<PublicOnlyRouteWrapper><AuthPage /></PublicOnlyRouteWrapper>} />
+                    <Route path="/apartment" element={<SearchApartmentPage />} />
+                    <Route path="/apartment/:apartmentId" element={<ApartmentPage />} />
+                    <Route path="/minasidor" element={<PrivateRouteWrapper><ProfilePage /></PrivateRouteWrapper>} />
                     <Route path="/parking" element={<Parking />} />
                     <Route path="/parking/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
                     <Route
