@@ -15,7 +15,7 @@ export default function ParkingSkeletonCards() {
                 <div className="mt-4 border-t border-neutral-300 pt-4">
                     <Skeleton variant="text" animation="wave" height={24} width="48%" />
                 </div>
-            </div>2
+            </div>
         </article>
     )
 }
