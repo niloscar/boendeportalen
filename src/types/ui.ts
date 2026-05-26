@@ -1,5 +1,3 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-
 export type ConfirmDialogProps = {
     open: boolean;
     title?: string;
