@@ -7,9 +7,9 @@ const openLinks: NavigationLink[] = [
 ]
 
 const loggedInLinks: NavigationLink[] = [
-    { label: 'Mina sidor', href: '/minasidor', requiresAuth: true, onlyForPart: 'footer' },
     { label: 'Tvättstuga', href: '/tvattstuga', requiresAuth: true },
-    { label: 'Gästlägenhet', href: '/gastlagenhet', requiresAuth: true }
+    { label: 'Gästlägenhet', href: '/gastlagenhet', requiresAuth: true },
+    { label: 'Mina sidor', href: '/minasidor', requiresAuth: true, onlyForPart: 'footer' }
 ]
 
 const adminLinks: NavigationLink[] = [
