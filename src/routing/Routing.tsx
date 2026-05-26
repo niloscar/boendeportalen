@@ -1,10 +1,12 @@
 import { Navigate } from 'react-router-dom'
+import type { ReactNode } from 'react'
+import useAuth from '../hooks/useAuth'
 import { hasAdminAccess } from '../utils/accessControl'
 import type { RouteGuardProps } from '../types/routing'
 
-function RouteLoadingFallback() {
+export function RouteLoadingFallback() {
     return (
-        <div className='min-h-screen grid place-items-center bg-neutral-100 text-sm text-gray-600'>
+        <div className='min-h-screen grid place-items-center text-sm text-gray-600'>
             Laddar...
         </div>
     )
@@ -32,6 +34,20 @@ export function AdminRoute({ children, user, loading, profile }: RouteGuardProps
     return children
 }
 
-// IMPORTANT
-// You can add more route guards that check for specific permissions or roles as needed. Just follow the same patterns as above.
-// If you choose not to create more, then delete these comments.
+export function PublicOnlyRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading } = useAuth()
+
+    return <PublicOnlyRoute user={user} loading={loading}>{children}</PublicOnlyRoute>
+}
+
+export function PrivateRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading } = useAuth()
+
+    return <PrivateRoute user={user} loading={loading}>{children}</PrivateRoute>
+}
+
+export function AdminRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading, profile } = useAuth()
+
+    return <AdminRoute user={user} loading={loading} profile={profile}>{children}</AdminRoute>
+}
