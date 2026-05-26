@@ -12,7 +12,7 @@ export const getAvailableApartments = async () => {
 };
 
 // Fetch if already signed up for apartment
-export const getApartmentSignupStatus = async (bearer: string | undefined, apartment_id: number, end_date: string) => {
+export const getApartmentSignupStatus = async (bearer: string | undefined, apartment_id: number, end_date: string | null) => {
     const config = {
         headers: { Authorization: `Bearer ${bearer}` }
     }
@@ -24,8 +24,9 @@ export const getApartmentSignupStatus = async (bearer: string | undefined, apart
         throw err;
     }
 };
+
 //Sign up for apartment
-export async function createApartmentSignUp(bearer: string | undefined, apartment_id: number, end_date: string) {
+export async function createApartmentSignUp(bearer: string | undefined, apartment_id: number, end_date: string | null) {
     const config = {
         headers: { Authorization: `Bearer ${bearer}` }
     }

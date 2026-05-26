@@ -5,10 +5,10 @@ import ApartmentList from './ApartmentList.tsx';
 import Button from '../ui/Button.tsx';
 
 const ApartmentCard = ({ apartment }: ApartmentProp) => {
-    const apartmentArray = Object.values(apartment);
-    const calculateLastDay = subtractMonths(new Date(apartment.end_date), 1);
-    const applyBy = calculateLastDay.toISOString().split("T")[0];
-    const details = [
+    const apartmentArray = apartment && Object.values(apartment);
+    const calculateLastDay = apartment && subtractMonths(new Date(apartment.end_date), 1);
+    const applyBy = calculateLastDay && calculateLastDay.toISOString().split("T")[0];
+    const details = apartmentArray && [
         {
             id: crypto.randomUUID(),
             title: "Kvadratmeter",
@@ -45,7 +45,13 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
         date.setMonth(date.getMonth() - months);
         return date;
     }
-
+    if (!apartment || !details) {
+        return (    
+        <section className="border border-solid border-green-500 rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 w-xs h-auto">
+            <h2 className="text-2xl">Problem med att läsa in lägenheten. Vänligen ladda om sidan.</h2>
+        </section>
+        )
+    }
     return (
         <section className="border border-solid border-green-500 rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 w-xs">
             <ImageCarousel images={apartment.images} size="small" />

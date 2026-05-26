@@ -5,14 +5,14 @@ import Button from '../components/ui/Button.tsx';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import type { ApartmentData, Detail } from '../types/apartment.ts';
 import ApartmentSignUp from '../components/SearchApartmentPage/ApartmentSignUp.tsx';
-import { useSignUp } from '../hooks/useSignUp.tsx';
+import { useApartmentSignUp } from '../hooks/useApartmentSignUp.tsx';
 import { useSession } from '../hooks/useAuth.ts';
 
 const Apartment = () => {
     const { state } = useLocation();
     const session = useSession();
-    const apartment: ApartmentData = state.apartment;
-    const details: Detail[] = state.details;
+    const apartment: ApartmentData = state && state.apartment;
+    const details: Detail[] = state && state.details;
     const {
         signUp,
         deleteSignUp,
@@ -20,18 +20,18 @@ const Apartment = () => {
         loading,
         error,
         applied,
-    } = useSignUp({ apartment });
+    } = useApartmentSignUp({ apartment });
 
     useEffect(() => {
-        if (session?.access_token) {
+        if (state && session?.access_token) {
             getApartmentStatus();
         }
-    }, [session?.access_token]);
+    }, [session?.access_token, state]);
     
     if (!apartment || !details) {
         return (
             <div className="max-w-3xl">
-                <Link to="/apartments">
+                <Link to="/apartment">
                     <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
                 </Link>
                 <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>

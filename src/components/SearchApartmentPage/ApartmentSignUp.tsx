@@ -11,7 +11,7 @@ const ApartmentSignUp = ({ error, loading, applied, deleteSignUp, signUp }: Sign
 
     if (error) {
         return (<div>
-            <p>Någonting gick fel, vänligen ladda om sidan för att anmäla eller ta bort intresseanmälan.</p>
+            <p>Kunde inte hämta intresseanmälan. Vänligen ladda om sidan. </p>
         </div>)
     }
     if (loading) {

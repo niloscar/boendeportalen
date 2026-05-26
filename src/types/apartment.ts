@@ -46,7 +46,7 @@ export type ApartmentListProp =
       items: Detail[]
     }
 export type ApartmentProp = {
-    apartment: ApartmentData,
+    apartment: ApartmentData | null,
 }
 export type ApartmentImagesProp = {
     images: ApartmentImages[],
