@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { supabase } from '../lib/supabase'
+import { supabase } from '../lib/supabase';
 
 const apiConfig = axios.create({
     baseURL: "https://zavnweqhytaqbpswyhcl.supabase.co/rest/v1/",
@@ -11,14 +11,13 @@ const apiConfig = axios.create({
 });
 
 apiConfig.interceptors.request.use(async (config) => {
-    const { data: { session } } = await supabase.auth.getSession()
-
-    if (session?.access_token) {
-        config.headers.Authorization = `Bearer ${session.access_token}`
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
     }
-
-    return config
-})
+    return config;
+});
 
 apiConfig.interceptors.response.use(
     (response) => {

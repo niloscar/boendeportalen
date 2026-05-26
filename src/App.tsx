@@ -1,45 +1,67 @@
 import { Routes, Route } from 'react-router-dom'
-import Auth from './pages/Auth'
+import { Suspense, lazy, type ReactNode } from 'react'
 import useAuth from './hooks/useAuth'
 
-// Import route guards here, like PrivateRoute and AdminRoute, if you want to use them in this file.
-import { PublicOnlyRoute, AdminRoute } from './routing'
+import { PublicOnlyRoute, AdminRoute, PrivateRoute } from './routing'
 
 // Import pages here
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import HomePage from './pages/HomePage'
-import AdminPage from './pages/AdminPage'
-import SearchApartment from "./pages/SearchApartment";
-import Apartment from "./pages/Apartment";
+
+const AuthPage = lazy(() => import('./pages/Auth'))
+const AdminPage = lazy(() => import('./pages/AdminPage'))
+const SearchApartmentPage = lazy(() => import('./pages/SearchApartment'))
+const ApartmentPage = lazy(() => import('./pages/Apartment'))
+const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+
+function RouteFallback() {
+    return (
+        <div className="w-full max-w-6xl p-6 text-sm text-center text-gray-600">
+            Laddar sida...
+        </div>
+    )
+}
+
+function LazyRoute({ children }: { children: ReactNode }) {
+    return <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+}
+
+function PublicOnlyRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading } = useAuth()
+    return <PublicOnlyRoute user={user} loading={loading}>{children}</PublicOnlyRoute>
+}
+
+function PrivateRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading } = useAuth()
+    return <PrivateRoute user={user} loading={loading}>{children}</PrivateRoute>
+}
+
+function AdminRouteWrapper({ children }: { children: ReactNode }) {
+    const { user, loading, profile } = useAuth()
+    return <AdminRoute user={user} loading={loading} profile={profile}>{children}</AdminRoute>
+}
 
 function App() {
-    // Add profile in here if you want to send profile info to route guards, like AdminRoute.
-    const { user, loading, profile } = useAuth()
-
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-1 flex justify-center items-start">
                 <Routes>
-                    <Route path="/auth" element={<PublicOnlyRoute user={user} loading={loading}><Auth /></PublicOnlyRoute>} />
-                    <Route path="/apartment" element={<SearchApartment />} />
-                    <Route path="/apartment/:apartmentId" element={<Apartment />} />
-                    {/* <Route path="/minasidor" element={<PrivateRoute user={user} loading={loading}><div>Detta är en privat sida.</div></PrivateRoute>} /> */}
-                    <Route 
-                        path="/admin/*" 
-                        element={
-                            <AdminRoute user={user} loading={loading} profile={profile}>
-                                <AdminPage />
-                            </AdminRoute>
-                        } 
+                    <Route path="/auth" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
+                    <Route path="/minasidor" element={<PrivateRouteWrapper><LazyRoute><ProfilePage /></LazyRoute></PrivateRouteWrapper>} />
+                    <Route path="/apartment" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
+                    <Route path="/apartment/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
+                    <Route
+                        path="/admin/*"
+                        element={<AdminRouteWrapper><LazyRoute><AdminPage /></LazyRoute></AdminRouteWrapper>}
                     />
                     <Route path="/" element={<HomePage />} />
                 </Routes>
             </main>
             <Footer />
         </div>
-    );
+    )
 }
 
 export default App
