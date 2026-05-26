@@ -5,7 +5,7 @@ import { useFeatures } from '../hooks/useFeatures'
 
 export default function HomePage() {
     const { user } = useAuth()
-    const { features } = useFeatures()
+    const { loading, loadError, features } = useFeatures()
 
     const filteredFeatures = features.filter(feature => feature.is_active && feature.type_slug === 'tenant_features')
 
@@ -20,12 +20,17 @@ export default function HomePage() {
                     <Link to="/auth" className="underline">Logga in</Link> för att se mer av webbplatsen.
                 </p>}
 
-            {user && filteredFeatures.length > 0 &&
+            {user && loading && <p className="text-sm text-neutral-600">Laddar funktioner...</p> }
+            {user && loadError && <p className="text-sm text-red-600">Kunde inte ladda funktioner: {loadError}</p>}
+            {user && !loading && !loadError && filteredFeatures.length > 0 && (
                 <ul>
-                    {filteredFeatures.map(feature => (
-                        <li key={feature.id}>{feature.name} - {feature.description}</li>
+                    {filteredFeatures.map((feature) => (
+                        <li key={feature.id}>
+                            {feature.name} - {feature.description}
+                        </li>
                     ))}
-                </ul>}
+                </ul>
+            )}
 
             {user && 
                 <div className="flex gap-4 items-center">

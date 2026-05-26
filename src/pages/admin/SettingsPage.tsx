@@ -8,7 +8,7 @@ import type { FeaturesByType } from '../../types/admin'
 type SaveStatus = 'idle' | 'saving' | 'success' | 'error'
 
 export default function SettingsPage() {
-    const { error, features, loading, toggleFeature, saveFeatures } = useFeatures()
+    const { loadError, features, loading, toggleFeature, saveFeatures } = useFeatures()
     const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -36,7 +36,7 @@ export default function SettingsPage() {
     }
 
     if (loading) return <p className="text-sm text-neutral-600 text-center w-full">Laddar inställningar...</p>
-    if (error) return <p className="text-red-600 text-center w-full">Kunde inte ladda inställningar: {error}</p>
+    if (loadError) return <p className="text-red-600 text-center w-full">Kunde inte ladda inställningar: {loadError}</p>
 
     const featuresByType = features.reduce((groupedFeatures, feature) => {
         if (!groupedFeatures[feature.type_slug]) {

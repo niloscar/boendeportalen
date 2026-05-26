@@ -1,37 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
-import { getFeatures } from '../../api/settingsApi'
+import { useFeatures } from '../../hooks/useFeatures'
 import ExpandedWidget from '../../components/admin/ExpandedWidget.tsx'
 import Widget from '../../components/admin/Widget'
 
-import type { Feature } from '../../types/admin.ts'
-
 export default function DashboardPage() {
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
-    const [features, setFeatures] = useState([] as Feature[])
+    const { loadError, features, loading } = useFeatures()
     const [expandedWidgetTitle, setExpandedWidgetTitle] = useState<string | null>(null)
 
-    useEffect(() => {
-        const fetchFeatures = async () => {
-            try {
-                setLoading(true)
-                setError('')
-                const data = await getFeatures();
-                setFeatures(data)
-            } catch (error: unknown) {
-                if (error instanceof Error) {
-                    setError(error.message)
-                }
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchFeatures()
-    }, [])
-
     if (loading) return <p className="text-sm text-neutral-600 text-center w-full">Laddar kontrollpanel...</p>
-    if (error) return <p className="text-red-600 text-center w-full">Kunde inte ladda kontrollpanel: {error}</p>
+    if (loadError) return <p className="text-red-600 text-center w-full">Kunde inte ladda kontrollpanel: {loadError}</p>
 
     const widgets = features
         .filter((feature) => (feature.is_active && feature.type_slug === 'admin_widgets'))

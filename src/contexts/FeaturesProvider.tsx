@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FeaturesContext } from './FeaturesContext'
 import type { ReactNode } from 'react'
 import type { Feature } from '../types/admin'
@@ -7,19 +7,21 @@ import { getFeatures, updateFeatureStatuses } from '../api/settingsApi'
 export function FeaturesProvider({ children }: { children: ReactNode }) {
     const [features, setFeatures] = useState<Feature[]>([])
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
+    const [loadError, setLoadError] = useState('')
 
     useEffect(() => {
         const fetchFeatures = async () => {
             try {
                 setLoading(true)
-                setError('')
+                setLoadError('')
                 const data = await getFeatures();
                 setFeatures(data)
             } catch (error: unknown) {
-                if (error instanceof Error) {
-                    setError(error.message)
-                }
+                setLoadError(
+                    error instanceof Error
+                        ? error.message
+                        : 'Ett okänt fel inträffade'
+                )
             } finally {
                 setLoading(false)
             }
@@ -27,7 +29,7 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
         fetchFeatures()
     }, [])
 
-    const toggleFeature = (featureName: string, isActive: boolean) => {
+    const toggleFeature = useCallback((featureName: string, isActive: boolean) => {
         setFeatures((prevFeatures) =>
             prevFeatures.map((feature) =>
                 feature.name === featureName
@@ -35,13 +37,20 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
                     : feature
             )
         )
-    }
+    }, [])
 
-    const saveFeatures = async () => {
+    const saveFeatures = useCallback(async () => {
         await updateFeatureStatuses(features)
-    }
+    }, [features])
 
-    const value = { features, loading, error, setFeatures, toggleFeature, saveFeatures }
+    const value = useMemo(() => ({
+        features,
+        loading,
+        loadError,
+        setFeatures,
+        toggleFeature,
+        saveFeatures
+    }), [features, loading, loadError, toggleFeature, saveFeatures])
 
     return (
         <FeaturesContext.Provider value={value}>
