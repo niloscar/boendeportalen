@@ -15,3 +15,11 @@ export type AlertDialogProps = {
     onConfirm: () => void;
     confirmColor: "green" | "red";
 };
+
+export type FormSwitchProps = {
+    id: string
+    name: string
+    checked: boolean
+    onSwitchChange: (name: string, checked: boolean) => void
+    disabled?: boolean
+};
