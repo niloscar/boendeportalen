@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { Suspense, lazy, type ReactNode } from 'react'
 
 import { AdminRouteWrapper, PrivateRouteWrapper, PublicOnlyRouteWrapper, RouteLoadingFallback } from './routing/Routing'
@@ -22,10 +22,13 @@ function LazyRoute({ children }: { children: ReactNode }) {
 }
 
 function App() {
+    const location = useLocation()
+    const isAuthPage = location.pathname === '/inloggning'
+
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="flex-1 flex py-10 w-full max-w-6xl mx-auto">
+            <main className={isAuthPage ? 'flex-1 flex w-full' : 'flex-1 flex py-10 w-full max-w-6xl mx-auto'}>
                 <Routes>
                     <Route path="/inloggning" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
                     <Route path="/minasidor" element={<PrivateRouteWrapper><LazyRoute><ProfilePage /></LazyRoute></PrivateRouteWrapper>} />
