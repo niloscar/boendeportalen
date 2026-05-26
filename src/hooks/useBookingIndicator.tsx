@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import type { useBookingIndicatorProps } from "../types/booking";
-import BookingIndicator from "../components/ManageBookings/BookingIndicator";
+import BookingIndicator from "../components/bookings/BookingIndicator";
 
 export function useBookingIndicator({ myEvents, currentIndex, goToBooking }: useBookingIndicatorProps) {
 

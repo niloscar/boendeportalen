@@ -1,9 +1,9 @@
-import GuestSuiteCalendar from "../components/ManageBookings/GuestSuiteCalendar";
+import GuestSuiteCalendar from "../components/bookings/GuestSuiteCalendar";
 import { useEffect, useState, useCallback } from "react";
 import { fetchBookedSlots } from "../api/guestSuite";
 import type { Booking } from "../types/booking";
 import AlertDialog from "../components/ui/AlertDialog";
-import GuestSuiteInfo from "../components/ManageBookings/GuestSuiteInfo";
+import GuestSuiteInfo from "../components/bookings/GuestSuiteInfo";
 
 export default function GuestSuite() {
     const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
@@ -26,32 +26,35 @@ export default function GuestSuite() {
     }, [refreshBookings]);
 
     return (
-        <div className='w-full text-neutral-900'>
-            <main className='mx-auto flex w-full flex-col gap-8'>
-                <div className="h-screen">
-                    <h1 className="text-3xl mb-6">Bokning av gästlägenheten</h1>
-                    <div className="mb-6">Välkommen att boka vår gästlägenhet! Gästlägenheten är tillgänglig för dig som hyresgäst när du får besök av familj eller vänner och behöver extra utrymme. <a href="" onClick={(e) => { e.preventDefault(); setOpenAlertDialog(true) }} className="text-green-500 hover:text-green-700">Här</a> hittar du all viktig information inför din bokning.</div>
-                    
-                    {errorMessage && (
-                        <div className="bg-red-100 border border-red-300 text-red-700 p-3 rounded-md mb-4">
-                            {errorMessage}
-                        </div>
-                    )}
-
-                    <GuestSuiteCalendar
-                        bookings={bookings}
-                        refreshBookings={refreshBookings}
-                    />
+        <div>
+            <div className="h-screen">
+                <div className="flex w-full flex-col items-center gap-6">
+                    <h1 className="text-3xl md:text-5xl font-bold">Bokning av gästlägenheten</h1 >
+                    <div className="mb-6 text-gray-600 text-center">
+                        Gästlägenheten är tillgänglig för dig som hyresgäst när du får besök av familj eller vänner och behöver extra utrymme. <br />
+                        <a href="" onClick={(e) => { e.preventDefault(); setOpenAlertDialog(true) }} className="text-green-500 hover:text-green-700">Här</a> hittar du all viktig information inför din bokning.
+                    </div>
                 </div>
 
-                <AlertDialog
-                    open={openAlertDialog}
-                    title="🏡 Gästlägenhet - Bokningsinformation"
-                    message={<GuestSuiteInfo />}
-                    onConfirm={() => { setOpenAlertDialog(false); }}
-                    confirmColor="green"
+                {errorMessage && (
+                    <div className="bg-red-100 border border-red-300 text-red-700 p-3 rounded-md mb-4">
+                        {errorMessage}
+                    </div>
+                )}
+
+                <GuestSuiteCalendar
+                    bookings={bookings}
+                    refreshBookings={refreshBookings}
                 />
-            </main>
+            </div>
+
+            <AlertDialog
+                open={openAlertDialog}
+                title="🏡 Gästlägenhet - Bokningsinformation"
+                message={<GuestSuiteInfo />}
+                onConfirm={() => { setOpenAlertDialog(false); }}
+                confirmColor="green"
+            />
         </div >
     );
 }
