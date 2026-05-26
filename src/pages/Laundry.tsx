@@ -27,21 +27,23 @@ export default function Laundry() {
     }, [refreshBookings]);
 
     return (
-        <>
-            <h1 className="text-3xl mb-6">Bokning av tvättstugan</h1 >
-            <div className="mb-6">Välkommen att boka tid i tvättstugan. Genom att följa <a href="" onClick={(e) => { e.preventDefault(); setOpenAlertDialog(true) }} className="text-green-500 hover:text-green-700">reglerna</a> hjälper du till att hålla tvättstugan trivsam och tillgänglig för alla i föreningen.</div>
-            <LaundryRoomCalendar
-                bookings={bookings}
-                timeslots={timeslots}
-                refreshBookings={refreshBookings}
-            />
-            <AlertDialog
-                open={openAlertDialog}
-                title="🧺 Tvättstuga - Bokningsinformation"
-                message={<LaundryRoomInfo />}
-                onConfirm={() => { setOpenAlertDialog(false); }}
-                confirmColor="green"
-            />
-        </>
+        <div className='w-full text-neutral-900'>
+            <main className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pt-6 pb-16 sm:px-10'>
+                <h1 className="text-3xl mb-6">Bokning av tvättstugan</h1 >
+                <div className="mb-6">Välkommen att boka tid i tvättstugan. Genom att följa <a href="" onClick={(e) => { e.preventDefault(); setOpenAlertDialog(true) }} className="text-green-500 hover:text-green-700">reglerna</a> hjälper du till att hålla tvättstugan trivsam och tillgänglig för alla i föreningen.</div>
+                <LaundryRoomCalendar
+                    bookings={bookings}
+                    timeslots={timeslots}
+                    refreshBookings={refreshBookings}
+                />
+                <AlertDialog
+                    open={openAlertDialog}
+                    title="🧺 Tvättstuga - Bokningsinformation"
+                    message={<LaundryRoomInfo />}
+                    onConfirm={() => { setOpenAlertDialog(false); }}
+                    confirmColor="green"
+                />
+            </main>
+        </div>
     );
 }
