@@ -15,7 +15,7 @@ export default function AdminNav({ pages, signOut }: AdminNavProps) {
 
     async function handleSignOut() {
         await signOut()
-        return <Navigate to={`/auth`} replace />
+        return <Navigate to={`/inloggning`} replace />
     }
 
     const isAdmin = hasAdminAccess(profile)

@@ -2,7 +2,7 @@ import { Skeleton } from '@mui/material';
 
 const ProfilePageSkeleton = () => (
     <>
-        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
+        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
             <div className='flex items-start gap-4'>
                 <Skeleton variant='circular' width={40} height={40} />
                 <div className='flex-1'>
@@ -13,7 +13,7 @@ const ProfilePageSkeleton = () => (
             </div>
         </section>
 
-        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
+        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
             <div className='grid gap-8 lg:grid-cols-[1.2fr_1fr]'>
                 <div className='flex flex-col gap-6'>
                     <div className='flex items-start gap-4'>
@@ -39,7 +39,7 @@ const ProfilePageSkeleton = () => (
             </div>
         </section>
 
-        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
+        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
             <div className='flex items-start gap-4'>
                 <Skeleton variant='circular' width={40} height={40} />
                 <div className='flex-1'>

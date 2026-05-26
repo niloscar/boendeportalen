@@ -35,7 +35,7 @@ export default function AlertDialog({
 
             {/* Dialog */}
 
-            <div className="p-6 relative bg-white rounded-2xl shadow-xl w-full max-w-[600px] max-h-[80vh] flex flex-col animate-[fadeIn_0.15s_ease-out]">
+            <div className="p-6 relative bg-white rounded-2xl shadow-md w-full max-w-[600px] max-h-[80vh] flex flex-col animate-[fadeIn_0.15s_ease-out]">
 
                 {/* Scrollbart innehåll */}
                 <div className="p-2 overflow-y-auto flex-1">

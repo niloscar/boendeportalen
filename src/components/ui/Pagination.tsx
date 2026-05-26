@@ -25,7 +25,7 @@ export default function Pagination({ totalPages, currentPage, onPageChange }: Pa
             <button
                 onClick={() => onPageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className={`px-4 py-2 rounded-xl border ${currentPage === 1 ? 'text-gray-400 border-gray-200' : 'bg-white text-neutral-900 hover:bg-neutral-100 cursor-pointer'}`}
+                className={`px-4 py-2 rounded-xl border border-green-500 ${currentPage === 1 ? 'text-green-500 border-gray-200' : 'bg-green-500 text-white hover:bg-green-600 cursor-pointer'}`}
             >
                 Föregående
             </button>
@@ -39,7 +39,7 @@ export default function Pagination({ totalPages, currentPage, onPageChange }: Pa
                             key={item}
                             onClick={() => onPageChange(item)}
                             aria-current={item === currentPage ? 'page' : undefined}
-                            className={`px-4 py-2 rounded-xl border ${item === currentPage ? 'bg-neutral-900 text-white' : 'bg-white text-neutral-900 hover:bg-neutral-100 cursor-pointer'}`}
+                            className={`px-4 py-2 rounded-xl border border-green-500 ${item === currentPage ? 'bg-green-500 text-white' : 'bg-white text-green-600 hover:bg-green-100 cursor-pointer'}`}
                         >
                             {item}
                         </button>
@@ -50,7 +50,7 @@ export default function Pagination({ totalPages, currentPage, onPageChange }: Pa
             <button
                 onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
-                className={`px-4 py-2 rounded-xl border ${currentPage === totalPages ? 'text-gray-400 border-gray-200' : 'bg-white text-neutral-900 hover:bg-neutral-100 cursor-pointer'}`}
+                className={`px-4 py-2 rounded-xl border border-green-500 ${currentPage === totalPages ? 'text-gray-400 border-gray-200' : 'bg-green-500 text-white hover:bg-green-600 cursor-pointer'}`}
             >
                 Nästa
             </button>
