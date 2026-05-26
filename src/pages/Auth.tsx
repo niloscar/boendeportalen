@@ -45,8 +45,8 @@ function Auth() {
     const weekday = weekdays[now.getDay()]
 
     return (
-        <div className='min-h-screen flex items-stretch md:items-center justify-center'>
-            <div className={`flex w-full min-h-screen md:min-h-0 md:max-h-[92vh] md:w-[95%] lg:w-[92%] xl:w-[88%] 2xl:w-3/4 overflow-hidden bg-white md:rounded-2xl shadow-none md:shadow-md ${styles.cardTransition}`}>
+        <div className='w-full flex items-stretch items-center justify-center py-10'>
+            <div className={`flex w-full md:min-h-0 md:max-h-[92vh] md:w-[95%] lg:w-[92%] xl:w-[88%] 2xl:w-3/4 overflow-hidden bg-white md:rounded-2xl shadow-none md:shadow-md ${styles.cardTransition}`}>
                 <div className='hidden lg:block lg:w-1/2 2xl:w-2/3 min-h-full bg-gradient-to-r from-green-700 to-green-500'>
                     <div className='relative h-full flex items-center justify-center'>
                         <img src='/city.svg' alt='City' className={styles.cityfloat + ' ' + styles.cityImage + ' opacity-90'} />
@@ -68,7 +68,7 @@ function Auth() {
                                 {isLogin ? 'Välkommen!' : 'Registrera dig!'}
                             </h1>
                             <p className='text-sm sm:text-base text-gray-700 text-center max-w-prose'>
-                                {isLogin ? 'Välkommen till BoendePortalen! Här kan du enkelt hantera din bostad och få hjälp med vardagliga uppgifter.' : 'Skapa ett konto för att komma igång med BoendePortalen!'}
+                                {isLogin ? 'Välkommen till BoendePortalen! Här kan du enkelt hantera din bostad.' : 'Skapa ett konto för att komma igång med BoendePortalen!'}
                             </p>
                         </div>
 
@@ -82,10 +82,6 @@ function Auth() {
 
                         {showForgot && <ForgotPassword onClose={() => setShowForgot(false)} />}
                         {showReset && <ResetPassword onClose={() => setShowReset(false)} />}
-
-                        <div className='mt-auto py-4 text-center border-t border-gray-200/70'>
-                            <p className='text-gray-500 text-xs sm:text-sm'>© 2026 <strong>BoendePortalen</strong>. All rights reserved.</p>
-                        </div>
                     </div>
                 </div>
             </div>
