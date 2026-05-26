@@ -100,25 +100,25 @@ export default function ParkingDetails() {
                         </div>
 
                         <div className="grid gap-4 sm:grid-cols-2">
-                            <div className="rounded-2xl bg-neutral-100 p-4">
+                            <div className="rounded-2xl bg-neutral-100 border border-neutral-200 p-4">
                                 <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-600"><CarProfileIcon className="h-4 w-4" /> Typ</div>
                                 <p className="text-lg font-semibold">{spot.type}</p>
                             </div>
-                            <div className="rounded-2xl bg-neutral-100 p-4">
+                            <div className="rounded-2xl bg-neutral-100 border border-neutral-200 p-4">
                                 <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-600"><CurrencyCircleDollarIcon className="h-4 w-4" /> Hyra</div>
                                 <p className="text-lg font-semibold">{formatNumber(spot.price)} kr/mån</p>
                             </div>
-                            <div className="rounded-2xl bg-neutral-100 p-4">
+                            <div className="rounded-2xl bg-neutral-100 border border-neutral-200 p-4">
                                 <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-600"><CalendarDotsIcon className="h-4 w-4" /> Ledig från</div>
                                 <p className="text-lg font-semibold">{new Date(spot.availableFrom).toLocaleDateString('sv-SE')}</p>
                             </div>
-                            <div className="rounded-2xl bg-neutral-100 p-4">
+                            <div className="rounded-2xl bg-neutral-100 border border-neutral-200 p-4">
                                 <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-600"><MapPinIcon className="h-4 w-4" /> Status</div>
                                 <p className="text-lg font-semibold">{spot.application ? 'Öppen ansökan' : 'Stängd ansökan'}</p>
                             </div>
                         </div>
 
-                        <div className="rounded-2xl bg-neutral-100 p-4 text-neutral-700">
+                        <div className="rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-neutral-700">
                             <p className="font-medium text-neutral-900">Information</p>
                             <p className="mt-2">{spot.description ?? 'Ingen beskrivning är angiven för denna parkeringsplats ännu.'}</p>
                         </div>
