@@ -1,49 +1,22 @@
-import { useEffect, useState } from 'react'
-import { getFeatures, updateFeatureStatuses } from '../../api/settingsApi'
+import { useState } from 'react'
+import { useFeatures } from '../../hooks/useFeatures'
 import { Button } from '../../components/ui/Button'
 
 import type { ChangeEventHandler, SubmitEventHandler } from 'react'
-import type { Feature, FeaturesByType } from '../../types/admin'
+import type { FeaturesByType } from '../../types/admin'
 
 type SaveStatus = 'idle' | 'saving' | 'success' | 'error'
 
 export default function SettingsPage() {
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState('')
+    const { error, features, loading, toggleFeature, saveFeatures } = useFeatures()
     const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle')
-    const [features, setFeatures] = useState<Feature[]>([])
-
-    useEffect(() => {
-        const fetchFeatures = async () => {
-            try {
-                setLoading(true)
-                setError('')
-                const data = await getFeatures();
-                setFeatures(data)
-            } catch (error: unknown) {
-                if (error instanceof Error) {
-                    setError(error.message)
-                }
-            } finally {
-                setLoading(false)
-            }
-        }
-        fetchFeatures()
-    }, [])
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         const featureName = e.target.name
         const isChecked = e.target.checked
 
         setSaveStatus('idle')
-
-        setFeatures((prevFeatures) =>
-            prevFeatures.map((feature) =>
-                feature.name === featureName
-                    ? { ...feature, is_active: isChecked }
-                    : feature
-            )
-        )
+        toggleFeature(featureName, isChecked)
     }
 
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
@@ -51,7 +24,7 @@ export default function SettingsPage() {
 
         try {
             setSaveStatus('saving')
-            await updateFeatureStatuses(features)
+            await saveFeatures()
             setSaveStatus('success')
 
             setTimeout(() => { setSaveStatus('idle') }, 1500)

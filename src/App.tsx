@@ -1,15 +1,15 @@
-import { Link, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Auth from './pages/Auth'
-import { signOut } from './lib/supabase'
 import useAuth from './hooks/useAuth'
 
 // Import route guards here, like PrivateRoute and AdminRoute, if you want to use them in this file.
 import { PublicOnlyRoute, AdminRoute } from './routing'
 
 // Import pages here
-import AdminPage from './pages/AdminPage'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
+import HomePage from './pages/HomePage'
+import AdminPage from './pages/AdminPage'
 import SearchApartment from "./pages/SearchApartment";
 import Apartment from "./pages/Apartment";
 
@@ -34,13 +34,7 @@ function App() {
                             </AdminRoute>
                         } 
                     />
-                    <Route path="/" element={<div>Detta är en placeholder. Gå till <Link to="/auth" className="text-blue-500 hover:underline">Inloggning</Link>
-                        {user && <div className="mt-4">
-                            <div className="text-green-600">Inloggad som {user?.email}</div>
-                            <button onClick={async () => { await signOut(); window.location.reload(); }} className="py-2 px-4 bg-red-600 text-white rounded cursor-pointer hover:bg-red-700">Logga ut</button>
-                        </div>
-                        }
-                    </div>} />
+                    <Route path="/" element={<HomePage />} />
                 </Routes>
             </main>
             <Footer />
