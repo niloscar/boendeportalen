@@ -23,29 +23,23 @@ const Apartment = () => {
     } = useApartmentSignUp({ apartment });
 
     useEffect(() => {
-        if (state && session?.access_token) {
-            getApartmentStatus();
-        }
-    }, [session?.access_token, state]);
+        getApartmentStatus();
+    }, []);
 
     if (!apartment || !details) {
         return (
             <section className="flex flex-col items-center gap-6 p-6 w-full">
-                    <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>
-                    <Link to="/bostader">
-                        <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
-                    </Link>
+                <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>
+                <Link to="/bostader">
+                    <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
+                </Link>
             </section>
         )
     }
 
     return (
         <section className="flex flex-col gap-6 p-6">
-            <div className="flex justify-between">
-                <h1 className="text-5xl">{apartment.street}</h1>
-                {session &&
-                    <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} />}
-            </div>
+            <h1 className="text-5xl">{apartment.street}</h1>
             <ImageCarousel images={apartment.images} size="large" rounded={true} />
             <h2 className="text-2xl">Om bostaden</h2>
             <p>{apartment.description}</p>
@@ -56,7 +50,7 @@ const Apartment = () => {
                 <ApartmentList variant="ul" items={details} />
             </ul>
             {session ?
-                <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} /> :
+                <div><ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} /></div> :
                 <div>Du måste vara inloggad för att anmäla intressse. Vänligen <a href="/inloggning" className="text-green-500 hover:underline">logga in</a> eller registrera ett konto.</div>
             }
         </section>

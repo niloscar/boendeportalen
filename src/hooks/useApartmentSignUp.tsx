@@ -17,7 +17,7 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
             try {
                 setLoading(true);
                 setError('');
-                const data = await getApartmentSignupStatus(session?.access_token, apartment.id, activeUntil);
+                const data = await getApartmentSignupStatus(apartment.id, activeUntil);
                 setApplied(data);
             } catch (error: unknown) {
                 if (error instanceof Error) {
@@ -27,7 +27,7 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
                 setLoading(false);
             }
         }
-    }, [loading, session, apartment, activeUntil]);
+    }, [loading, apartment, activeUntil]);
 
     const signUp = async () => {
         if (loading) return;
@@ -35,7 +35,7 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
             try {
                 setLoading(true);
                 setError('');
-                await createApartmentSignUp(session?.access_token, apartment.id, activeUntil);
+                await createApartmentSignUp(apartment.id, activeUntil);
                 getApartmentStatus();
             } catch (error: unknown) {
                 if (error instanceof Error) {
@@ -53,7 +53,7 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
             try {
                 setLoading(true);
                 setError('');
-                await deleteApartmentSignUp(session?.access_token, applied[0].id);
+                await deleteApartmentSignUp(applied[0].id);
                 getApartmentStatus();
             } catch (error: unknown) {
                 if (error instanceof Error) {
