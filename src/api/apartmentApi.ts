@@ -25,6 +25,20 @@ export const getApartmentSignupStatus = async (bearer: string | undefined, apart
     }
 };
 
+//Fetch status for all applications 
+export const getAllApartmentSignups = async (bearer: string | undefined, end_date: string | null) => {
+    const config = {
+        headers: { Authorization: `Bearer ${bearer}` }
+    }
+    try {
+        const response = await apiConfig.get(`/apartment_sign_up?select=id,apartment_id,end_date,sign_up_date&end_date=gte.${end_date}`, config);
+        return response.data;
+    } catch (err) {
+        console.log(`Kunde inte hitta tidigare intresseanmälningar, ${err}`);
+        throw err;
+    }
+};
+
 //Sign up for apartment
 export async function createApartmentSignUp(bearer: string | undefined, apartment_id: number, end_date: string | null) {
     const config = {

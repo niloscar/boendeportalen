@@ -68,6 +68,7 @@ export type SignUp ={
     error: string,
     loading: boolean,
     applied: SignedUpData[],
+    totalApplications: SignedUpData[],
     deleteSignUp: () => Promise<void>,
     signUp: () => Promise<void>
 }

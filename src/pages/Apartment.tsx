@@ -5,7 +5,7 @@ import Button from '../components/ui/Button.tsx';
 import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import type { ApartmentData, Detail } from '../types/apartment.ts';
 import ApartmentSignUp from '../components/SearchApartmentPage/ApartmentSignUp.tsx';
-import { useApartmentSignUp } from '../hooks/useApartmentSignUp.tsx';
+import { useApartmentSignUp } from '../hooks/useApartmentSignUp.ts';
 import { useSession } from '../hooks/useAuth.ts';
 
 const Apartment = () => {
@@ -17,17 +17,20 @@ const Apartment = () => {
         signUp,
         deleteSignUp,
         getApartmentStatus,
+        getAllApartmentStatus,
         loading,
         error,
         applied,
+        totalApplications
     } = useApartmentSignUp({ apartment });
 
     useEffect(() => {
         if (state && session?.access_token) {
             getApartmentStatus();
+            getAllApartmentStatus();
         }
     }, [session?.access_token, state]);
-    
+
     if (!apartment || !details) {
         return (
             <div className="max-w-3xl">
@@ -44,7 +47,7 @@ const Apartment = () => {
             <div className="flex justify-between">
                 <h1 className="text-5xl">{apartment.street}</h1>
                 {session &&
-                    <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} />}
+                    <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} totalApplications={totalApplications} />}
             </div>
             <ImageCarousel images={apartment.images} size="large" />
             <h2 className="text-2xl">Om bostaden</h2>
@@ -56,7 +59,7 @@ const Apartment = () => {
                 <ApartmentList variant="ul" items={details} />
             </ul>
             {session ?
-                <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} /> :
+                <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} totalApplications={totalApplications}/> :
                 <div>Du måste vara inloggad för att anmäla intressse. Vänligen <a href="/inloggning" className="text-blue-500 hover:underline">logga in</a> eller registrera ett konto.</div>
             }
         </section>

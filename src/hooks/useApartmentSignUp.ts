@@ -1,18 +1,19 @@
 import { useState, useCallback } from 'react';
 import { Temporal } from '@js-temporal/polyfill';
 import type { ApartmentProp, SignedUpData } from '../types/apartment.ts';
-import { createApartmentSignUp, getApartmentSignupStatus, deleteApartmentSignUp } from '../api/apartmentApi.ts';
+import { createApartmentSignUp, getApartmentSignupStatus, deleteApartmentSignUp, getAllApartmentSignups } from '../api/apartmentApi.ts';
 import { useSession } from './useAuth.ts';
 
 export function useApartmentSignUp({ apartment }: ApartmentProp) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [applied, setApplied] = useState<SignedUpData[]>([]);
+    const [totalApplications, setTotalApplications] = useState([]);
+    const today = new Date().toJSON().slice(0, 10);
     const activeUntil = apartment && Temporal.PlainDate.from(apartment.end_date).add({ weeks: 2 }).toString();
     const session = useSession();
 
     const getApartmentStatus = useCallback(async () => {
-        if (loading) return;
         if (apartment) {
             try {
                 setLoading(true);
@@ -29,8 +30,25 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
         }
     }, [loading, session, apartment, activeUntil]);
 
+
+    const getAllApartmentStatus = useCallback(async () => {
+        if (apartment) {
+            try {
+                setLoading(true);
+                setError('');
+                const data = await getAllApartmentSignups(session?.access_token, today);
+                setTotalApplications(data);
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    setError(error.message);
+                }
+            } finally {
+                setLoading(false);
+            }
+        }
+    }, [session, apartment, today]);
+
     const signUp = async () => {
-        if (loading) return;
         if (apartment) {
             try {
                 setLoading(true);
@@ -48,7 +66,6 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
     }
 
     const deleteSignUp = async () => {
-        if (loading) return;
         if (apartment) {
             try {
                 setLoading(true);
@@ -69,8 +86,10 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
         signUp,
         deleteSignUp,
         getApartmentStatus,
+        getAllApartmentStatus,
         loading,
         error,
-        applied
+        applied,
+        totalApplications
     };
 }
