@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import type { ReportFormData } from '../components/ProfilePage/ReportForm';
+import type { ReportFormData } from '../types/forms';
 import { ArrowLeftIcon } from '@phosphor-icons/react';
 import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';

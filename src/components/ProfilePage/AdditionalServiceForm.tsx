@@ -1,5 +1,5 @@
 import { ReportForm } from './ReportForm';
-import type { ReportFormData } from './ReportForm';
+import type { ReportFormData } from '../../types/forms';
 
 interface AdditionalServiceFormProps {
     onCancel: () => void;

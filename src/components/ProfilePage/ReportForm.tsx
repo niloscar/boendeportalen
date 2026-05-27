@@ -2,16 +2,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { PaperclipIcon, CaretDownIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
-export interface ReportFormData {
-    category: string;
-    location: string;
-    description: string;
-    extraLocation: string;
-    allowMasterKey: boolean;
-    hasPets: boolean;
-    contactFirst: boolean;
-    attachment: File | null;
-}
+import type { ReportFormData } from '../../types/forms';
 
 interface ReportFormProps {
     categories: string[];

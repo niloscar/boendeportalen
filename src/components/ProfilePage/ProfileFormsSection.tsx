@@ -1,6 +1,6 @@
 import { ErrorReportForm } from './ErrorReportForm';
 import { AdditionalServiceForm } from './AdditionalServiceForm';
-import type { ReportFormData } from './ReportForm';
+import type { ReportFormData } from '../../types/forms';
 
 export type ActiveForm = null | 'error' | 'service';
 
