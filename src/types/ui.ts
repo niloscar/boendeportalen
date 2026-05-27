@@ -1,3 +1,5 @@
+import type { ReactElement } from "react";
+
 export type ConfirmDialogProps = {
     open: boolean;
     title?: string;
@@ -10,7 +12,7 @@ export type ConfirmDialogProps = {
 
 export type AlertDialogProps = {
     open: boolean;
-    title?: string;
+    title?: string | ReactElement;
     message?: React.ReactNode;
     onConfirm: () => void;
     confirmColor: "primary" | "red";
