@@ -253,6 +253,42 @@ export const getContractSignedUrl = async (filePath: string | null): Promise<str
     return data.signedUrl;
 };
 
+export type AppliedApartmentSummary = {
+    signUpId: number;
+    endDate: string;
+    apartment: ApartmentSummary;
+};
+
+export const getAppliedApartments = async (userId: string): Promise<AppliedApartmentSummary[]> => {
+    const signUpsResponse = await apiConfig.get<Array<{ id: number; end_date: string; apartment_id: number }>>('/apartment_sign_up', {
+        params: {
+            select: 'id,end_date,apartment_id',
+            user_id: `eq.${userId}`,
+        },
+    });
+
+    const signUps = signUpsResponse.data;
+    if (signUps.length === 0) return [];
+
+    const apartmentIds = signUps.map((s) => s.apartment_id);
+    const apartmentsResponse = await apiConfig.get<ApartmentSummary[]>('/apartments', {
+        params: {
+            select: 'id,street,postcode,city,area,rooms,district,description',
+            id: `in.(${apartmentIds.join(',')})`,
+        },
+    });
+
+    const apartmentsMap = new Map(apartmentsResponse.data.map((a) => [a.id, a]));
+
+    return signUps
+        .filter((s) => apartmentsMap.has(s.apartment_id))
+        .map((s) => ({
+            signUpId: s.id,
+            endDate: s.end_date,
+            apartment: apartmentsMap.get(s.apartment_id)!,
+        }));
+};
+
 // Generates a signed URL valid for 1 hour for apartment documents (manuals, floor plans).
 export const getApartmentFileSignedUrl = async (filePath: string): Promise<string | null> => {
     const { data, error } = await supabase.storage

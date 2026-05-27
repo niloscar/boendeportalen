@@ -6,11 +6,13 @@ import {
     getApartmentEquipment,
     getApartmentForUser,
     getApartmentFileSignedUrl,
+    getAppliedApartments,
     getUserProfile,
 } from '../api/profilepageApi';
 import type {
     ApartmentDocument,
     ApartmentEquipment,
+    AppliedApartmentSummary,
     ContractSummary,
     UserProfile,
 } from '../api/profilepageApi';
@@ -37,6 +39,7 @@ export interface ProfileData {
     apartmentInfo: string[] | null;
     manualDocuments: ApartmentDocument[];
     floorPlanDocument: ApartmentDocument | null;
+    appliedApartments: AppliedApartmentSummary[];
 }
 
 /**
@@ -51,6 +54,7 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
     const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
     const [documentUrls, setDocumentUrls] = useState<Record<number, string>>({});
     const [equipment, setEquipment] = useState<ApartmentEquipment[]>([]);
+    const [appliedApartments, setAppliedApartments] = useState<AppliedApartmentSummary[]>([]);
 
     useEffect(() => {
         const loadProfileData = async () => {
@@ -72,6 +76,9 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
 
                 setProfile(profileData);
                 setContract(contractData);
+
+                const applied = await getAppliedApartments(userId);
+                setAppliedApartments(applied);
 
                 if (contractData?.apartment_id) {
                     const [documentsData, equipmentData] = await Promise.all([
@@ -153,5 +160,6 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
         apartmentInfo,
         manualDocuments,
         floorPlanDocument,
+        appliedApartments,
     };
 }

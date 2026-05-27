@@ -5,6 +5,7 @@ import { ArrowLeftIcon } from '@phosphor-icons/react';
 import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';
 import ApartmentOverviewCard from '../components/ProfilePage/ApartmentOverviewCard';
+import AppliedApartmentsSection from '../components/ProfilePage/AppliedApartmentsSection';
 import ApartmentDocumentsSection from '../components/ProfilePage/ApartmentDocumentsSection';
 import PersonalInfoSection from '../components/ProfilePage/PersonalInfoSection';
 import ProfileFormsSection from '../components/ProfilePage/ProfileFormsSection';
@@ -41,6 +42,7 @@ const ProfilePage = () => {
         apartmentInfo,
         manualDocuments,
         floorPlanDocument,
+        appliedApartments,
     } = useProfileData(userId, loading);
 
     // Ref used to scroll the page back to top when a form subview opens
@@ -237,6 +239,9 @@ const ProfilePage = () => {
                             onSave={handleProfileSave}
                             onAvatarUpload={handleAvatarUpload}
                         />
+                        {appliedApartments.length > 0 && (
+                            <AppliedApartmentsSection appliedApartments={appliedApartments} />
+                        )}
                         {contract && (
                             <>
                                 <ApartmentOverviewCard
