@@ -30,7 +30,7 @@ const Apartment = () => {
     
     if (!apartment || !details) {
         return (
-            <div className="max-w-3xl">
+            <div>
                 <Link to="/bostader">
                     <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
                 </Link>
@@ -40,7 +40,7 @@ const Apartment = () => {
     }
 
     return (
-        <section className="flex flex-col gap-6 p-6 max-w-3xl">
+        <section className="flex flex-col gap-6 p-6">
             <div className="flex justify-between">
                 <h1 className="text-5xl">{apartment.street}</h1>
                 {session &&
@@ -57,7 +57,7 @@ const Apartment = () => {
             </ul>
             {session ?
                 <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} /> :
-                <div>Du måste vara inloggad för att anmäla intressse. Vänligen <a href="/inloggning" className="text-blue-500 hover:underline">logga in</a> eller registrera ett konto.</div>
+                <div>Du måste vara inloggad för att anmäla intressse. Vänligen <a href="/inloggning" className="text-green-500 hover:underline">logga in</a> eller registrera ett konto.</div>
             }
         </section>
     )
