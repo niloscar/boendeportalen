@@ -9,6 +9,7 @@ export default function LaundryRoomCalendarView({
     calendarRef,
     calendarEvents,
     today,
+    isMobile,
     calMaxDate,
     handleEventClick
 }: LaundryRoomCalendarPropsBig) {
@@ -22,6 +23,16 @@ export default function LaundryRoomCalendarView({
                 left: "today",
                 center: "title",
                 right: "prev,next"
+            }}
+            datesSet={() => {
+                const api = calendarRef.current?.getApi();
+                if (!api) return;
+
+                const desiredView = isMobile ? "listWeek" : "dayGridMonth";
+
+                if (api.view.type !== desiredView) {
+                    api.changeView(desiredView);
+                }
             }}
             events={calendarEvents}
             eventClassNames={(arg) => {
