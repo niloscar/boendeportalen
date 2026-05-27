@@ -24,13 +24,13 @@ const ImageCarousel = ({ images, size }: ApartmentImagesProp) => {
             setNextIndex(arrayLength - 1);
         }
     };
-    const imageSize = size == 'large' ? "md:h-110" : "h-50";
+    const imageSize = size == 'large' ? "md:h-110" : "h-70";
     return (
         images.length > 0 ?
             <div className="relative m-auto w-full">
-                <img src={images[nextIndex].url} className={`w-full object-fill rounded-2xl h-50 ${imageSize} m-auto`} alt={images[nextIndex].description} />
-                <button className={`hover:bg-neutral-200 absolute top-[40%] text-green-500 rounded-l text-2xl p-4`} onClick={(e) => back(e)}><CaretLeftIcon weight="bold" size={32}/></button>
-                <button className={`hover:bg-neutral-200 absolute top-[40%] right-0 text-green-500 rounded-r text-2xl p-4`} onClick={(e) => forward(e)}><CaretRightIcon weight="bold" size={32}/></button>
+                <img src={images[nextIndex].url} className={`w-full object-cover rounded-2xl h-70 ${imageSize} m-auto`} alt={images[nextIndex].description} />
+                <button className={`hover:bg-neutral-200 absolute top-[40%] text-green-500 rounded-l p-4`} onClick={(e) => back(e)}><CaretLeftIcon weight="bold" size={32}/></button>
+                <button className={`hover:bg-neutral-200 absolute top-[40%] right-0 text-green-500 rounded-r p-4`} onClick={(e) => forward(e)}><CaretRightIcon weight="bold" size={32}/></button>
             </div>
             :
             <div>Bilder ej tillgänliga</div>
