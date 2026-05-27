@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Temporal } from "@js-temporal/polyfill";
+import { Temporal } from '@js-temporal/polyfill';
 import type { ApartmentProp, SignedUpData } from '../types/apartment.ts';
 import { createApartmentSignUp, getApartmentSignupStatus, deleteApartmentSignUp } from '../api/apartmentApi.ts';
 import { useSession } from './useAuth.ts';
@@ -71,6 +71,6 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
         getApartmentStatus,
         loading,
         error,
-        applied,
+        applied
     };
 }
