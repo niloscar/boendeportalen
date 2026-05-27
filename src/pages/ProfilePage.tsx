@@ -237,18 +237,22 @@ const ProfilePage = () => {
                             onSave={handleProfileSave}
                             onAvatarUpload={handleAvatarUpload}
                         />
-                        <ApartmentOverviewCard
-                            apartmentInfo={apartmentInfo}
-                            onErrorReport={() => openForm('error')}
-                            onServiceRequest={() => openForm('service')}
-                            onOpenContract={openContract}
-                            onOpenFloorPlan={openFloorPlan}
-                            imageSrc={profilePageImage}
-                        />
-                        <ApartmentDocumentsSection
-                            documents={manualDocuments}
-                            documentUrls={documentUrls}
-                        />
+                        {contract && (
+                            <>
+                                <ApartmentOverviewCard
+                                    apartmentInfo={apartmentInfo}
+                                    onErrorReport={() => openForm('error')}
+                                    onServiceRequest={() => openForm('service')}
+                                    onOpenContract={openContract}
+                                    onOpenFloorPlan={openFloorPlan}
+                                    imageSrc={profilePageImage}
+                                />
+                                <ApartmentDocumentsSection
+                                    documents={manualDocuments}
+                                    documentUrls={documentUrls}
+                                />
+                            </>
+                        )}
                     </>
                 )}
             </main>
