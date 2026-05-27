@@ -1,5 +1,5 @@
 import React, { useId, useRef, useState } from 'react';
-import { PaperclipIcon } from '@phosphor-icons/react';
+import { PaperclipIcon, CaretDownIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
 export interface ReportFormData {
@@ -100,19 +100,26 @@ export const ReportForm = ({
                 <label className="text-sm font-medium text-gray-700" htmlFor={categoryId}>
                     Ämnesrad *
                 </label>
-                <select
-                    id={categoryId}
-                    name="category"
-                    className={`${inputBase} ${errors.category ? inputError : inputValid}`}
-                    onChange={() => clearError('category')}
-                >
-                    <option value="">Välj ett ämne...</option>
-                    {categories.map((category) => (
-                        <option key={category} value={category}>
-                            {category}
-                        </option>
-                    ))}
-                </select>
+                <div className="relative">
+                    <select
+                        id={categoryId}
+                        name="category"
+                        className={`${inputBase} appearance-none pr-10 ${errors.category ? inputError : inputValid}`}
+                        onChange={() => clearError('category')}
+                    >
+                        <option value="">Välj ett ämne...</option>
+                        {categories.map((category) => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
+                    <CaretDownIcon
+                        size={16}
+                        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500"
+                        aria-hidden="true"
+                    />
+                </div>
                 {errors.category && (
                     <p className="text-xs text-red-500" role="alert">{errors.category}</p>
                 )}
