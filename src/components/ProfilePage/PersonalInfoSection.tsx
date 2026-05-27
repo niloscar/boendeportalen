@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { UserIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
+import { signOut } from '../../lib/supabase';
 
 interface PersonalInfoSectionProps {
     name: string | null;
@@ -88,7 +89,12 @@ const PersonalInfoSection = ({
                 </div>
 
                 <div className='min-w-0 flex-1'>
-                    <h2 className='text-lg font-semibold'>Mina uppgifter</h2>
+                    <div className='flex items-center justify-between'>
+                        <h2 className='text-lg font-semibold'>Mina uppgifter</h2>
+                        <Button variant='danger' size='md' onClick={() => signOut()}>
+                            Logga ut
+                        </Button>
+                    </div>
 
                     {isEditing ? (
                         <form onSubmit={handleSubmit} noValidate className='mt-5 flex flex-col gap-4'>
