@@ -61,24 +61,12 @@ const AppliedApartmentsSection = ({ appliedApartments }: AppliedApartmentsSectio
                                         state: buildNavigationState(item),
                                     })
                                 }
-                                className='w-full border-l-2 border-green-500 pl-3 py-1 text-left text-sm transition hover:border-green-700'
+                                className='w-full border-l-2 border-green-500 pl-3 py-1 text-left text-sm leading-6 space-y-1 transition hover:border-green-700'
                             >
-                                <span className='block font-medium text-neutral-900'>
-                                    {item.apartment.street}, {item.apartment.city}
-                                </span>
-                                <span className='text-xs text-neutral-500'>
-                                    {[
-                                        item.apartment.area && `${item.apartment.area} kvm`,
-                                        item.apartment.rooms && `${item.apartment.rooms} rum`,
-                                    ]
-                                        .filter(Boolean)
-                                        .join(' · ')}
-                                </span>
-                                {item.rent !== null && (
-                                    <span className='mt-1 block text-xs text-neutral-700'>
-                                        Hyra: {formatNumber(item.rent)} kr/mån
-                                    </span>
-                                )}
+                                <span className='block text-neutral-900'>Adress: {item.apartment.street}, {item.apartment.city}</span>
+                                {item.apartment.area && <span className='block text-neutral-900'>Storlek: {item.apartment.area} kvm</span>}
+                                {item.apartment.rooms && <span className='block text-neutral-900'>Rum: {item.apartment.rooms}</span>}
+                                {item.rent !== null && <span className='block text-neutral-900'>Hyra: {formatNumber(item.rent)} kr/mån</span>}
                             </button>
                         </li>
                     ))}

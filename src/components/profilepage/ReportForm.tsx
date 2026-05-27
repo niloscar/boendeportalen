@@ -94,7 +94,7 @@ export const ReportForm = ({
         });
     };
 
-    const inputBase = 'w-full rounded-2xl bg-neutral-200 p-4 focus:outline-none focus:ring-2';
+    const inputBase = 'w-full rounded-2xl bg-neutral-100 p-4 focus:outline-none focus:ring-2';
     const inputValid = 'focus:ring-green-500';
     const inputError = 'ring-2 ring-red-400 focus:ring-red-400';
 
@@ -225,7 +225,7 @@ export const ReportForm = ({
                         <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="flex items-center gap-2 w-full rounded-2xl bg-neutral-200 p-4 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer"
+                            className="flex items-center gap-2 w-full rounded-2xl bg-neutral-100 p-4 hover:bg-neutral-200 transition-colors duration-200 cursor-pointer"
                         >
                             <PaperclipIcon size={16} className="shrink-0 text-neutral-500" />
                             <span className={`truncate ${fileName ? '' : 'text-neutral-400'}`}>{fileName ?? 'Välj fil...'}</span>

@@ -22,15 +22,11 @@ const AppliedParkingSection = ({ appliedParking }: AppliedParkingSectionProps) =
             {appliedParking.map((item) => (
                 <li
                     key={item.applicationId}
-                    className='border-l-2 border-green-500 pl-3 py-1 text-sm'
+                    className='border-l-2 border-green-500 pl-3 py-1 text-sm leading-6 space-y-1'
                 >
-                    <span className='block font-medium text-neutral-900'>
-                        {item.parking.address}, {item.parking.city}
-                    </span>
-                    <span className='text-xs text-neutral-500'>{item.parking.type}</span>
-                    <span className='mt-1 block text-xs text-neutral-700'>
-                        Hyra: {formatNumber(item.parking.price)} kr/mån
-                    </span>
+                    <span className='block text-neutral-900'>Adress: {item.parking.address}, {item.parking.city}</span>
+                    <span className='block text-neutral-900'>Typ: {item.parking.type}</span>
+                    <span className='block text-neutral-900'>Hyra: {formatNumber(item.parking.price)} kr/mån</span>
                 </li>
             ))}
         </ul>

@@ -21,8 +21,8 @@ const MyParkingSection = ({ myParking }: MyParkingSectionProps) => (
         <ul className='mt-4 space-y-4 text-sm leading-6 text-gray-700'>
             {myParking.map((spot) => (
                 <li key={spot.id}>
-                    <p>{spot.address}, {spot.city}</p>
-                    <p>{spot.type}</p>
+                    <p>Adress: {spot.address}, {spot.city}</p>
+                    <p>Typ: {spot.type}</p>
                     <p>Hyra: {formatNumber(spot.price)} kr/mån</p>
                 </li>
             ))}

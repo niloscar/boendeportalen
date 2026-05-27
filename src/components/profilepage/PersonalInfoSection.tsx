@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { UserIcon } from '@phosphor-icons/react';
+import { UserIcon, PaperclipIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 import { signOut } from '../../lib/supabase';
 
@@ -38,6 +38,8 @@ const PersonalInfoSection = ({
     const [emailError, setEmailError] = useState<string | null>(null);
     const [phoneError, setPhoneError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
+    const [avatarFileName, setAvatarFileName] = useState<string | null>(null);
+    const avatarInputRef = useRef<HTMLInputElement>(null);
 
     const startEditing = () => {
         setEmailValue(email ?? '');
@@ -127,15 +129,29 @@ const PersonalInfoSection = ({
                         )}
                     </div>
 
-                    <label className='flex flex-col gap-1 text-sm font-medium text-neutral-700'>
-                        <span>Profilbild</span>
+                    <div className='flex flex-col gap-1'>
+                        <span className='text-sm font-medium text-neutral-700'>Profilbild</span>
                         <input
+                            ref={avatarInputRef}
                             type='file'
                             accept='image/png,image/jpeg,image/webp'
-                            onChange={onAvatarUpload}
-                            className={inputClass}
+                            className='hidden'
+                            onChange={(e) => {
+                                setAvatarFileName(e.target.files?.[0]?.name ?? null);
+                                onAvatarUpload(e);
+                            }}
                         />
-                    </label>
+                        <button
+                            type='button'
+                            onClick={() => avatarInputRef.current?.click()}
+                            className='flex items-center gap-2 w-full rounded-xl border border-neutral-200 bg-neutral-100 px-3 py-2 hover:bg-neutral-200 transition-colors duration-200 cursor-pointer'
+                        >
+                            <PaperclipIcon size={16} className='shrink-0 text-neutral-500' />
+                            <span className={`truncate text-sm ${avatarFileName ? '' : 'text-neutral-400'}`}>
+                                {avatarFileName ?? 'Välj fil...'}
+                            </span>
+                        </button>
+                    </div>
 
                     <div className='flex gap-3'>
                         <Button type='submit' variant='primary' size='md' disabled={isSaving}>
@@ -155,9 +171,9 @@ const PersonalInfoSection = ({
             ) : (
                 <>
                     <div className='mt-5 space-y-1 text-sm leading-6 text-gray-700'>
-                        {name && <p>{name}</p>}
-                        {email && <p>{email}</p>}
-                        {phone && <p>{phone}</p>}
+                        {name && <p>Namn: {name}</p>}
+                        {email && <p>E-post: {email}</p>}
+                        {phone && <p>Telefon: {phone}</p>}
                         {!name && !email && !phone && (
                             <p className='text-gray-600'>
                                 Inga personuppgifter tillgängliga.
