@@ -90,7 +90,7 @@ const SearchApartment = () => {
             <h1 className="text-3xl md:text-5xl font-bold">Lediga lägenheter</h1>
             <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} filtersVisibility={filtersVisibility} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} setVisibility={setVisibility} />
             {loading ?
-                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full px-4">
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full">
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                     <Skeleton variant="rounded" className="w-full" height="502px" />
@@ -99,7 +99,7 @@ const SearchApartment = () => {
                 apartments.length < 1 ?
                     <div>Kunde inte hitta några lediga lägenheter</div>
                     :
-                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full px-4">
+                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full">
                         <ApartmentList variant="div" items={filteredApartments} />
                     </div>
             }
