@@ -44,6 +44,14 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
     }, [])
 
     const saveFeatures = useCallback(async () => {
+    console.table(features.map(feature => ({
+        id: feature.id,
+        name: feature.name,
+        feature_type_id: feature.feature_type_id,
+        type_slug: feature.type_slug,
+        is_active: feature.is_active
+    })))
+
         await updateFeatureStatuses(features)
     }, [features])
 

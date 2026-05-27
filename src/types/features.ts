@@ -38,3 +38,9 @@ export type WidgetProps = {
     children: ReactNode
     onExpand: () => void
 }
+
+export type FeatureStatusUpdate = {
+    id: number
+    feature_type_id: number
+    is_active: boolean
+}
