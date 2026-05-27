@@ -4,12 +4,9 @@ import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import ExpandedWidget from '../../components/admin/ExpandedWidget'
 import Widget from '../../components/admin/Widget'
 
-import Tenants from '../../components/admin/widgets/Tenants'
-
 import type { ComponentType } from 'react'
 
 const WIDGET_COMPONENTS = {
-    Tenants
 } satisfies Record<string, ComponentType>
 
 function getWidgetComponent(componentName: string | null): ComponentType | null {
