@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import type React from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import ApartmentList from '../components/searchApartmentPage/ApartmentList.tsx';
-import ApartmentFilter from '../components/searchApartmentPage/ApartmentFilter.tsx';
+import ApartmentList from '../components/searchapartment/ApartmentList.tsx';
+import ApartmentFilter from '../components/searchapartment/ApartmentFilter.tsx';
 import type { ApartmentData } from "../types/apartment.ts";
 import { getAvailableApartments } from '../api/apartmentApi.ts';
 

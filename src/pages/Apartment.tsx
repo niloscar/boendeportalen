@@ -1,9 +1,9 @@
 import { useLocation, Link } from 'react-router-dom';
-import ImageCarousel from '../components/searchApartmentPage/ImageCarousel.tsx';
+import ImageCarousel from '../components/searchapartment/ImageCarousel.tsx';
 import Button from '../components/ui/Button.tsx';
-import ApartmentList from '../components/searchApartmentPage/ApartmentList.tsx';
+import ApartmentList from '../components/searchapartment/ApartmentList.tsx';
 import type { ApartmentData, Detail } from '../types/apartment.ts';
-import ApartmentSignUp from '../components/searchApartmentPage/ApartmentSignUp.tsx';
+import ApartmentSignUp from '../components/searchapartment/ApartmentSignUp.tsx';
 import { useApartmentSignUp } from '../hooks/useApartmentSignUp.tsx';
 import { useSession } from '../hooks/useAuth.ts';
 
