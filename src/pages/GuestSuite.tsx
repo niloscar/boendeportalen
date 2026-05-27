@@ -11,6 +11,21 @@ export default function GuestSuite() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [bookings, setBookings] = useState<Booking[]>([]);
 
+    useEffect(() => {
+        async function load() {
+            const result = await fetchBookedSlots();
+
+            if (!result.success) {
+                setErrorMessage(result.error ?? "Ett oväntat fel inträffade");
+                return;
+            }
+
+            setBookings(result.data);
+        }
+
+        load();
+    }, []);
+
     const refreshBookings = useCallback(async () => {
         const result = await fetchBookedSlots();
 
@@ -22,13 +37,9 @@ export default function GuestSuite() {
         setBookings(result.data);
     }, []);
 
-    useEffect(() => {
-        refreshBookings();
-    }, [refreshBookings]);
-
     return (
         <div>
-            <div className="h-screen">
+            <div>
                 <div className="flex w-full flex-col items-center gap-6">
                     <h1 className="text-3xl md:text-5xl font-bold">Bokning av gästlägenheten</h1 >
                     <div className="mb-6 text-gray-600 text-center">

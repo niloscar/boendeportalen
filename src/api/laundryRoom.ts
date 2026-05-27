@@ -61,7 +61,7 @@ export async function fetchBookedSlots(): Promise<ApiResult<Booking[]>> {
 }
 
 //Delete booking from Supabase based on id
-export async function deleteLaundryRoomBooking(id: number): Promise<ApiResult<any>> {
+export async function deleteLaundryRoomBooking(id: number): Promise<ApiResult<void>> {
     try {
         const response = await apiConfig.delete("laundry_bookings", {
             params: { id: `eq.${id}` }

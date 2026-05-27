@@ -13,18 +13,6 @@ export default function Laundry() {
     const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
     const [bookings, setBookings] = useState<Booking[]>([]);
 
-    const refreshBookings = useCallback(async () => {
-        const result = await fetchBookedSlots();
-
-        if (!result.success) {
-            setErrorMessage(result.error ?? "Kunde inte hämta bokningar");
-            return;
-        }
-
-        // ✔ TS vet att data finns här
-        setBookings(result.data);
-    }, []);
-
     useEffect(() => {
         (async () => {
             const result = await fetchLaundrySlots();
@@ -34,14 +22,34 @@ export default function Laundry() {
                 return;
             }
 
-            // ✔ TS vet att data finns här
             setTimeslots(result.data);
         })();
     }, []);
 
+
+    const refreshBookings = useCallback(async () => {
+        const result = await fetchBookedSlots();
+
+        if (!result.success) {
+            setErrorMessage(result.error ?? "Kunde inte hämta bokningar");
+            return;
+        }
+
+        setBookings(result.data);
+    }, []);
+
     useEffect(() => {
-        refreshBookings(); // ✔ korrekt
-    }, [refreshBookings]);
+        (async () => {
+            const result = await fetchBookedSlots();
+
+            if (!result.success) {
+                setErrorMessage(result.error ?? "Kunde inte hämta bokningar");
+                return;
+            }
+
+            setBookings(result.data);
+        })();
+    }, []);
 
     return (
         <div>
