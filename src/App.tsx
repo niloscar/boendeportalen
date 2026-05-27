@@ -14,6 +14,7 @@ const SearchApartmentPage = lazy(() => import('./pages/SearchApartment'))
 const ApartmentPage = lazy(() => import('./pages/Apartment'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
 const Parking = lazy(() => import('./pages/Parking'))
+const ParkingDetails = lazy(() => import('./pages/ParkingDetails'))
 const LaundryRoomPage = lazy(() => import('./pages/LaundryRoom'))
 const GuestSuitePage = lazy(() => import('./pages/GuestSuite'))
 
@@ -37,7 +38,7 @@ function App() {
                     <Route path="/bostader" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
                     <Route path="/bostader/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
                     <Route path="/parkeringar" element={<LazyRoute><Parking /></LazyRoute>} />
-                    <Route path="/parkeringar/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
+                    <Route path="/parkeringar/:parkingId" element={<LazyRoute><ParkingDetails /></LazyRoute>} />
                     <Route path="/admin/*" element={<AdminRouteWrapper><LazyRoute><AdminPage /></LazyRoute></AdminRouteWrapper>} />
                     <Route path="/" element={<HomePage />} />
                 </Routes>
