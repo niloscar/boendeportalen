@@ -23,10 +23,10 @@ const ApartmentOverviewCard = ({
             <div className='flex flex-col gap-6'>
                 <div className='flex items-start gap-4'>
                     <div
-                        className='mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100'
+                        className='mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500'
                         aria-hidden='true'
                     >
-                        <HouseLineIcon size={20} className='text-neutral-500' />
+                        <HouseLineIcon size={20} weight='fill' className='text-white' />
                     </div>
                     <div>
                         <h2 className='text-lg font-semibold'>Bostadsinformation</h2>

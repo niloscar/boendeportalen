@@ -10,10 +10,10 @@ const AppliedParkingSection = ({ appliedParking }: AppliedParkingSectionProps) =
     <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
         <div className='flex items-start gap-4'>
             <div
-                className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100'
+                className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500'
                 aria-hidden='true'
             >
-                <CarIcon size={20} className='text-neutral-500' />
+                <CarIcon size={20} weight='fill' className='text-white' />
             </div>
             <div className='flex-1'>
                 <h2 className='text-lg font-semibold'>Sökta parkeringsplatser</h2>
@@ -22,7 +22,7 @@ const AppliedParkingSection = ({ appliedParking }: AppliedParkingSectionProps) =
                     {appliedParking.map((item) => (
                         <li
                             key={item.applicationId}
-                            className='rounded-2xl border border-neutral-200 bg-neutral-100 px-4 py-3 text-sm'
+                            className='border-l-2 border-green-500 pl-3 py-1 text-sm'
                         >
                             <span className='block font-medium text-neutral-900'>
                                 {item.parking.address}, {item.parking.city}

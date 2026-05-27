@@ -74,7 +74,7 @@ const PersonalInfoSection = ({
         <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
             <div className='flex items-start gap-4'>
                 <div
-                    className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100'
+                    className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500'
                     aria-hidden='true'
                 >
                     {avatarUrl ? (
@@ -84,7 +84,7 @@ const PersonalInfoSection = ({
                             className='h-10 w-10 rounded-full object-cover'
                         />
                     ) : (
-                        <UserIcon size={20} className='text-neutral-500' />
+                        <UserIcon size={20} weight='fill' className='text-white' />
                     )}
                 </div>
 
