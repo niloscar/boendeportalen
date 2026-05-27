@@ -21,7 +21,7 @@ export default function ParkingList({ currentSpots, totalPages, currentPage, onP
 
     return (
         <>
-            <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 px-4">
                 {currentSpots.map((spot) => (<ParkingCard key={spot.id} spot={spot} />))}
             </div>
 

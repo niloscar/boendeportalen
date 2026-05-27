@@ -80,7 +80,9 @@ const SearchApartment = () => {
     }
 
     if (error) {
-        return (<div>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </div>)
+        return (<div className="w-full flex flex-col items-center gap-6">
+            <p>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </p>
+        </div>)
     }
 
     return (
@@ -88,7 +90,7 @@ const SearchApartment = () => {
             <h1 className="text-3xl md:text-5xl font-bold">Lediga lägenheter</h1>
             <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} filtersVisibility={filtersVisibility} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} setVisibility={setVisibility} />
             {loading ?
-                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start w-full">
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full px-4">
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                     <Skeleton variant="rounded" className="w-full" height="502px" />
@@ -97,7 +99,7 @@ const SearchApartment = () => {
                 apartments.length < 1 ?
                     <div>Kunde inte hitta några lediga lägenheter</div>
                     :
-                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start w-full">
+                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full px-4">
                         <ApartmentList variant="div" items={filteredApartments} />
                     </div>
             }
