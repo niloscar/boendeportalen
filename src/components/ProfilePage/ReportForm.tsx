@@ -1,4 +1,4 @@
-import React, { useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import { PaperclipIcon, CaretDownIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
@@ -43,7 +43,20 @@ export const ReportForm = ({
 
     const [errors, setErrors] = useState<FormErrors>({});
     const [fileName, setFileName] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const clearError = (field: keyof FormErrors) => {
         if (errors[field]) {
@@ -100,25 +113,43 @@ export const ReportForm = ({
                 <label className="text-sm font-medium text-gray-700" htmlFor={categoryId}>
                     Ämnesrad *
                 </label>
-                <div className="relative">
-                    <select
+                <div className="relative" ref={dropdownRef}>
+                    <input type="hidden" name="category" value={selectedCategory} />
+                    <button
                         id={categoryId}
-                        name="category"
-                        className={`${inputBase} appearance-none pr-10 ${errors.category ? inputError : inputValid}`}
-                        onChange={() => clearError('category')}
+                        type="button"
+                        onClick={() => { setDropdownOpen((v) => !v); clearError('category'); }}
+                        className={`${inputBase} flex items-center justify-between ${errors.category ? inputError : inputValid}`}
+                        aria-haspopup="listbox"
+                        aria-expanded={dropdownOpen}
                     >
-                        <option value="">Välj ett ämne...</option>
-                        {categories.map((category) => (
-                            <option key={category} value={category}>
-                                {category}
-                            </option>
-                        ))}
-                    </select>
-                    <CaretDownIcon
-                        size={16}
-                        className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500"
-                        aria-hidden="true"
-                    />
+                        <span className={selectedCategory ? '' : 'text-neutral-400'}>
+                            {selectedCategory || 'Välj ett ämne...'}
+                        </span>
+                        <CaretDownIcon
+                            size={16}
+                            className={`shrink-0 text-neutral-500 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
+                            aria-hidden="true"
+                        />
+                    </button>
+                    {dropdownOpen && (
+                        <ul
+                            role="listbox"
+                            className="absolute z-10 mt-1 w-full rounded-2xl border border-neutral-200 bg-white py-1 shadow-md overflow-hidden"
+                        >
+                            {categories.map((cat) => (
+                                <li key={cat} role="option" aria-selected={selectedCategory === cat}>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setSelectedCategory(cat); setDropdownOpen(false); clearError('category'); }}
+                                        className={`w-full px-4 py-2.5 text-left text-sm transition-colors hover:bg-neutral-100 ${selectedCategory === cat ? 'font-medium text-green-600' : 'text-neutral-900'}`}
+                                    >
+                                        {cat}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
                 {errors.category && (
                     <p className="text-xs text-red-500" role="alert">{errors.category}</p>
