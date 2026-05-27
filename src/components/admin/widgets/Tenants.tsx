@@ -131,7 +131,7 @@ export default function AdminTenants() {
                 <input
                     id="resident-search"
                     name="search"
-                    className="w-full rounded-2xl bg-neutral-200 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full rounded-2xl bg-white border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                     type="search"
                     placeholder="Sök boende..."
                     value={searchTerm}
@@ -159,7 +159,7 @@ export default function AdminTenants() {
                                         return (
                                             <th 
                                                 key={key}
-                                                className="text-left pb-3"
+                                                className="text-left pb-3 not-last:pr-1"
                                             >
                                                 <SortButton
                                                     onClick={() => handleSortChange(sortField)}

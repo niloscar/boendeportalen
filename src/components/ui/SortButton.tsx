@@ -12,8 +12,8 @@ const SortButton = ({ onClick, children, value, isActive }: { onClick: () => voi
             value={value}
         >
             {children} 
-            <span className="text-xs inline-flex w-4 h-4">
-                {isActive && (direction === 'asc' ? <CaretUpIcon size={16} /> : <CaretDownIcon size={16} />)}
+            <span className="text-xs inline-flex w-3 h-3">
+                {isActive && (direction === 'asc' ? <CaretUpIcon /> : <CaretDownIcon />)}
             </span>
         </button>
     );
