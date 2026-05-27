@@ -1,14 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CaretRightIcon } from '@phosphor-icons/react'
-
-type Crumb = {
-    title: string
-    href?: string
-}
-
-type BreadcrumbsProps = {
-    crumbs: Crumb[]
-}
+import type { BreadcrumbsProps } from '../../types/ui'
 
 export default function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
     return (
