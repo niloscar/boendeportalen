@@ -90,7 +90,7 @@ export default function ParkingDetails() {
             </div>
 
             <section className="grid gap-8 lg:grid-cols-[1.4fr_0.9fr]">
-                <article className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm">
+                <article className="overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-md">
                     <img src={spot.imageUrl} alt={`${spot.type} vid ${spot.address}`} className="h-72 w-full object-cover" />
 
                     <div className="flex flex-col gap-6 p-6 md:p-8">
