@@ -27,15 +27,15 @@ const Apartment = () => {
             getApartmentStatus();
         }
     }, [session?.access_token, state]);
-    
+
     if (!apartment || !details) {
         return (
-            <div>
-                <Link to="/bostader">
-                    <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
-                </Link>
-                <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>
-            </div>
+            <section className="flex flex-col items-center gap-6 p-6 w-full">
+                    <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>
+                    <Link to="/bostader">
+                        <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
+                    </Link>
+            </section>
         )
     }
 
@@ -46,7 +46,7 @@ const Apartment = () => {
                 {session &&
                     <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} />}
             </div>
-            <ImageCarousel images={apartment.images} size="large" rounded={true}/>
+            <ImageCarousel images={apartment.images} size="large" rounded={true} />
             <h2 className="text-2xl">Om bostaden</h2>
             <p>{apartment.description}</p>
             <h2 className="text-2xl">Visning</h2>
