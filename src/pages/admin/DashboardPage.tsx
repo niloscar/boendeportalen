@@ -38,7 +38,7 @@ export default function DashboardPage() {
     console.log('Aktiva widgets:', widgets.map(widget => widget.name))
 
     return (
-        <main className="py-6">
+        <main>
             <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 960: 2 }}>
                 <Masonry style={{ gap: 24 }} itemStyle={{ gap: 24 }}>
                     {widgets.map((widget) => {

@@ -1,19 +1,23 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FeaturesContext } from './featuresContext'
-import type { ReactNode } from 'react'
-import type { Feature } from '../types/admin'
+import { useAccessControl } from '../hooks/useAccessControl'
 import { getFeatures, updateFeatureStatuses } from '../api/settingsApi'
+import { canShowFeature as canShowFeatureForLevel } from '../utils/featureAccess'
+
+import type { ReactNode } from 'react'
+import type { Feature } from '../types/features'
 
 export function FeaturesProvider({ children }: { children: ReactNode }) {
     const [features, setFeatures] = useState<Feature[]>([])
     const [loading, setLoading] = useState(true)
-    const [loadError, setLoadError] = useState('')
+    const [loadError, setLoadError] = useState<string | null>(null)
+    const { userLevel } = useAccessControl()
 
     useEffect(() => {
         const fetchFeatures = async () => {
             try {
                 setLoading(true)
-                setLoadError('')
+                setLoadError(null)
                 const data = await getFeatures();
                 setFeatures(data)
             } catch (error: unknown) {
@@ -29,10 +33,10 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
         fetchFeatures()
     }, [])
 
-    const toggleFeature = useCallback((featureSlug: string, isActive: boolean) => {
+    const toggleFeature = useCallback((featureId: number, featureTypeId: number, isActive: boolean) => {
         setFeatures((prevFeatures) =>
             prevFeatures.map((feature) =>
-                feature.slug === featureSlug
+                feature.id === featureId && feature.feature_type_id === featureTypeId
                     ? { ...feature, is_active: isActive }
                     : feature
             )
@@ -43,14 +47,55 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
         await updateFeatureStatuses(features)
     }, [features])
 
+    const visibleFeatures = useMemo(() => {
+        const featuresById = new Map<number, Feature>()
+
+        features
+            .filter(feature => canShowFeatureForLevel(feature, userLevel))
+            .sort((a, b) => {
+                if (a.user_level !== b.user_level) {
+                    return a.user_level - b.user_level
+                }
+
+                return a.name.localeCompare(b.name, 'sv', { sensitivity: 'base' })
+            })
+            .forEach(feature => {
+                if (!featuresById.has(feature.id)) {
+                    featuresById.set(feature.id, feature)
+                }
+            })
+
+        return Array.from(featuresById.values())
+    }, [features, userLevel])
+
+    const isFeatureEnabled = useCallback((slug: string): boolean => {
+        return visibleFeatures.some(feature => feature.slug === slug)
+    }, [visibleFeatures])
+
+    const canShowFeature = useCallback((feature: Feature): boolean => {
+        return canShowFeatureForLevel(feature, userLevel)
+    }, [userLevel])
+
     const value = useMemo(() => ({
         features,
+        visibleFeatures,
         loading,
         loadError,
         setFeatures,
         toggleFeature,
-        saveFeatures
-    }), [features, loading, loadError, toggleFeature, saveFeatures])
+        saveFeatures,
+        isFeatureEnabled,
+        canShowFeature
+    }), [
+        features,
+        visibleFeatures,
+        loading,
+        loadError,
+        toggleFeature,
+        saveFeatures,
+        isFeatureEnabled,
+        canShowFeature
+    ])
 
     return (
         <FeaturesContext.Provider value={value}>
