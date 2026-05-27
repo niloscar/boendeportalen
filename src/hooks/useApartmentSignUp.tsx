@@ -11,7 +11,7 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
     
     useEffect(() => {
         const getApartmentStatus = async () => {
-        if (loading) return;
+    
         if (apartment) {
             try {
                 setLoading(true);
@@ -27,11 +27,11 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
             }
         }
     }
-    
+
     getApartmentStatus();
-    },[])
+    },[apartment, activeUntil])
+
     const signUp = async () => {
-        if (loading) return;
         if (apartment) {
             try {
                 setLoading(true);
@@ -50,7 +50,6 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
     }
 
     const deleteSignUp = async () => {
-        if (loading) return;
         if (apartment) {
             try {
                 setLoading(true);
