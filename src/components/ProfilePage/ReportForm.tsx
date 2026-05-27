@@ -1,4 +1,5 @@
-import React, { useId, useState } from 'react';
+import React, { useId, useRef, useState } from 'react';
+import { PaperclipIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
 export interface ReportFormData {
@@ -41,6 +42,8 @@ export const ReportForm = ({
     const attachmentId = `${idPrefix}-attachment`;
 
     const [errors, setErrors] = useState<FormErrors>({});
+    const [fileName, setFileName] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const clearError = (field: keyof FormErrors) => {
         if (errors[field]) {
@@ -87,7 +90,7 @@ export const ReportForm = ({
         });
     };
 
-    const inputBase = 'w-full rounded-2xl bg-neutral-200 p-6 focus:outline-none focus:ring-2';
+    const inputBase = 'w-full rounded-2xl bg-neutral-200 p-4 focus:outline-none focus:ring-2';
     const inputValid = 'focus:ring-green-500';
     const inputError = 'ring-2 ring-red-400 focus:ring-red-400';
 
@@ -153,14 +156,14 @@ export const ReportForm = ({
                 <div className="border-t border-neutral-200 pt-6">
                     <div className="flex flex-col gap-2 mb-4">
                         <label className="text-sm font-medium text-gray-700" htmlFor={extraLocationId}>
-                            Annan lägesbeskrivning
+                            Övriga upplysningar
                         </label>
                         <textarea
                             id={extraLocationId}
                             name="extraLocation"
                             className={`${inputBase} ${inputValid}`}
                             rows={3}
-                            placeholder="Annan lägesbeskrivning (valfritt)"
+                            placeholder="Övriga upplysningar (valfritt)"
                         />
                     </div>
 
@@ -181,15 +184,23 @@ export const ReportForm = ({
                     </fieldset>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium text-gray-700" htmlFor={attachmentId}>
-                            Bifoga fil
-                        </label>
+                        <span className="text-sm font-medium text-gray-700">Bifoga fil</span>
                         <input
+                            ref={fileInputRef}
                             id={attachmentId}
                             name="attachment"
                             type="file"
-                            className="w-full rounded-2xl bg-white p-2 border border-neutral-300 cursor-pointer"
+                            className="hidden"
+                            onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
                         />
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="flex items-center gap-2 w-full rounded-2xl bg-neutral-200 p-4 hover:bg-neutral-300 transition-colors duration-200 cursor-pointer"
+                        >
+                            <PaperclipIcon size={16} className="shrink-0 text-neutral-500" />
+                            <span className={`truncate ${fileName ? '' : 'text-neutral-400'}`}>{fileName ?? 'Välj fil...'}</span>
+                        </button>
                     </div>
                 </div>
             )}
