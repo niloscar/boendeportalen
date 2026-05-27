@@ -51,6 +51,7 @@ export type ApartmentProp = {
 export type ApartmentImagesProp = {
     images: ApartmentImages[],
     size: string,
+    rounded: boolean,
 }
 
 export type ListProp = {

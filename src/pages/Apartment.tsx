@@ -46,7 +46,7 @@ const Apartment = () => {
                 {session &&
                     <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} />}
             </div>
-            <ImageCarousel images={apartment.images} size="large" />
+            <ImageCarousel images={apartment.images} size="large" rounded={true}/>
             <h2 className="text-2xl">Om bostaden</h2>
             <p>{apartment.description}</p>
             <h2 className="text-2xl">Visning</h2>
