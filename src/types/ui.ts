@@ -5,7 +5,7 @@ export type ConfirmDialogProps = {
     isProcessing: boolean;
     onConfirm: () => void;
     onCancel: () => void;
-    confirmColor: "green" | "red";
+    confirmColor: "primary" | "red";
 };
 
 export type AlertDialogProps = {
@@ -13,7 +13,7 @@ export type AlertDialogProps = {
     title?: string;
     message?: React.ReactNode;
     onConfirm: () => void;
-    confirmColor: "green" | "red";
+    confirmColor: "primary" | "red";
 };
 
 export type FormSwitchProps = {

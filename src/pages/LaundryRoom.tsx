@@ -4,6 +4,7 @@ import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundryRoom";
 import type { Timeslot, Booking } from "../types/booking";
 import LaundryRoomInfo from "../components/bookings/LaundryRoomInfo";
 import AlertDialog from "../components/ui/AlertDialog";
+import { WashingMachineIcon } from "@phosphor-icons/react";
 
 export default function Laundry() {
 
@@ -73,10 +74,17 @@ export default function Laundry() {
 
             <AlertDialog
                 open={openAlertDialog}
-                title="🧺 Tvättstuga - Bokningsinformation"
+                title={
+                    <div className="flex items-center gap-2">
+                        <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500' aria-hidden='true'>
+                            <WashingMachineIcon size={20} weight='fill' className='text-white' />
+                        </div>
+                        <span>Tvättstuga - Bokningsinformation</span>
+                    </div>
+                }
                 message={<LaundryRoomInfo />}
                 onConfirm={() => { setOpenAlertDialog(false); }}
-                confirmColor="green"
+                confirmColor="primary"
             />
         </div>
     );

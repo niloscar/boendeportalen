@@ -179,7 +179,7 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
                     setOpenBookDialog(false);
                     setNewBooking(null);
                 }}
-                confirmColor="green"
+                confirmColor="primary"
             />
 
             <AlertDialog
@@ -187,7 +187,7 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
                 title="Information"
                 message={alertDialogMessage}
                 onConfirm={handleAlertConfirm}
-                confirmColor="green"
+                confirmColor="primary"
             />
         </div>
     );

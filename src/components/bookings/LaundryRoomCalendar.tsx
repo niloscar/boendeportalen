@@ -128,7 +128,7 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
                     setOpenBookDialog(false);
                     setNewBooking(null);
                 }}
-                confirmColor="green"
+                confirmColor="primary"
             />
         </div>
     );

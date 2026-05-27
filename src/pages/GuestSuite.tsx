@@ -4,6 +4,7 @@ import { fetchBookedSlots } from "../api/guestSuite";
 import type { Booking } from "../types/booking";
 import AlertDialog from "../components/ui/AlertDialog";
 import GuestSuiteInfo from "../components/bookings/GuestSuiteInfo";
+import { BuildingApartmentIcon } from "@phosphor-icons/react";
 
 export default function GuestSuite() {
     const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
@@ -50,10 +51,16 @@ export default function GuestSuite() {
 
             <AlertDialog
                 open={openAlertDialog}
-                title="🏡 Gästlägenhet - Bokningsinformation"
+                title=
+                {<div className="flex items-center gap-2">
+                    <div className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500' aria-hidden='true'>
+                        <BuildingApartmentIcon size={20} weight='fill' className='text-white' />
+                    </div>
+                    <span>Gästlägenhet - Bokningsinformation</span>
+                </div>}
                 message={<GuestSuiteInfo />}
                 onConfirm={() => { setOpenAlertDialog(false); }}
-                confirmColor="green"
+                confirmColor="primary"
             />
         </div >
     );

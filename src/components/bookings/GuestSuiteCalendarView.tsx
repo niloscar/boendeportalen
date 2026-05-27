@@ -15,6 +15,7 @@ export default function GuestSuiteCalendarView({
     handleViewDidMount
 }: GuestSuiteCalendarPropsBig) {
     return (
+        <div>
         <FullCalendar
             plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
             initialView="dayGridMonth"
@@ -54,11 +55,13 @@ export default function GuestSuiteCalendarView({
             locale={svLocale}
             allDaySlot={true}
             height="auto"
+            expandRows={true}
             validRange={{
                 start: today.toISOString().split("T")[0],
                 end: calMaxDate.toISOString().split("T")[0]
             }}
             viewDidMount={handleViewDidMount}
         />
+        </div>
     );
 }
