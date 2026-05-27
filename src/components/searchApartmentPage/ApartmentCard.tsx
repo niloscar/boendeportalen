@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import type { ApartmentProp } from "../../types/apartment.ts";
 import ImageCarousel from './ImageCarousel.tsx';
 import ApartmentList from './ApartmentList.tsx';
-import Button from '../ui/Button.tsx';
 import { formatNumber } from '../../utils/calc.ts';
 import { ArrowRightIcon } from '@phosphor-icons/react'
 

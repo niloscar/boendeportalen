@@ -1,5 +1,4 @@
 import { useLocation, Link } from 'react-router-dom';
-import { useEffect } from 'react';
 import ImageCarousel from '../components/searchApartmentPage/ImageCarousel.tsx';
 import Button from '../components/ui/Button.tsx';
 import ApartmentList from '../components/searchApartmentPage/ApartmentList.tsx';
@@ -16,15 +15,10 @@ const Apartment = () => {
     const {
         signUp,
         deleteSignUp,
-        getApartmentStatus,
         loading,
         error,
         applied,
     } = useApartmentSignUp({ apartment });
-
-    useEffect(() => {
-        getApartmentStatus();
-    }, []);
 
     if (!apartment || !details) {
         return (
@@ -38,7 +32,7 @@ const Apartment = () => {
     }
 
     return (
-        <section className="flex flex-col gap-6 p-6">
+        <section className="flex flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8">
             <h1 className="text-5xl">{apartment.street}</h1>
             <ImageCarousel images={apartment.images} size="large" rounded={true} />
             <h2 className="text-2xl">Om bostaden</h2>
@@ -46,7 +40,7 @@ const Apartment = () => {
             <h2 className="text-2xl">Visning</h2>
             <p>Visning sker två veckor innan sista ansökningsdag. Du kommer att få en kallelse. Vänligen notera att visningstiden ej går att boka om. Om du inte kan delta i person går det bra att skicka en ersättare med giltlig legitimation. </p>
             <h2 className="text-2xl">Detaljer</h2>
-            <ul className="grid md:grid-cols-2 gap-x-6 md:gap-y-1">
+            <ul className="grid md:grid-cols-2 md:gap-y-1">
                 <ApartmentList variant="ul" items={details} />
             </ul>
             {session ?

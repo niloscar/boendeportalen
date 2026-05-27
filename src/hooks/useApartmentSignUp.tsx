@@ -1,17 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Temporal } from "@js-temporal/polyfill";
 import type { ApartmentProp, SignedUpData } from '../types/apartment.ts';
 import { createApartmentSignUp, getApartmentSignupStatus, deleteApartmentSignUp } from '../api/apartmentApi.ts';
-import { useSession } from './useAuth.ts';
 
 export function useApartmentSignUp({ apartment }: ApartmentProp) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [applied, setApplied] = useState<SignedUpData[]>([]);
     const activeUntil = apartment && Temporal.PlainDate.from(apartment.end_date).add({ weeks: 2 }).toString();
-    const session = useSession();
-
-    const getApartmentStatus = useCallback(async () => {
+    
+    useEffect(() => {
+        const getApartmentStatus = async () => {
         if (loading) return;
         if (apartment) {
             try {
@@ -27,8 +26,10 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
                 setLoading(false);
             }
         }
-    }, [loading, apartment, activeUntil]);
-
+    }
+    
+    getApartmentStatus();
+    },[])
     const signUp = async () => {
         if (loading) return;
         if (apartment) {
@@ -36,7 +37,8 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
                 setLoading(true);
                 setError('');
                 await createApartmentSignUp(apartment.id, activeUntil);
-                getApartmentStatus();
+                const data = await getApartmentSignupStatus(apartment.id, activeUntil);
+                setApplied(data);
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     setError(error.message);
@@ -54,7 +56,8 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
                 setLoading(true);
                 setError('');
                 await deleteApartmentSignUp(applied[0].id);
-                getApartmentStatus();
+                const data = await getApartmentSignupStatus(apartment.id, activeUntil);
+                setApplied(data);
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     setError(error.message);
@@ -68,7 +71,6 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
     return {
         signUp,
         deleteSignUp,
-        getApartmentStatus,
         loading,
         error,
         applied,
