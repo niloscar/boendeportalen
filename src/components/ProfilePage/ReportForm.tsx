@@ -166,15 +166,15 @@ export const ReportForm = ({
 
                     <fieldset className="flex flex-col gap-3 mb-4">
                         <legend className="text-sm font-medium text-gray-700 mb-1">Övrigt</legend>
-                        <label className="flex items-center gap-3 cursor-pointer">
+                        <label className="flex items-center gap-3">
                             <input type="checkbox" name="allowMasterKey" className="h-4 w-4" />
                             <span className="text-sm">Får använda huvudnyckel</span>
                         </label>
-                        <label className="flex items-center gap-3 cursor-pointer">
+                        <label className="flex items-center gap-3">
                             <input type="checkbox" name="hasPets" className="h-4 w-4" />
                             <span className="text-sm">Hund/Katt</span>
                         </label>
-                        <label className="flex items-center gap-3 cursor-pointer">
+                        <label className="flex items-center gap-3">
                             <input type="checkbox" name="contactFirst" className="h-4 w-4" />
                             <span className="text-sm">Kontakta mig först</span>
                         </label>
@@ -188,7 +188,7 @@ export const ReportForm = ({
                             id={attachmentId}
                             name="attachment"
                             type="file"
-                            className="w-full rounded-2xl bg-white p-2 border border-neutral-300"
+                            className="w-full rounded-2xl bg-white p-2 border border-neutral-300 cursor-pointer"
                         />
                     </div>
                 </div>
