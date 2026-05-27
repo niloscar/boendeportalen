@@ -27,7 +27,7 @@ function renderField(field: FilterBoxField) {
                     <select
                         value={field.value}
                         onChange={(event) => field.onChange(event.target.value)}
-                        className="w-full appearance-none overflow-hidden whitespace-nowrap text-ellipsis px-3 py-2.5 pr-10 border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
+                        className="w-full appearance-none overflow-hidden whitespace-nowrap text-ellipsis px-3 py-2 pr-10 border border-neutral-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
                         aria-label={field.ariaLabel ?? field.label}
                     >
                         {field.options.map((option) => (
