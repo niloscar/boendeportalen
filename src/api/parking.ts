@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase'
-import type { ParkingSpot, ParkingSpotFilters, ParkingSpotInput, ParkingSpotInsert, ParkingSpotRow, ParkingSpotUpdate, } from '../types/parking'
+import type { ParkingApplication, ParkingApplicationRow, ParkingSpot, ParkingSpotFilters, ParkingSpotInput, ParkingSpotInsert, ParkingSpotRow, ParkingSpotUpdate, } from '../types/parking'
 
-const parkingSpotSelect = 'id, address, city, postal_code, spot_type, price, available_from, renter, application, created_at, updated_at'
+const parkingSpotSelect = 'id, address, city, postal_code, spot_type, price, available_from, renter, application, image_url, description, created_at, updated_at'
 
 const mapRowToParkingSpot = (row: ParkingSpotRow): ParkingSpot => ({
     id: row.id,
@@ -13,6 +13,15 @@ const mapRowToParkingSpot = (row: ParkingSpotRow): ParkingSpot => ({
     availableFrom: row.available_from,
     renter: row.renter,
     application: row.application,
+    imageUrl: row.image_url,
+    description: row.description,
+})
+
+const mapRowToParkingApplication = (row: ParkingApplicationRow): ParkingApplication => ({
+    id: row.id,
+    signUpDate: row.sign_up_date,
+    parkingId: row.parking_id,
+    userId: row.user_id,
 })
 
 export async function fetchParkingSpots(filters: ParkingSpotFilters = {}) {
@@ -71,6 +80,8 @@ export async function createParkingSpot(input: ParkingSpotInput) {
         available_from: input.availableFrom,
         renter: input.renter ?? null,
         application: input.application ?? true,
+        image_url: input.imageUrl ?? 'https://klimatkommunerna.se/wp-content/uploads/2019/09/parking-5120x3413.jpg',
+        description: input.description ?? null,
     }
 
     const { data, error } = await supabase
@@ -94,6 +105,8 @@ export async function updateParkingSpot(id: number, input: Partial<ParkingSpotIn
         ...(input.availableFrom !== undefined ? { available_from: input.availableFrom } : {}),
         ...(input.renter !== undefined ? { renter: input.renter } : {}),
         ...(input.application !== undefined ? { application: input.application } : {}),
+        ...(input.imageUrl !== undefined ? { image_url: input.imageUrl } : {}),
+        ...(input.description !== undefined ? { description: input.description } : {}),
     }
 
     const { data, error } = await supabase
@@ -118,4 +131,41 @@ export async function deleteParkingSpot(id: number) {
 
 export async function setParkingSpotRenter(id: number, renterId: string | null) {
     return updateParkingSpot(id, { renter: renterId })
+}
+
+export async function fetchParkingApplicationByUserAndParking(parkingId: number, userId: string) {
+    const { data, error } = await supabase
+        .from('parking_applications')
+        .select('id, sign_up_date, parking_id, user_id')
+        .eq('parking_id', parkingId)
+        .eq('user_id', userId)
+        .maybeSingle()
+
+    if (error) throw error
+
+    return data ? mapRowToParkingApplication(data as ParkingApplicationRow) : null
+}
+
+export async function createParkingApplication(parkingId: number, userId: string) {
+    const { data, error } = await supabase
+        .from('parking_applications')
+        .insert({ parking_id: parkingId, user_id: userId })
+        .select('id, sign_up_date, parking_id, user_id')
+        .single()
+
+    if (error) throw error
+
+    return mapRowToParkingApplication(data as ParkingApplicationRow)
+}
+
+export async function deleteParkingApplication(parkingId: number, userId: string) {
+    const { error } = await supabase
+        .from('parking_applications')
+        .delete()
+        .eq('parking_id', parkingId)
+        .eq('user_id', userId)
+
+    if (error) throw error
+
+    return { success: true }
 }
