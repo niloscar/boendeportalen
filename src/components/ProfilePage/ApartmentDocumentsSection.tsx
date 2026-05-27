@@ -40,20 +40,20 @@ const ApartmentDocumentsSection = ({
 
     return (
         <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
-            <div className='flex items-start gap-4'>
+            <div className='flex items-center gap-4'>
                 <div
                     className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-500'
                     aria-hidden='true'
                 >
                     <InfoIcon size={20} weight='fill' className='text-white' />
                 </div>
-                <div className='flex-1'>
-                    <h2 className='text-lg font-semibold'>Ta hand om din lägenhet</h2>
-                    <p className='mt-3 max-w-2xl text-sm leading-6 text-gray-600'>
-                        Nyttiga dokument om hur du tar hand om din lägenhet på bästa sätt
-                    </p>
+                <h2 className='text-lg font-semibold'>Ta hand om din lägenhet</h2>
+            </div>
+            <p className='mt-3 max-w-2xl text-sm leading-6 text-gray-600'>
+                Nyttiga dokument om hur du tar hand om din lägenhet på bästa sätt
+            </p>
 
-                    {grouped.length > 0 ? (
+            {grouped.length > 0 ? (
                         <div className='mt-6 space-y-6 sm:columns-2 sm:gap-6 sm:space-y-0'>
                             {grouped.map(([key, docs]) => (
                                 <div key={key} className='mb-6 break-inside-avoid flex flex-col gap-2'>
@@ -88,9 +88,7 @@ const ApartmentDocumentsSection = ({
                         </div>
                     ) : (
                         <p className='mt-6 text-sm text-gray-600'>Inga dokument uppladdade ännu.</p>
-                    )}
-                </div>
-            </div>
+            )}
         </section>
     );
 };
