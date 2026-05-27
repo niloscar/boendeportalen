@@ -3,6 +3,7 @@ import type { ApartmentProp } from "../../types/apartment.ts";
 import ImageCarousel from './ImageCarousel.tsx';
 import ApartmentList from './ApartmentList.tsx';
 import Button from '../ui/Button.tsx';
+import { formatNumber } from '../../utils/calc.ts';
 
 const ApartmentCard = ({ apartment }: ApartmentProp) => {
     const apartmentArray = apartment && Object.values(apartment);
@@ -22,7 +23,7 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
         {
             id: crypto.randomUUID(),
             title: "Hyra",
-            content: apartmentArray[9]
+            content: `${formatNumber(apartmentArray[9])} kr/mån`
         },
         {
             id: crypto.randomUUID(),
