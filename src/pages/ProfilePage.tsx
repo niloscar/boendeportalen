@@ -6,6 +6,8 @@ import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';
 import ApartmentOverviewCard from '../components/ProfilePage/ApartmentOverviewCard';
 import AppliedApartmentsSection from '../components/ProfilePage/AppliedApartmentsSection';
+import MyParkingSection from '../components/ProfilePage/MyParkingSection';
+import AppliedParkingSection from '../components/ProfilePage/AppliedParkingSection';
 import ApartmentDocumentsSection from '../components/ProfilePage/ApartmentDocumentsSection';
 import PersonalInfoSection from '../components/ProfilePage/PersonalInfoSection';
 import ProfileFormsSection from '../components/ProfilePage/ProfileFormsSection';
@@ -43,6 +45,8 @@ const ProfilePage = () => {
         manualDocuments,
         floorPlanDocument,
         appliedApartments,
+        myParking,
+        appliedParking,
     } = useProfileData(userId, loading);
 
     // Ref used to scroll the page back to top when a form subview opens
@@ -239,24 +243,30 @@ const ProfilePage = () => {
                             onSave={handleProfileSave}
                             onAvatarUpload={handleAvatarUpload}
                         />
+                        {contract && (
+                            <ApartmentOverviewCard
+                                apartmentInfo={apartmentInfo}
+                                onErrorReport={() => openForm('error')}
+                                onServiceRequest={() => openForm('service')}
+                                onOpenContract={openContract}
+                                onOpenFloorPlan={openFloorPlan}
+                                imageSrc={profilePageImage}
+                            />
+                        )}
+                        {myParking.length > 0 && (
+                            <MyParkingSection myParking={myParking} />
+                        )}
+                        {appliedParking.length > 0 && (
+                            <AppliedParkingSection appliedParking={appliedParking} />
+                        )}
                         {appliedApartments.length > 0 && (
                             <AppliedApartmentsSection appliedApartments={appliedApartments} />
                         )}
                         {contract && (
-                            <>
-                                <ApartmentOverviewCard
-                                    apartmentInfo={apartmentInfo}
-                                    onErrorReport={() => openForm('error')}
-                                    onServiceRequest={() => openForm('service')}
-                                    onOpenContract={openContract}
-                                    onOpenFloorPlan={openFloorPlan}
-                                    imageSrc={profilePageImage}
-                                />
-                                <ApartmentDocumentsSection
-                                    documents={manualDocuments}
-                                    documentUrls={documentUrls}
-                                />
-                            </>
+                            <ApartmentDocumentsSection
+                                documents={manualDocuments}
+                                documentUrls={documentUrls}
+                            />
                         )}
                     </>
                 )}

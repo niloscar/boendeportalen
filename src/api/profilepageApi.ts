@@ -253,9 +253,25 @@ export const getContractSignedUrl = async (filePath: string | null): Promise<str
     return data.signedUrl;
 };
 
+export type ParkingSpotSummary = {
+    id: number;
+    address: string;
+    city: string;
+    postalCode: string;
+    type: string;
+    price: number;
+};
+
+export type AppliedParkingSummary = {
+    applicationId: string;
+    signUpDate: string;
+    parking: ParkingSpotSummary;
+};
+
 export type AppliedApartmentSummary = {
     signUpId: number;
     endDate: string;
+    rent: number | null;
     apartment: ApartmentSummary;
 };
 
@@ -280,13 +296,98 @@ export const getAppliedApartments = async (userId: string): Promise<AppliedApart
 
     const apartmentsMap = new Map(apartmentsResponse.data.map((a) => [a.id, a]));
 
+    const availableResponse = await apiConfig.get<Array<{ id: number; rent: number }>>('/available_apartments', {
+        params: {
+            select: 'id,rent',
+            id: `in.(${apartmentIds.join(',')})`,
+        },
+    });
+    const rentMap = new Map(availableResponse.data.map((a) => [a.id, a.rent]));
+
     return signUps
         .filter((s) => apartmentsMap.has(s.apartment_id))
         .map((s) => ({
             signUpId: s.id,
             endDate: s.end_date,
+            rent: rentMap.get(s.apartment_id) ?? null,
             apartment: apartmentsMap.get(s.apartment_id)!,
         }));
+};
+
+export const getMyParking = async (userId: string): Promise<ParkingSpotSummary[]> => {
+    const response = await apiConfig.get<Array<{
+        id: number;
+        address: string;
+        city: string;
+        postal_code: string;
+        spot_type: string;
+        price: number;
+    }>>('/parking_spots', {
+        params: {
+            select: 'id,address,city,postal_code,spot_type,price',
+            renter: `eq.${userId}`,
+        },
+    });
+
+    return response.data.map((row) => ({
+        id: row.id,
+        address: row.address,
+        city: row.city,
+        postalCode: row.postal_code,
+        type: row.spot_type,
+        price: row.price,
+    }));
+};
+
+export const getAppliedParking = async (userId: string): Promise<AppliedParkingSummary[]> => {
+    const appsResponse = await apiConfig.get<Array<{
+        id: string;
+        sign_up_date: string;
+        parking_id: number;
+    }>>('/parking_applications', {
+        params: {
+            select: 'id,sign_up_date,parking_id',
+            user_id: `eq.${userId}`,
+        },
+    });
+
+    const apps = appsResponse.data;
+    if (apps.length === 0) return [];
+
+    const parkingIds = apps.map((a) => a.parking_id);
+    const spotsResponse = await apiConfig.get<Array<{
+        id: number;
+        address: string;
+        city: string;
+        postal_code: string;
+        spot_type: string;
+        price: number;
+    }>>('/parking_spots', {
+        params: {
+            select: 'id,address,city,postal_code,spot_type,price',
+            id: `in.(${parkingIds.join(',')})`,
+        },
+    });
+
+    const spotsMap = new Map(spotsResponse.data.map((s) => [s.id, s]));
+
+    return apps
+        .filter((a) => spotsMap.has(a.parking_id))
+        .map((a) => {
+            const spot = spotsMap.get(a.parking_id)!;
+            return {
+                applicationId: a.id,
+                signUpDate: a.sign_up_date,
+                parking: {
+                    id: spot.id,
+                    address: spot.address,
+                    city: spot.city,
+                    postalCode: spot.postal_code,
+                    type: spot.spot_type,
+                    price: spot.price,
+                },
+            };
+        });
 };
 
 // Generates a signed URL valid for 1 hour for apartment documents (manuals, floor plans).

@@ -1,6 +1,7 @@
 import { HouseLineIcon } from '@phosphor-icons/react';
 import { Temporal } from '@js-temporal/polyfill';
 import { useNavigate } from 'react-router-dom';
+import { formatNumber } from '../../utils/calc';
 import type { AppliedApartmentSummary } from '../../api/profilepageApi';
 import type { ApartmentData, Detail } from '../../types/apartment';
 
@@ -73,6 +74,11 @@ const AppliedApartmentsSection = ({ appliedApartments }: AppliedApartmentsSectio
                                                 .filter(Boolean)
                                                 .join(' · ')}
                                         </span>
+                                        {item.rent !== null && (
+                                            <span className='mt-1 block text-xs text-neutral-700'>
+                                                Hyra: {formatNumber(item.rent)} kr/mån
+                                            </span>
+                                        )}
                                     </button>
                                 </li>
                             ))}

@@ -7,13 +7,17 @@ import {
     getApartmentForUser,
     getApartmentFileSignedUrl,
     getAppliedApartments,
+    getAppliedParking,
+    getMyParking,
     getUserProfile,
 } from '../api/profilepageApi';
 import type {
     ApartmentDocument,
     ApartmentEquipment,
     AppliedApartmentSummary,
+    AppliedParkingSummary,
     ContractSummary,
+    ParkingSpotSummary,
     UserProfile,
 } from '../api/profilepageApi';
 import type React from 'react';
@@ -40,6 +44,8 @@ export interface ProfileData {
     manualDocuments: ApartmentDocument[];
     floorPlanDocument: ApartmentDocument | null;
     appliedApartments: AppliedApartmentSummary[];
+    myParking: ParkingSpotSummary[];
+    appliedParking: AppliedParkingSummary[];
 }
 
 /**
@@ -55,6 +61,8 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
     const [documentUrls, setDocumentUrls] = useState<Record<number, string>>({});
     const [equipment, setEquipment] = useState<ApartmentEquipment[]>([]);
     const [appliedApartments, setAppliedApartments] = useState<AppliedApartmentSummary[]>([]);
+    const [myParking, setMyParking] = useState<ParkingSpotSummary[]>([]);
+    const [appliedParking, setAppliedParking] = useState<AppliedParkingSummary[]>([]);
 
     useEffect(() => {
         const loadProfileData = async () => {
@@ -77,8 +85,14 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
                 setProfile(profileData);
                 setContract(contractData);
 
-                const applied = await getAppliedApartments(userId);
+                const [applied, myParkingData, appliedParkingData] = await Promise.all([
+                    getAppliedApartments(userId),
+                    getMyParking(userId),
+                    getAppliedParking(userId),
+                ]);
                 setAppliedApartments(applied);
+                setMyParking(myParkingData);
+                setAppliedParking(appliedParkingData);
 
                 if (contractData?.apartment_id) {
                     const [documentsData, equipmentData] = await Promise.all([
@@ -161,5 +175,7 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
         manualDocuments,
         floorPlanDocument,
         appliedApartments,
+        myParking,
+        appliedParking,
     };
 }
