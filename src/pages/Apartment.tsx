@@ -31,7 +31,7 @@ const Apartment = () => {
     if (!apartment || !details) {
         return (
             <div className="max-w-3xl">
-                <Link to="/apartment">
+                <Link to="/bostader">
                     <Button variant="primary" size="md" type="button" children="Tillbaka till sök" />
                 </Link>
                 <p>Kunde inte hämta information om lägenheten. Vänligen gå tillbaka och försök igen.</p>
@@ -57,7 +57,7 @@ const Apartment = () => {
             </ul>
             {session ?
                 <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} /> :
-                <div>Du måste vara inloggad för att anmäla intressse. Vänligen <a href="/auth" className="text-blue-500 hover:underline">logga in</a> eller registrera ett konto.</div>
+                <div>Du måste vara inloggad för att anmäla intressse. Vänligen <a href="/inloggning" className="text-blue-500 hover:underline">logga in</a> eller registrera ett konto.</div>
             }
         </section>
     )

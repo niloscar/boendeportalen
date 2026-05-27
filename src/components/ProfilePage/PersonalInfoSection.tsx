@@ -70,7 +70,7 @@ const PersonalInfoSection = ({
     };
 
     return (
-        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
+        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
             <div className='flex items-start gap-4'>
                 <div
                     className='flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-100'

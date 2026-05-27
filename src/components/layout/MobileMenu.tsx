@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Bars3Icon, XMarkIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
+import { ListIcon, XIcon, ArrowRightIcon } from '@phosphor-icons/react'
 import type { MobileMenuProps } from '../../types/navigation'
 
 export default function MobileMenu({ navigationLinks, user, profile }: MobileMenuProps) {
@@ -24,9 +24,9 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                 aria-expanded={isOpen}
                 aria-controls="mobile-navigation"
                 aria-label={isOpen ? 'Stäng meny' : 'Öppna meny'}
-                className="relative z-[60] inline-flex items-center justify-center rounded-full border border-neutral-200 bg-white p-2 text-neutral-900 shadow-sm transition-colors hover:border-neutral-300 hover:bg-neutral-50 cursor-pointer"
+                className="relative z-[60] inline-flex items-center justify-center rounded-full border border-neutral-200 bg-white p-2 text-neutral-900 shadow-md transition-colors hover:border-neutral-300 hover:bg-neutral-50 cursor-pointer"
             >
-                {isOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+                {isOpen ? <XIcon className="h-6 w-6" /> : <ListIcon className="h-6 w-6" />}
             </button>
 
             {isOpen && (
@@ -38,7 +38,7 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
                     />
 
-                    <div className="absolute right-4 top-20 w-[calc(100%-2rem)] max-w-sm rounded-3xl border border-neutral-200 bg-white p-4 shadow-2xl">
+                    <div className="absolute right-4 top-20 w-[calc(100%-2rem)] max-w-sm rounded-3xl border border-neutral-200 bg-white p-4 shadow-md">
                         <nav id="mobile-navigation" aria-label="Mobilnavigering">
                             <ul className="space-y-1 text-base text-neutral-800">
                                 {navigationLinks.map((link) => (
@@ -81,7 +81,7 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                                     </NavLink>
                                 ) : (
                                     <NavLink
-                                        to="/auth"
+                                        to="/inloggning"
                                         onClick={() => setIsOpen(false)}
                                         className={({ isActive }) => [
                                             'inline-flex w-full items-center justify-between rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-medium text-neutral-800 transition-colors hover:border-neutral-300 hover:bg-neutral-100 hover:text-neutral-950',
@@ -89,7 +89,7 @@ export default function MobileMenu({ navigationLinks, user, profile }: MobileMen
                                         ].filter(Boolean).join(' ')}
                                     >
                                         Logga in
-                                        <ArrowLongRightIcon className="h-4 w-4" />
+                                        <ArrowRightIcon className="h-4 w-4" />
                                     </NavLink>
                                 )}
                             </div>

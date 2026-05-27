@@ -10,14 +10,14 @@ export default function HomePage() {
     const filteredFeatures = features.filter(feature => feature.is_active && feature.type_slug === 'tenant_features')
 
     return (
-        <main className="p-6 flex gap-6 flex-col">
+        <main className="w-full flex flex-col gap-6 justify-start items-center">
             
             <h1 className="text-2xl font-bold">Välkommen till Boendeportalen!</h1>
             <p>Det här är en placeholder för startsidan.</p>
 
             {!user && 
                 <p>
-                    <Link to="/auth" className="underline">Logga in</Link> för att se mer av webbplatsen.
+                    <Link to="/inloggning" className="underline">Logga in</Link> för att se mer av webbplatsen.
                 </p>}
 
             {user && loading && <p className="text-sm text-neutral-600">Laddar funktioner...</p> }

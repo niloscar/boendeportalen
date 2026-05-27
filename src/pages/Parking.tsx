@@ -25,7 +25,7 @@ export default function Parking() {
     } = useParkingPage()
 
     return (
-        <div className="flex w-full max-w-5xl flex-col items-center gap-6 p-6">
+        <div className="flex w-full flex-col items-center gap-6">
             <h1 className="text-3xl md:text-5xl font-bold">Lediga parkeringsplatser</h1>
             <p className="text-gray-600">Här hittar du lediga parkeringsplatser i din närhet.</p>
 

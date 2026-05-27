@@ -29,7 +29,7 @@ const ProfileFormsSection = ({
     }
 
     return (
-        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
+        <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
             <h2 className='mb-6 text-xl font-semibold text-neutral-900'>
                 {FORM_TITLES[activeForm]}
             </h2>

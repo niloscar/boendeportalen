@@ -177,7 +177,7 @@ const ProfilePage = () => {
 
     return (
         <div className='w-full text-neutral-900'>
-            <main ref={mainRef} className='mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 pt-6 pb-16 sm:px-10'>
+            <main ref={mainRef} className='mx-auto flex w-full flex-col gap-8'>
                 {submitMessage && (
                     <section
                         className='rounded-2xl border border-green-200 bg-green-50 p-4 text-sm text-green-900'

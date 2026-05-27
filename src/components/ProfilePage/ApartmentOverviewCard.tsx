@@ -18,7 +18,7 @@ const ApartmentOverviewCard = ({
     onOpenFloorPlan,
     imageSrc,
 }: ApartmentOverviewCardProps) => (
-    <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8'>
+    <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>
         <div className='grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-stretch'>
             <div className='flex flex-col gap-6'>
                 <div className='flex items-start gap-4'>

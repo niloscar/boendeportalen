@@ -28,7 +28,7 @@ export default function AdminPage() {
     
     const isAdmin = hasAdminAccess(profile)
 
-    if (!isAdmin) return <Navigate to={`/auth`} replace />
+    if (!isAdmin) return <Navigate to={`/inloggning`} replace />
     if (isAdmin && !slug) return <Navigate to={`/admin/${dashboardPage.slug}`} replace />
 
     const currentPage = ADMIN_SUB_PAGES.find(page => page.slug === slug) || dashboardPage
