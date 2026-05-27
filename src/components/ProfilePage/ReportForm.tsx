@@ -197,7 +197,7 @@ export const ReportForm = ({
             <div className="flex gap-4">
                 <Button
                     type="submit"
-                    variant="primary"
+                    variant="green"
                     size="md"
                     className="flex-1"
                     disabled={isSubmitting}

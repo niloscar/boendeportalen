@@ -218,13 +218,10 @@ const ProfilePage = () => {
                     <ProfilePageSkeleton />
                 ) : activeForm ? (
                     <>
-                        <button
-                            onClick={closeForm}
-                            className='flex w-fit items-center gap-1.5 text-sm text-neutral-500 transition-colors duration-200 hover:text-neutral-900'
-                        >
+                        <Button variant='secondary' size='md' onClick={closeForm} className='flex w-fit items-center gap-1.5'>
                             <ArrowLeftIcon size={16} />
                             Tillbaka
-                        </button>
+                        </Button>
                         <ProfileFormsSection
                             activeForm={activeForm}
                             onCloseForm={closeForm}
