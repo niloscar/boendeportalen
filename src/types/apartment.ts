@@ -3,13 +3,15 @@ import type React from 'react';
 export interface ApartmentData {
     id: number,
     street: string,
+    house_number?: number,
+    stairwell?: string,
+    apartment_number?: number,
     postcode: number,
     city: string,
     area: number,
     rooms: string,
     district: string,
     description: string,
-    house_number: number,
     rent: number,
     end_date: string,
     images: ApartmentImages[]
