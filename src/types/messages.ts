@@ -56,3 +56,11 @@ export type CreateMessagePayload = {
     publishAt: string
     sendImmediately: boolean
 }
+
+export type MessageResponse = {
+    id: string
+}
+
+export type MessageRecipientCandidate = {
+    user_id: string
+}
