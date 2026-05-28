@@ -32,7 +32,7 @@ const ApartmentOverviewCard = ({
                 </div>
 
                 <div>
-                    {apartmentInfo ? (
+                    {apartmentInfo?.length ? (
                         <div className='space-y-1 text-sm leading-6 text-gray-700'>
                             {apartmentInfo.map((info) => (
                                 <p key={info}>{info}</p>
@@ -75,7 +75,7 @@ const ApartmentOverviewCard = ({
                 </div>
             </div>
 
-            <div className='flex min-h-[280px] items-center justify-center rounded-2xl bg-neutral-200/70 text-neutral-400 overflow-hidden'>
+            <div className='flex min-h-70 items-center justify-center rounded-2xl bg-neutral-200/70 text-neutral-400 overflow-hidden'>
                 <img src={imageSrc} alt='Lägenhet' className='h-full w-full object-cover' />
             </div>
         </div>
