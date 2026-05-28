@@ -14,7 +14,7 @@ export default function Laundry() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
     const [bookings, setBookings] = useState<Booking[]>([]);
-    const { isFeatureEnabled } = useFeatures()
+    const { isFeatureEnabled } = useFeatures();
 
     useEffect(() => {
         (async () => {
@@ -54,7 +54,7 @@ export default function Laundry() {
         })();
     }, []);
 
-    if (!isFeatureEnabled('tvattstuga')) {
+    if (!isFeatureEnabled('tvattid')) {
         return <Navigate to="/" replace />;
     }
 
