@@ -346,7 +346,7 @@ function ScheduleStep({ state, dispatch }: MessagesFormStepProps) {
                 <span className="block text-sm mb-1">Välj datum och tid för utskicket</span>
                 <input
                     type="datetime-local"
-                    className="text-sm border border-neutral-300 rounded-xl px-4 py-3 w-full"
+                    className="text-sm border border-neutral-300 rounded-xl px-4 py-3 w-full outline-green-500"
                     placeholder="Välj datum och tid för utskicket"
                     value={state.publishAt}
                     onChange={(event) => dispatch({
