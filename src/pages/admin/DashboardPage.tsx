@@ -3,15 +3,16 @@ import { useFeatures } from '../../hooks/useFeatures'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import ExpandedWidget from '../../components/admin/ExpandedWidget'
 import Widget from '../../components/admin/Widget'
+import Issues from '../../components/admin/widgets/Issues'
 import Messages from '../../components/admin/widgets/messages/Messages'
 
 import type { ComponentType } from 'react'
 
 const WIDGET_COMPONENTS = {
+    Issues,
     Messages,
     Tenants: () => <p>Lista över samtliga hyresgäster.</p>,
     Resources: () => <p>Hantera uthyrningsbara resurser.</p>,
-    Issues: () => <p>Hantera inkomna felanmälningar.</p>,
 } satisfies Record<string, ComponentType>
 
 function getWidgetComponent(componentName: string | null): ComponentType | null {
