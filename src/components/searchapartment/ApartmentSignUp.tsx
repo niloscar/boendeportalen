@@ -1,13 +1,13 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { SignUp } from '../../types/apartment.ts';
 import Button from '../../components/ui/Button.tsx';
 
-const ApartmentSignUp = ({ error, loading, applied, deleteSignUp, signUp }: SignUp) => {
-    //To prevent doubleclicks causing multiple entries
+const ApartmentSignUp = ({ error, loading, applied, totalApplications, deleteSignUp, signUp }: SignUp) => {
     const [submitting, setSubmitting] = useState(false);
     const processing = async () => {
         setSubmitting(true)
-        window.setTimeout(() => {setSubmitting(false)}, 500)
+        window.setTimeout(() => { setSubmitting(false) }, 500)
     }
 
     if (error) {
@@ -20,12 +20,17 @@ const ApartmentSignUp = ({ error, loading, applied, deleteSignUp, signUp }: Sign
     }
     if (applied.length > 0) {
         return (<>
-            <Button variant="secondary" size="md" type="button" children="Ta bort intresseanmälan" onClick={() => {deleteSignUp(); processing()}} disabled={submitting} />
+            <Button variant="secondary" size="md" type="button" children="Ta bort intresseanmälan" onClick={() => { deleteSignUp(); processing() }} disabled={submitting} />
         </>)
+    }
+    if (totalApplications.length >= 3) {
+        return (
+          <div className="mt-10">Du får max ha tre ansökningar samtidigt. Om du vill ansöka om denna lägenhet, vänligen ta bort en annan ansökan. Du hittar dina ansökningar under <Link to="/minasidor" className="text-green-500 hover:underline">Mina sidor</Link>.</div>
+        )
     }
     return (
         <>
-            <Button variant="primary" size="md" type="button" children="Anmäl intresse" onClick={() => {signUp(); processing()}} disabled={submitting} />
+            <Button variant="primary" size="md" type="button" children="Anmäl intresse" onClick={() => { signUp(); processing() }} disabled={submitting} />
         </>
     )
 }

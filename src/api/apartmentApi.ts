@@ -22,6 +22,17 @@ export const getApartmentSignupStatus = async (apartment_id: number, end_date: s
     }
 };
 
+//Fetch status for all applications 
+export const getAllApartmentSignups = async (end_date: string | null) => {
+    try {
+        const response = await apiConfig.get(`/apartment_sign_up?select=id,apartment_id,end_date,sign_up_date&end_date=gte.${end_date}`);
+        return response.data;
+    } catch (err) {
+        console.log(`Kunde inte hitta tidigare intresseanmälningar, ${err}`);
+        throw err;
+    }
+};
+
 //Sign up for apartment
 export async function createApartmentSignUp(apartment_id: number, end_date: string | null) {
     try {
