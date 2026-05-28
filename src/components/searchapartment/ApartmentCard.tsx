@@ -6,34 +6,33 @@ import { formatNumber } from '../../utils/calc.ts';
 import { ArrowRightIcon } from '@phosphor-icons/react'
 
 const ApartmentCard = ({ apartment }: ApartmentProp) => {
-    const apartmentArray = apartment && Object.values(apartment);
     const calculateLastDay = apartment && subtractMonths(new Date(apartment.end_date), 1);
     const applyBy = calculateLastDay && calculateLastDay.toISOString().split("T")[0];
-    const details = apartmentArray && [
+    const details = apartment && [
         {
             id: crypto.randomUUID(),
             title: "Kvadratmeter",
-            content: apartmentArray[4]
+            content: apartment.area
         },
         {
             id: crypto.randomUUID(),
             title: "Antal rum",
-            content: apartmentArray[5]
+            content: apartment.rooms
         },
         {
             id: crypto.randomUUID(),
             title: "Hyra",
-            content: `${formatNumber(apartmentArray[9])} kr/mån`
+            content: `${formatNumber(apartment.rent)} kr/mån`
         },
         {
             id: crypto.randomUUID(),
             title: "Område",
-            content: apartmentArray[6]
+            content: apartment.district
         },
         {
             id: crypto.randomUUID(),
             title: "Tillgänglig från",
-            content: apartmentArray[8]
+            content: apartment.end_date
         },
         {
             id: crypto.randomUUID(),
@@ -46,6 +45,7 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
         date.setMonth(date.getMonth() - months);
         return date;
     }
+
     if (!apartment || !details) {
         return (
             <section className="border border-solid border-green-500 rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 w-xs h-auto">
@@ -53,6 +53,7 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
             </section>
         )
     }
+    
     return (
         <Link to={`/bostader/${apartment.id}`} aria-label='Läs mer om bostaden' state={{ apartment: apartment, details: details }} className="block focus:outline-none focus:ring-2 focus:ring-green-500 rounded-xl">
             <article className="w-full bg-white border border-neutral-300 rounded-xl shadow-md group hover:shadow-lg transition-shadow duration-150 focus:outline-none focus:ring-2 focus:ring-green-500">

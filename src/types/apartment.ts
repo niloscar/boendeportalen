@@ -16,7 +16,7 @@ export interface ApartmentData {
 export interface Detail {
     id: string,
     title: string,
-    content: string | number
+    content: string | number | null
 }
 
 export interface ApartmentImages {
