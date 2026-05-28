@@ -51,6 +51,7 @@ export default function DashboardPage() {
                             <Widget
                                 key={widget.name}
                                 title={widget.name}
+                                slug={widget.slug}
                                 description={widget.description}
                                 onExpand={() => setExpandedWidgetTitle(widget.name)}
                             >
@@ -68,7 +69,8 @@ export default function DashboardPage() {
 
                 return (
                     <ExpandedWidget
-                        widgetSlug={expandedWidget.name}
+                        title={expandedWidget.name}
+                        slug={expandedWidget.slug}
                         description={expandedWidget.description}
                         onClose={() => setExpandedWidgetTitle(null)}
                     >
