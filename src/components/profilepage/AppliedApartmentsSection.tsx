@@ -2,12 +2,8 @@ import { HouseLineIcon } from '@phosphor-icons/react';
 import { Temporal } from '@js-temporal/polyfill';
 import { useNavigate } from 'react-router-dom';
 import { formatNumber } from '../../utils/calc';
-import type { AppliedApartmentSummary } from '../../types/profile';
+import type { AppliedApartmentSummary, AppliedApartmentsSectionProps } from '../../types/profile';
 import type { ApartmentData, Detail } from '../../types/apartment';
-
-interface AppliedApartmentsSectionProps {
-    appliedApartments: AppliedApartmentSummary[];
-}
 
 const buildNavigationState = (item: AppliedApartmentSummary) => {
     const { apartment, endDate } = item;

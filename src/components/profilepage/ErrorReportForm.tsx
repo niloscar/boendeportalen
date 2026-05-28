@@ -1,11 +1,5 @@
 import { ReportForm } from './ReportForm';
-import type { ReportFormData } from '../../types/forms';
-
-interface ErrorReportFormProps {
-    onCancel: () => void;
-    onSubmit: (data: ReportFormData) => void;
-    isSubmitting?: boolean;
-}
+import type { ErrorReportFormProps } from '../../types/profile';
 
 const ERROR_CATEGORIES = [
     'Vattenskada',

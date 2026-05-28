@@ -2,17 +2,7 @@ import React, { useEffect, useId, useRef, useState } from 'react';
 import { PaperclipIcon, CaretDownIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
-import type { ReportFormData } from '../../types/forms';
-
-interface ReportFormProps {
-    categories: string[];
-    submitLabel: string;
-    descriptionPlaceholder: string;
-    onSubmit: (data: ReportFormData) => void;
-    onCancel: () => void;
-    showExtras?: boolean;
-    isSubmitting?: boolean;
-}
+import type { ReportFormProps } from '../../types/profile';
 
 type FormErrors = Partial<Record<'category' | 'location' | 'description', string>>;
 

@@ -15,21 +15,6 @@ import type {
     UserProfile,
 } from '../types/profile';
 
-export type {
-    ApartmentDocument,
-    ApartmentEquipment,
-    ApartmentSummary,
-    AppliedApartmentSummary,
-    AppliedParkingSummary,
-    ContractSummary,
-    ErrorReportPayload,
-    ErrorReportRecord,
-    ParkingSpotSummary,
-    ServiceRequestPayload,
-    ServiceRequestRecord,
-    UserProfile,
-};
-
 // Sanitizes a file name for Supabase Storage: strips diacritics, replaces
 // non-alphanumeric characters with hyphens, and collapses duplicate hyphens.
 const toFileName = (name: string) =>

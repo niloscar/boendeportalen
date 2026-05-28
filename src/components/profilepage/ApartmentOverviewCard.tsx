@@ -1,14 +1,6 @@
 import { HouseLineIcon, FileTextIcon, NoteBlankIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
-
-interface ApartmentOverviewCardProps {
-    apartmentInfo: string[] | null;
-    onErrorReport: () => void;
-    onServiceRequest: () => void;
-    onOpenContract: () => void;
-    onOpenFloorPlan: () => void;
-    imageSrc: string;
-}
+import type { ApartmentOverviewCardProps } from '../../types/profile';
 
 const ApartmentOverviewCard = ({
     apartmentInfo,

@@ -1,10 +1,6 @@
 import { CarIcon } from '@phosphor-icons/react';
 import { formatNumber } from '../../utils/calc';
-import type { AppliedParkingSummary } from '../../types/profile';
-
-interface AppliedParkingSectionProps {
-    appliedParking: AppliedParkingSummary[];
-}
+import type { AppliedParkingSectionProps } from '../../types/profile';
 
 const AppliedParkingSection = ({ appliedParking }: AppliedParkingSectionProps) => (
     <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>

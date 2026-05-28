@@ -1,10 +1,6 @@
 import { CarIcon } from '@phosphor-icons/react';
 import { formatNumber } from '../../utils/calc';
-import type { ParkingSpotSummary } from '../../types/profile';
-
-interface MyParkingSectionProps {
-    myParking: ParkingSpotSummary[];
-}
+import type { MyParkingSectionProps } from '../../types/profile';
 
 const MyParkingSection = ({ myParking }: MyParkingSectionProps) => (
     <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8'>

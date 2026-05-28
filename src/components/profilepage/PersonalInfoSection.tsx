@@ -1,17 +1,8 @@
 import { useRef, useState } from 'react';
-import type { ChangeEvent } from 'react';
 import { UserIcon, PaperclipIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 import { signOut } from '../../lib/supabase';
-
-interface PersonalInfoSectionProps {
-    name: string | null;
-    email: string | null;
-    phone: string | null;
-    avatarUrl: string | null;
-    onSave: (data: { email: string; phone: string }) => Promise<void>;
-    onAvatarUpload: (event: ChangeEvent<HTMLInputElement>) => void;
-}
+import type { PersonalInfoSectionProps } from '../../types/profile';
 
 const validateEmail = (value: string): string | null =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()) ? null : 'Ange en giltig e-postadress.';

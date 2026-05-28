@@ -12,7 +12,7 @@ import ApartmentDocumentsSection from '../components/profilepage/ApartmentDocume
 import PersonalInfoSection from '../components/profilepage/PersonalInfoSection';
 import ProfileFormsSection from '../components/profilepage/ProfileFormsSection';
 import ProfilePageSkeleton from '../components/profilepage/ProfilePageSkeleton';
-import type { ActiveForm } from '../components/profilepage/ProfileFormsSection';
+import type { ActiveForm } from '../types/profile';
 import useAuth from '../hooks/useAuth';
 import { useProfileData } from '../hooks/useProfileData';
 import {
