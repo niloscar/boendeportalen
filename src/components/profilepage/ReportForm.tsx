@@ -1,26 +1,8 @@
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import { PaperclipIcon, CaretDownIcon } from '@phosphor-icons/react';
 import Button from '../ui/Button';
 
-export interface ReportFormData {
-    category: string;
-    location: string;
-    description: string;
-    extraLocation: string;
-    allowMasterKey: boolean;
-    hasPets: boolean;
-    contactFirst: boolean;
-    attachment: File | null;
-}
-
-interface ReportFormProps {
-    categories: string[];
-    submitLabel: string;
-    descriptionPlaceholder: string;
-    onSubmit: (data: ReportFormData) => void;
-    onCancel: () => void;
-    showExtras?: boolean;
-    isSubmitting?: boolean;
-}
+import type { ReportFormProps } from '../../types/profile';
 
 type FormErrors = Partial<Record<'category' | 'location' | 'description', string>>;
 
@@ -41,6 +23,21 @@ export const ReportForm = ({
     const attachmentId = `${idPrefix}-attachment`;
 
     const [errors, setErrors] = useState<FormErrors>({});
+    const [fileName, setFileName] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const clearError = (field: keyof FormErrors) => {
         if (errors[field]) {
@@ -87,7 +84,7 @@ export const ReportForm = ({
         });
     };
 
-    const inputBase = 'w-full rounded-2xl bg-neutral-200 p-6 focus:outline-none focus:ring-2';
+    const inputBase = 'w-full rounded-2xl bg-neutral-100 p-4 focus:outline-none focus:ring-2';
     const inputValid = 'focus:ring-green-500';
     const inputError = 'ring-2 ring-red-400 focus:ring-red-400';
 
@@ -97,19 +94,44 @@ export const ReportForm = ({
                 <label className="text-sm font-medium text-gray-700" htmlFor={categoryId}>
                     Ämnesrad *
                 </label>
-                <select
-                    id={categoryId}
-                    name="category"
-                    className={`${inputBase} ${errors.category ? inputError : inputValid}`}
-                    onChange={() => clearError('category')}
-                >
-                    <option value="">Välj ett ämne...</option>
-                    {categories.map((category) => (
-                        <option key={category} value={category}>
-                            {category}
-                        </option>
-                    ))}
-                </select>
+                <div className="relative" ref={dropdownRef}>
+                    <input type="hidden" name="category" value={selectedCategory} />
+                    <button
+                        id={categoryId}
+                        type="button"
+                        onClick={() => { setDropdownOpen((v) => !v); clearError('category'); }}
+                        className={`${inputBase} flex items-center justify-between ${errors.category ? inputError : inputValid}`}
+                        aria-haspopup="listbox"
+                        aria-expanded={dropdownOpen}
+                    >
+                        <span className={selectedCategory ? '' : 'text-neutral-400'}>
+                            {selectedCategory || 'Välj ett ämne...'}
+                        </span>
+                        <CaretDownIcon
+                            size={16}
+                            className={`shrink-0 text-neutral-500 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`}
+                            aria-hidden="true"
+                        />
+                    </button>
+                    {dropdownOpen && (
+                        <ul
+                            role="listbox"
+                            className="absolute z-10 mt-1 w-full rounded-2xl border border-neutral-200 bg-white py-1 shadow-md overflow-hidden"
+                        >
+                            {categories.map((cat) => (
+                                <li key={cat} role="option" aria-selected={selectedCategory === cat}>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setSelectedCategory(cat); setDropdownOpen(false); clearError('category'); }}
+                                        className={`w-full px-4 py-2.5 text-left text-sm transition-colors hover:bg-neutral-100 ${selectedCategory === cat ? 'font-medium text-green-600' : 'text-neutral-900'}`}
+                                    >
+                                        {cat}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
                 {errors.category && (
                     <p className="text-xs text-red-500" role="alert">{errors.category}</p>
                 )}
@@ -153,43 +175,51 @@ export const ReportForm = ({
                 <div className="border-t border-neutral-200 pt-6">
                     <div className="flex flex-col gap-2 mb-4">
                         <label className="text-sm font-medium text-gray-700" htmlFor={extraLocationId}>
-                            Annan lägesbeskrivning
+                            Övriga upplysningar
                         </label>
                         <textarea
                             id={extraLocationId}
                             name="extraLocation"
                             className={`${inputBase} ${inputValid}`}
                             rows={3}
-                            placeholder="Annan lägesbeskrivning (valfritt)"
+                            placeholder="Övriga upplysningar (valfritt)"
                         />
                     </div>
 
                     <fieldset className="flex flex-col gap-3 mb-4">
                         <legend className="text-sm font-medium text-gray-700 mb-1">Övrigt</legend>
-                        <label className="flex items-center gap-3 cursor-pointer">
+                        <label className="flex items-center gap-3">
                             <input type="checkbox" name="allowMasterKey" className="h-4 w-4" />
                             <span className="text-sm">Får använda huvudnyckel</span>
                         </label>
-                        <label className="flex items-center gap-3 cursor-pointer">
+                        <label className="flex items-center gap-3">
                             <input type="checkbox" name="hasPets" className="h-4 w-4" />
                             <span className="text-sm">Hund/Katt</span>
                         </label>
-                        <label className="flex items-center gap-3 cursor-pointer">
+                        <label className="flex items-center gap-3">
                             <input type="checkbox" name="contactFirst" className="h-4 w-4" />
                             <span className="text-sm">Kontakta mig först</span>
                         </label>
                     </fieldset>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium text-gray-700" htmlFor={attachmentId}>
-                            Bifoga fil
-                        </label>
+                        <span className="text-sm font-medium text-gray-700">Bifoga fil</span>
                         <input
+                            ref={fileInputRef}
                             id={attachmentId}
                             name="attachment"
                             type="file"
-                            className="w-full rounded-2xl bg-white p-2 border border-neutral-300"
+                            className="hidden"
+                            onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
                         />
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="flex items-center gap-2 w-full rounded-2xl bg-neutral-100 p-4 hover:bg-neutral-200 transition-colors duration-200 cursor-pointer"
+                        >
+                            <PaperclipIcon size={16} className="shrink-0 text-neutral-500" />
+                            <span className={`truncate ${fileName ? '' : 'text-neutral-400'}`}>{fileName ?? 'Välj fil...'}</span>
+                        </button>
                     </div>
                 </div>
             )}
@@ -197,7 +227,7 @@ export const ReportForm = ({
             <div className="flex gap-4">
                 <Button
                     type="submit"
-                    variant="primary"
+                    variant="green"
                     size="md"
                     className="flex-1"
                     disabled={isSubmitting}
