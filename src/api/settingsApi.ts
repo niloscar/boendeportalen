@@ -5,9 +5,9 @@ export const getFeatures = async () => {
     try {
         const response = await apiConfig.get('/features_with_type')
         return response.data
-    } catch (err) {
-        console.log(`Kunde inte hämta funktioner, ${err}`)
-        throw err
+    } catch (error) {
+        console.error(`Kunde inte hämta funktioner, ${error}`)
+        throw error
     }
 }
 
@@ -24,8 +24,8 @@ export const updateFeatureStatuses = async (features: FeatureStatusUpdate[]) => 
         )
 
         return responses.flatMap((response) => response.data)
-    } catch (err) {
-        console.log(`Kunde inte uppdatera funktioner, ${err}`)
-        throw err
+    } catch (error) {
+        console.error(`Kunde inte uppdatera funktioner, ${error}`)
+        throw error
     }
 }

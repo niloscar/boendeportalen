@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useFeatures } from '../../hooks/useFeatures'
 import { Button } from '../../components/ui/Button'
 import FormSwitch from '../../components/ui/FormSwitch'
@@ -38,37 +38,36 @@ export default function SettingsPage() {
         }
     }
 
-    if (loading) return <p className="text-sm text-neutral-600 text-center w-full">Laddar inställningar...</p>
-    if (loadError) return <p className="text-red-600 text-center w-full">Kunde inte ladda inställningar: {loadError}</p>
-
-    const featuresByType = features.reduce<FeaturesByType>((groupedFeatures, feature) => {
-        if (!groupedFeatures[feature.type_slug]) {
-            groupedFeatures[feature.type_slug] = {
-                type_name: feature.type_name,
-                type_description: feature.type_description,
-                features: []
+    const sortedFeatureGroups = useMemo(() => {
+        const featuresByType = features.reduce<FeaturesByType>((groupedFeatures, feature) => {
+            if (!groupedFeatures[feature.type_slug]) {
+                groupedFeatures[feature.type_slug] = {
+                    type_name: feature.type_name,
+                    type_description: feature.type_description,
+                    features: []
+                }
             }
-        }
 
-        groupedFeatures[feature.type_slug].features.push(feature)
+            groupedFeatures[feature.type_slug].features.push(feature)
 
-        return groupedFeatures
-    }, {})
+            return groupedFeatures
+        }, {})
 
-    const sortedFeatureGroups = Object.entries(featuresByType)
-        .map(([type, group]) => ({
-            type,
-            ...group,
-            features: [...group.features].sort((a, b) =>
-                a.name.localeCompare(b.name, 'sv', { sensitivity: 'base' })
-            )
-        }))
-        .sort((a, b) => {
-            const aLevel = Math.min(...a.features.map(feature => feature.user_level))
-            const bLevel = Math.min(...b.features.map(feature => feature.user_level))
+        return Object.entries(featuresByType)
+            .map(([type, group]) => ({
+                type,
+                ...group,
+                features: [...group.features].sort((a, b) =>
+                    a.name.localeCompare(b.name, 'sv', { sensitivity: 'base' })
+                )
+            }))
+            .sort((a, b) => {
+                const aLevel = Math.min(...a.features.map(feature => feature.user_level))
+                const bLevel = Math.min(...b.features.map(feature => feature.user_level))
 
-            return aLevel - bLevel
-        })
+                return aLevel - bLevel
+            })
+    }, [features])
 
     const buttonText = {
         idle: 'Spara inställningar',
@@ -83,6 +82,9 @@ export default function SettingsPage() {
         saveStatus === 'error' && 'bg-red-700',
         (saveStatus === 'idle' || saveStatus === 'saving') && 'bg-neutral-900 hover:bg-neutral-800'
     ].filter(Boolean).join(' ')
+
+    if (loading) return <p className="text-sm text-neutral-600 text-center w-full">Laddar inställningar...</p>
+    if (loadError) return <p className="text-red-600 text-center w-full">Kunde inte ladda inställningar: {loadError}</p>
 
     return (
         <main className="py-6">

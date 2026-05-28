@@ -1,8 +1,8 @@
 import { useContext } from 'react'
-import { featuresContext } from './featuresContext'
+import { FeaturesContext } from './featuresContext'
 
 export function useFeaturesContext() {
-    const context = useContext(featuresContext)
+    const context = useContext(FeaturesContext)
 
     if (!context) {
         throw new Error('useFeatures must be used within FeaturesProvider')

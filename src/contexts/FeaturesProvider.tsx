@@ -5,10 +5,11 @@ import { getFeatures, updateFeatureStatuses } from '../api/settingsApi'
 import { canShowFeature as canShowFeatureForLevel } from '../utils/featureAccess'
 
 import type { ReactNode } from 'react'
-import type { Feature } from '../types/features'
+import type { Feature, FeatureKey } from '../types/features'
 
 export function FeaturesProvider({ children }: { children: ReactNode }) {
     const [features, setFeatures] = useState<Feature[]>([])
+    const [originalFeatures, setOriginalFeatures] = useState<Feature[]>([])
     const [loading, setLoading] = useState(true)
     const [loadError, setLoadError] = useState<string | null>(null)
     const { userLevel } = useAccessControl()
@@ -18,8 +19,11 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
             try {
                 setLoading(true)
                 setLoadError(null)
+
                 const data = await getFeatures();
+
                 setFeatures(data)
+                setOriginalFeatures(data)
             } catch (error: unknown) {
                 setLoadError(
                     error instanceof Error
@@ -43,17 +47,25 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
         )
     }, [])
 
-    const saveFeatures = useCallback(async () => {
-    console.table(features.map(feature => ({
-        id: feature.id,
-        name: feature.name,
-        feature_type_id: feature.feature_type_id,
-        type_slug: feature.type_slug,
-        is_active: feature.is_active
-    })))
+    const changedFeatures = useMemo(() => {
+        const originalFeaturesByKey = new Map(
+            originalFeatures.map((feature) => [getFeatureKey(feature), feature])
+        )
 
-        await updateFeatureStatuses(features)
-    }, [features])
+        return features.filter((feature) => {
+            const originalFeature = originalFeaturesByKey.get(getFeatureKey(feature))
+
+            return originalFeature && feature.is_active !== originalFeature.is_active
+        })
+    }, [features, originalFeatures])
+
+    const saveFeatures = useCallback(async () => {
+        if (changedFeatures.length === 0) return
+
+        await updateFeatureStatuses(changedFeatures)
+
+        setOriginalFeatures(features)
+    }, [changedFeatures, features])
 
     const visibleFeatures = useMemo(() => {
         const featuresById = new Map<number, Feature>()
@@ -110,4 +122,8 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
             {children}
         </FeaturesContext.Provider>
     );
+}
+
+function getFeatureKey(feature: Feature): FeatureKey {
+    return `${feature.id}:${feature.feature_type_id}`
 }

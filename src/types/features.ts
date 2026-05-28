@@ -44,3 +44,5 @@ export type FeatureStatusUpdate = {
     feature_type_id: number
     is_active: boolean
 }
+
+export type FeatureKey = `${number}:${number}`
