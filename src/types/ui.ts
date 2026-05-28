@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import type { ReactNode, ReactElement } from "react";
 
 export type ConfirmDialogProps = {
     open: boolean;

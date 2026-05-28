@@ -1,7 +1,8 @@
-import LaundryRoomCalendar from "../components/bookings/LaundryRoomCalendar";
 import { useEffect, useState, useCallback } from "react";
+import { useFeatures } from '../hooks/useFeatures'
 import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundryRoom";
 import type { Timeslot, Booking } from "../types/booking";
+import LaundryRoomCalendar from "../components/bookings/LaundryRoomCalendar";
 import LaundryRoomInfo from "../components/bookings/LaundryRoomInfo";
 import AlertDialog from "../components/ui/AlertDialog";
 import { WashingMachineIcon } from "@phosphor-icons/react";
@@ -51,7 +52,14 @@ export default function Laundry() {
         })();
     }, []);
 
+    isFeatureEnabled('tvattstuga') {
+        return(
+            <div className="mb-6 text-gray-600 text-center pb-6">Du får inte öppna denna sida.</div>
+        )
+     }
+
     return (
+
         <div>
             <div className="flex w-full flex-col items-center gap-6">
                 <h1 className="text-3xl md:text-5xl font-bold">Bokning av tvättstugan</h1 >
