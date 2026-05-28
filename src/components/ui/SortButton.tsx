@@ -1,29 +1,19 @@
 import { type ReactNode } from 'react';
-import { ArrowDownIcon, ArrowUpIcon } from '@phosphor-icons/react'
-import styles from './SortButton.module.css'
+import { CaretUpIcon, CaretDownIcon } from '@phosphor-icons/react';
 
 const SortButton = ({ onClick, children, value, isActive }: { onClick: () => void; children: ReactNode; value: string; isActive: boolean }) => {
     const direction = value.split(':')[1]
 
-    const classNames = [
-        'text-sm',
-        'font-medium',
-        'text-gray-700',
-        'cursor-pointer',
-        'hover:underline',
-        isActive && 'underline'
-    ].filter(Boolean).join(' ')
-
     return (
         <button
             type="button"
-            className={classNames}
+            className="flex items-center gap-0.5 text-sm font-medium text-gray-700 cursor-pointer hover:underline"
             onClick={onClick} 
             value={value}
         >
             {children} 
-            <span className={`text-xs ${styles['sort-order']}`}>
-                {isActive && (direction === 'asc' ? <ArrowUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />)}
+            <span className="text-xs inline-flex w-3 h-3">
+                {isActive && (direction === 'asc' ? <CaretUpIcon /> : <CaretDownIcon />)}
             </span>
         </button>
     );

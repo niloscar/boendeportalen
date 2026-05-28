@@ -1,5 +1,14 @@
 import type { ReactNode } from 'react'
 
+export type Crumb = {
+    title: string
+    href?: string
+}
+
+export type BreadcrumbsProps = {
+    crumbs: Crumb[]
+}
+
 export type ConfirmDialogProps = {
     open: boolean;
     title?: string;

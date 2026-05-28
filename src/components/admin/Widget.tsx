@@ -1,9 +1,9 @@
 import { ArrowsOutSimpleIcon } from "@phosphor-icons/react"
-import type { WidgetProps } from '../../types/admin.ts'
+import type { WidgetProps } from '../../types/features'
 
 export default function Widget({ title, description, children, onExpand }: WidgetProps) {
     return (
-        <section className="p-4 border border-gray-200 rounded-2xl w-full flex flex-col gap-3 relative">
+        <section className="p-4 border border-gray-200 bg-white shadow-md rounded-2xl w-full flex flex-col gap-3 relative">
             <h2 className="text-xl font-semibold">{title}</h2>
             {description && <p className="text-gray-600 text-sm">{description}</p>}
             {children}

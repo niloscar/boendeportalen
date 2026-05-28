@@ -1,19 +1,11 @@
 import { Link } from 'react-router-dom'
 import { CaretRightIcon } from '@phosphor-icons/react'
-
-type Crumb = {
-    title: string
-    href?: string
-}
-
-type BreadcrumbsProps = {
-    crumbs: Crumb[]
-}
+import type { BreadcrumbsProps } from '../../types/ui'
 
 export default function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
     return (
         <nav
-            className="w-full md:w-fit rounded-2xl bg-neutral-100 px-4 py-2 text-sm text-neutral-500"
+            className="w-fit self-center px-4 py-2 text-sm text-neutral-500"
             aria-label="Breadcrumb"
         >
             <ol className="flex items-center gap-1">
