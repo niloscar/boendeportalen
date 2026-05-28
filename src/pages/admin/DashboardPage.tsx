@@ -8,7 +8,10 @@ import Messages from '../../components/admin/widgets/messages/Messages'
 import type { ComponentType } from 'react'
 
 const WIDGET_COMPONENTS = {
-    Messages
+    Messages,
+    Tenants: () => <p>Lista över samtliga hyresgäster.</p>,
+    Resources: () => <p>Hantera uthyrningsbara resurser.</p>,
+    Issues: () => <p>Hantera inkomna felanmälningar.</p>,
 } satisfies Record<string, ComponentType>
 
 function getWidgetComponent(componentName: string | null): ComponentType | null {
@@ -37,7 +40,7 @@ export default function DashboardPage() {
     return (
         <main>
             <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 960: 2 }}>
-                <Masonry style={{ gap: 24 }} itemStyle={{ gap: 24 }}>
+                <Masonry style={{ gap: 16 }} itemStyle={{ gap: 16 }}>
                     {widgets.map((widget) => {
                         const Component = getWidgetComponent(widget.component)
 
