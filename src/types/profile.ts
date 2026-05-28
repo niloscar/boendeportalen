@@ -128,14 +128,6 @@ export interface ApartmentOverviewCardProps {
     imageSrc: string;
 }
 
-export interface AppliedApartmentsSectionProps {
-    appliedApartments: AppliedApartmentSummary[];
-}
-
-export interface AppliedParkingSectionProps {
-    appliedParking: AppliedParkingSummary[];
-}
-
 export interface AppliedSectionProps {
     appliedApartments: AppliedApartmentSummary[];
     appliedParking: AppliedParkingSummary[];

@@ -140,9 +140,9 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
         const { apartments } = contract;
         const formattedPostcode = formatPostcode(apartments.postcode);
         const address = `Adress: ${apartments.street}, ${formattedPostcode} ${apartments.city}`;
-        const area = `Storlek: ${apartments.area ? `${apartments.area} kvm` : null}`;
-        const rooms = `Rum: ${apartments.rooms ? `${apartments.rooms} rum` : null}`;
-        const rent = `Hyra: ${contract.rent ? `${formatNumber(contract.rent)} kr/mån` : null}`;
+        const area = apartments.area ? `Storlek: ${apartments.area} kvm` : null;
+        const rooms = apartments.rooms ? `Rum: ${apartments.rooms} rum` : null;
+        const rent = contract.rent ? `Hyra: ${formatNumber(contract.rent)} kr/mån` : null;
 
         return [address, area, rooms, rent].filter(isNonEmptyString);
     }, [contract]);
