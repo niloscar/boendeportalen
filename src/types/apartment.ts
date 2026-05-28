@@ -16,7 +16,7 @@ export interface ApartmentData {
 export interface Detail {
     id: string,
     title: string,
-    content: string | number
+    content: string | number | null
 }
 
 export interface ApartmentImages {
@@ -51,6 +51,7 @@ export type ApartmentProp = {
 export type ApartmentImagesProp = {
     images: ApartmentImages[],
     size: string,
+    rounded: boolean,
 }
 
 export type ListProp = {

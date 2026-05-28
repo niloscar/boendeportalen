@@ -1,8 +1,11 @@
 import Skeleton from '@mui/material/Skeleton';
-import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
 import FilterBox from '../components/ui/FilterBox'
 import Button from '../components/ui/Button'
 import useApartmentFilter from '../hooks/useApartmentFilter'
+import ApartmentList from '../components/searchapartment/ApartmentList.tsx';
+// import ApartmentFilter from '../components/searchapartment/ApartmentFilter.tsx';
+// import type { ApartmentData } from "../types/apartment.ts";
+// import { getAvailableApartments } from '../api/apartmentApi.ts';
 
 const SearchApartment = () => {
     const {
@@ -21,8 +24,11 @@ const SearchApartment = () => {
         setMaxRent,
         setSortBy
     } = useApartmentFilter();
+
     if (error) {
-        return (<div className="w-full flex flex-col items-center gap-6">Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </div>)
+        return (<div className="w-full flex flex-col items-center gap-6">
+            <p>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </p>
+        </div>)
     }
 
     return (
@@ -86,7 +92,7 @@ const SearchApartment = () => {
                 footer={<Button type="button" variant="secondary" size="md" onClick={resetFilters}>Rensa filter</Button>}
             />
             {loading ?
-                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start w-full">
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full">
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                     <Skeleton variant="rounded" className="w-full" height="502px" />
@@ -95,7 +101,7 @@ const SearchApartment = () => {
                 filteredApartments.length < 1 ?
                     <div>Kunde inte hitta några lediga lägenheter</div>
                     :
-                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start w-full">
+                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full">
                         <ApartmentList variant="div" items={filteredApartments} />
                     </div>
             }
