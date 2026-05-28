@@ -31,7 +31,7 @@ export default function HomePage() {
                     {!loading && !loadError && visibleFeatures.length > 0 && (
                         <section className="grid grid-cols-2 gap-6 w-full">
                             {visibleFeatures.map((feature) => (
-                                <Link to={feature.id === 30 ? '/tvattid' : feature.id === 31 ? '/gastlagenhet' : feature.id === 29 ? '/parkeringar' : feature.id === 28 ? '/bostader' : '/'} key={feature.id}>
+                                <Link to={feature.id === 30 ? '/tvattstuga' : feature.id === 31 ? '/gastlagenhet' : feature.id === 29 ? '/parkeringar' : feature.id === 28 ? '/bostader' : '/'} key={feature.id}>
                                     <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full flex gap-4' >
                                         <div className='self-center'>
                                             {feature.id === 30 &&
