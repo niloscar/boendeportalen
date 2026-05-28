@@ -6,7 +6,7 @@ import { WashingMachineIcon, DoorOpenIcon, CarIcon, HouseLineIcon } from "@phosp
 
 export default function HomePage() {
     const { loading, loadError, visibleFeatures } = useFeatures()
-    const { user, loading: userLoading} = useAuth();
+    const { user, loading: userLoading } = useAuth();
     const userId = user?.id ?? '';
     const {
         profile,
@@ -14,7 +14,7 @@ export default function HomePage() {
 
     return (
         <main className="w-full flex flex-col gap-6 justify-start items-center">
-            {loading  || userLoading && <p className="text-sm text-neutral-600">Laddar funktioner...</p>}
+            {loading || userLoading && <p className="text-sm text-neutral-600">Laddar funktioner...</p>}
             {loadError && <p className="text-sm text-red-600">Kunde inte ladda funktioner: {loadError}</p>}
             {user &&
                 <>
@@ -31,22 +31,22 @@ export default function HomePage() {
                     {!loading && !loadError && visibleFeatures.length > 0 && (
                         <section className="grid grid-cols-2 gap-6 w-full">
                             {visibleFeatures.map((feature) => (
-                                <Link to={feature.id === 30 ? '/tvattstuga' : feature.id === 31 ? '/gastlagenhet' : feature.id === 29 ? '/parkeringar' : feature.id === 28 ? '/bostader' : '/'} key={feature.id}>
+                                <Link to={feature.slug === 'tvattstuga' ? '/tvattstuga' : feature.slug === 'gastlagenhet' ? '/gastlagenhet' : feature.slug === 'parkeringar' ? '/parkeringar' : feature.slug === 'bostader' ? '/bostader' : '/'} key={feature.id}>
                                     <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full flex gap-4' >
                                         <div className='self-center'>
-                                            {feature.id === 30 &&
+                                            {feature.slug === 'tvattstuga' &&
                                                 <WashingMachineIcon size={32} className="text-green-500" />
                                             }
                                             {
-                                                feature.id === 31 &&
+                                                feature.slug === 'gastlagenhet' &&
                                                 <DoorOpenIcon size={32} className="text-green-500" />
                                             }
                                             {
-                                                feature.id === 29 &&
+                                                feature.slug === 'parkeringar' &&
                                                 <CarIcon size={32} className="text-green-500" />
                                             }
                                             {
-                                                feature.id === 28 &&
+                                                feature.slug === 'bostader' &&
                                                 <HouseLineIcon size={32} className="text-green-500" />
                                             }
                                         </div>
