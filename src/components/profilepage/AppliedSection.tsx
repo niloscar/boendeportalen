@@ -54,7 +54,7 @@ const AppliedSection = ({ appliedApartments, appliedParking }: AppliedSectionPro
                                 <li key={item.signUpId}>
                                     <button
                                         onClick={() => navigate(`/bostader/${item.apartment.id}`, { state: buildNavigationState(item) })}
-                                        className='group w-full rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-left text-sm leading-6 transition hover:border-neutral-300 flex items-center justify-between gap-4'
+                                        className='group w-full cursor-pointer rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-left text-sm leading-6 transition hover:border-neutral-300 flex items-center justify-between gap-4'
                                     >
                                         <div className='space-y-1'>
                                             <span className='block text-neutral-900'>Adress: {[item.apartment.street, item.apartment.house_number, item.apartment.stairwell].filter(Boolean).join(' ')}, {formatPostcode(item.apartment.postcode)} {item.apartment.city}</span>
@@ -89,7 +89,7 @@ const AppliedSection = ({ appliedApartments, appliedParking }: AppliedSectionPro
                                 <li key={item.applicationId}>
                                     <button
                                         onClick={() => navigate(`/parkeringar/${item.parking.id}`)}
-                                        className='group w-full rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-left text-sm leading-6 transition hover:border-neutral-300 flex items-center justify-between gap-4'
+                                        className='group w-full cursor-pointer rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-left text-sm leading-6 transition hover:border-neutral-300 flex items-center justify-between gap-4'
                                     >
                                         <div className='space-y-1'>
                                             <span className='block text-neutral-900'>Adress: {item.parking.address}, {formatPostcode(item.parking.postalCode)} {item.parking.city}</span>
