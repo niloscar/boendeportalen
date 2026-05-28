@@ -1,4 +1,4 @@
-import { HouseLineIcon } from '@phosphor-icons/react';
+import { HouseLineIcon, ArrowRightIcon } from '@phosphor-icons/react';
 import { Temporal } from '@js-temporal/polyfill';
 import { useNavigate } from 'react-router-dom';
 import { formatNumber } from '../../utils/calc';
@@ -57,12 +57,15 @@ const AppliedApartmentsSection = ({ appliedApartments }: AppliedApartmentsSectio
                                         state: buildNavigationState(item),
                                     })
                                 }
-                                className='w-full border-l-2 border-green-500 pl-3 py-1 text-left text-sm leading-6 space-y-1 transition hover:border-green-700'
+                                className='group border-l-2 border-green-500 pl-3 py-1 text-left text-sm leading-6 transition hover:border-green-700 inline-flex items-center gap-2'
                             >
-                                <span className='block text-neutral-900'>Adress: {item.apartment.street}, {item.apartment.city}</span>
-                                {item.apartment.area && <span className='block text-neutral-900'>Storlek: {item.apartment.area} kvm</span>}
-                                {item.apartment.rooms && <span className='block text-neutral-900'>Rum: {item.apartment.rooms}</span>}
-                                {item.rent !== null && <span className='block text-neutral-900'>Hyra: {formatNumber(item.rent)} kr/mån</span>}
+                                <div className='space-y-1'>
+                                    <span className='block text-neutral-900'>Adress: {item.apartment.street}, {item.apartment.city}</span>
+                                    {item.apartment.area && <span className='block text-neutral-900'>Storlek: {item.apartment.area} kvm</span>}
+                                    {item.apartment.rooms && <span className='block text-neutral-900'>Rum: {item.apartment.rooms}</span>}
+                                    {item.rent !== null && <span className='block text-neutral-900'>Hyra: {formatNumber(item.rent)} kr/mån</span>}
+                                </div>
+                                <ArrowRightIcon size={16} className='shrink-0 text-neutral-400 transition-transform group-hover:translate-x-1 group-hover:text-green-500' />
                             </button>
                         </li>
                     ))}

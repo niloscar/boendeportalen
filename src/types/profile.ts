@@ -136,6 +136,11 @@ export interface AppliedParkingSectionProps {
     appliedParking: AppliedParkingSummary[];
 }
 
+export interface AppliedSectionProps {
+    appliedApartments: AppliedApartmentSummary[];
+    appliedParking: AppliedParkingSummary[];
+}
+
 export interface ErrorReportFormProps {
     onCancel: () => void;
     onSubmit: (data: ReportFormData) => void;

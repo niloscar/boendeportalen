@@ -5,9 +5,8 @@ import { ArrowLeftIcon } from '@phosphor-icons/react';
 import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';
 import ApartmentOverviewCard from '../components/profilepage/ApartmentOverviewCard';
-import AppliedApartmentsSection from '../components/profilepage/AppliedApartmentsSection';
+import AppliedSection from '../components/profilepage/AppliedSection';
 import MyParkingSection from '../components/profilepage/MyParkingSection';
-import AppliedParkingSection from '../components/profilepage/AppliedParkingSection';
 import ApartmentDocumentsSection from '../components/profilepage/ApartmentDocumentsSection';
 import PersonalInfoSection from '../components/profilepage/PersonalInfoSection';
 import ProfileFormsSection from '../components/profilepage/ProfileFormsSection';
@@ -253,11 +252,8 @@ const ProfilePage = () => {
                         {myParking.length > 0 && (
                             <MyParkingSection myParking={myParking} />
                         )}
-                        {appliedParking.length > 0 && (
-                            <AppliedParkingSection appliedParking={appliedParking} />
-                        )}
-                        {appliedApartments.length > 0 && (
-                            <AppliedApartmentsSection appliedApartments={appliedApartments} />
+                        {(appliedApartments.length > 0 || appliedParking.length > 0) && (
+                            <AppliedSection appliedApartments={appliedApartments} appliedParking={appliedParking} />
                         )}
                         {contract && (
                             <ApartmentDocumentsSection
