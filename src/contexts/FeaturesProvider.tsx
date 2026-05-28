@@ -20,7 +20,7 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
                 setLoading(true)
                 setLoadError(null)
 
-                const data = await getFeatures();
+                const data = await getFeatures()
 
                 setFeatures(data)
                 setOriginalFeatures(data)
@@ -68,7 +68,7 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
     }, [changedFeatures, features])
 
     const visibleFeatures = useMemo(() => {
-        const featuresById = new Map<number, Feature>()
+        const featuresByKey = new Map<FeatureKey, Feature>()
 
         features
             .filter(feature => canShowFeatureForLevel(feature, userLevel))
@@ -80,17 +80,23 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
                 return a.name.localeCompare(b.name, 'sv', { sensitivity: 'base' })
             })
             .forEach(feature => {
-                if (!featuresById.has(feature.id)) {
-                    featuresById.set(feature.id, feature)
+                const featureKey = getFeatureKey(feature)
+
+                if (!featuresByKey.has(featureKey)) {
+                    featuresByKey.set(featureKey, feature)
                 }
             })
 
-        return Array.from(featuresById.values())
+        return Array.from(featuresByKey.values())
     }, [features, userLevel])
 
     const isFeatureEnabled = useCallback((slug: string): boolean => {
-        return visibleFeatures.some(feature => feature.slug === slug)
-    }, [visibleFeatures])
+        return features.some(feature =>
+            feature.slug === slug &&
+            feature.is_active &&
+            canShowFeatureForLevel(feature, userLevel)
+        )
+    }, [features, userLevel])
 
     const canShowFeature = useCallback((feature: Feature): boolean => {
         return canShowFeatureForLevel(feature, userLevel)
@@ -121,7 +127,7 @@ export function FeaturesProvider({ children }: { children: ReactNode }) {
         <FeaturesContext.Provider value={value}>
             {children}
         </FeaturesContext.Provider>
-    );
+    )
 }
 
 function getFeatureKey(feature: Feature): FeatureKey {
