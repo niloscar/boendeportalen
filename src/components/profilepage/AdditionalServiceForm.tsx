@@ -1,11 +1,5 @@
 import { ReportForm } from './ReportForm';
-import type { ReportFormData } from './ReportForm';
-
-interface AdditionalServiceFormProps {
-    onCancel: () => void;
-    onSubmit: (data: ReportFormData) => void;
-    isSubmitting?: boolean;
-}
+import type { AdditionalServiceFormProps } from '../../types/profile';
 
 const SERVICE_TYPES = [
     'Renovering',
