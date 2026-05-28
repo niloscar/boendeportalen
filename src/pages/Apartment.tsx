@@ -39,10 +39,10 @@ const Apartment = () => {
                 <Link to="/bostader" className="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-4 py-2 transition hover:border-neutral-400 hover:text-neutral-900"><ArrowLeftIcon className="h-4 w-4" /> Tillbaka</Link>
                 <Link to="/bostader" className="py-2 text-green-500 hover:text-green-600">Bostäder</Link>
                 <span>/</span>
-                <span className="text-neutral-900">{apartment.street}</span>
+                <span className="text-neutral-900">{apartment.street} {apartment.house_number}</span>
             </div>
             <article className="flex flex-col gap-6 rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8">
-                <h1 className="text-5xl">{apartment.street}</h1>
+                <h1 className="text-5xl">{apartment.street} {apartment.house_number}</h1>
                 <ImageCarousel images={apartment.images} size="large" rounded={true} />
                 <h2 className="text-2xl">Om bostaden</h2>
                 <p>{apartment.description}</p>

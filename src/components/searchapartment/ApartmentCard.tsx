@@ -59,7 +59,7 @@ const ApartmentCard = ({ apartment }: ApartmentProp) => {
             <article className="w-full bg-white border border-neutral-300 rounded-xl shadow-md group hover:shadow-lg transition-shadow duration-150 focus:outline-none focus:ring-2 focus:ring-green-500">
                 <ImageCarousel images={apartment.images} size="small" rounded={false} />
                 <div className="flex flex-col gap-1 p-4">
-                    <h2 className="text-xl font-semibold">{apartment.street}</h2>
+                    <h2 className="text-xl font-semibold">{apartment.street} {apartment.house_number}</h2>
                     <section className="w-full text-gray-600">
                         <ul className="w-full">
                             <ApartmentList variant="ul" items={details} />

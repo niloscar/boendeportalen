@@ -9,6 +9,7 @@ export interface ApartmentData {
     rooms: string,
     district: string,
     description: string,
+    house_number: number,
     rent: number,
     end_date: string,
     images: ApartmentImages[]
