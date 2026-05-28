@@ -54,7 +54,7 @@ export default function Laundry() {
         })();
     }, []);
 
-    if (!isFeatureEnabled('tvattid')) {
+    if (!isFeatureEnabled('tvattstuga')) {
         return <Navigate to="/" replace />;
     }
 
