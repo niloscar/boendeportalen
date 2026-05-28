@@ -7,7 +7,6 @@ import { getDetails } from '../../utils/apartments.ts'
 
 const ApartmentCard = ({ apartment }: ApartmentProp) => {
     const details = apartment ? getDetails(apartment) : null;
-
     if (!apartment || !details) {
         return (
             <section className="border border-solid border-green-500 rounded-2xl bg-white p-4 flex flex-col items-center basis-full gap-4 w-xs h-auto">

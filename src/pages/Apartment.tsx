@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from 'react';
 import { useLocation, Link, useParams } from 'react-router-dom';
 import { ArrowLeftIcon } from '@phosphor-icons/react'
 import ImageCarousel from '../components/searchapartment/ImageCarousel.tsx';
@@ -8,15 +9,32 @@ import type { ApartmentData, Detail } from '../types/apartment.ts';
 import ApartmentSignUp from '../components/searchapartment/ApartmentSignUp.tsx';
 import { useApartmentSignUp } from '../hooks/useApartmentSignUp.ts';
 import { useSession } from '../hooks/useAuth.ts';
-import { getDetails } from '../utils/apartments.ts'
-import { useApartmentData } from '../hooks/useApartmentData.ts';
+import { getDetails, fetchApartments } from '../utils/apartments.ts'
 
 const Apartment = () => {
     const { state } = useLocation();
     const session = useSession();
     const { apartmentId } = useParams();
-    const apartment: ApartmentData = state ? state.apartment : useApartmentData(5);
-    const details: Detail[] = state ? state.details : apartment && getDetails(apartment);
+    const [apartment, setApartment] = useState<ApartmentData | null>(
+        state?.apartment ?? null
+    );
+    const [details, setDetails] = useState<Detail[] | null>(
+        state?.details ?? null
+    );
+    useEffect(() => {
+        if (!state?.apartment && apartmentId) {
+            const loadApartment = async () => {
+                const data = await fetchApartments(apartmentId);
+                if (data) {
+                    setApartment(data);
+                    setDetails(getDetails(data));
+                }
+            };
+
+            loadApartment();
+        }
+    }, [state?.apartment, apartmentId]);
+
     const {
         signUp,
         deleteSignUp,

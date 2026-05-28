@@ -10,10 +10,10 @@ export const getAvailableApartments = async () => {
         throw err;
     }
 };
-export const getAvailableApartment = async (apartmentId : number | undefined) => {
+export const getAvailableApartment = async (apartmentId : string | undefined) => {
     try {
         const response = await apiConfig.get(`/available_apartments?id=eq.${apartmentId}`);
-        return response.data;
+        return response.data[0];
     } catch (err) {
         console.log(`Kunde inte hämta lägenheter, ${err}`);
         throw err;

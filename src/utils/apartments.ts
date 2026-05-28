@@ -1,8 +1,8 @@
 import type { ApartmentData } from "../types/apartment.ts";
 import { formatNumber } from '../utils/calc.ts';
+import { getAvailableApartment } from '../api/apartmentApi.ts';
 
 export const getUniqueOptions = (apartments: ApartmentData[], key: 'district' | 'rooms') => Array.from(new Set(apartments.map((apartment) => apartment[key]))).sort((a, b) => a.localeCompare(b, 'sv-SE'))
-
 
 export function getDetails(apartment: ApartmentData) {
     const calculateLastDay = apartment && subtractMonths(new Date(apartment.end_date), 1);
@@ -11,7 +11,7 @@ export function getDetails(apartment: ApartmentData) {
         date.setMonth(date.getMonth() - months);
         return date;
     }
-    const details = [
+    const details = apartment ? [
         {
             id: crypto.randomUUID(),
             title: "Kvadratmeter",
@@ -42,9 +42,46 @@ export function getDetails(apartment: ApartmentData) {
             title: "Sista ansökningsdag",
             content: applyBy
         },
-    ]
+    ] : [ {
+            id: crypto.randomUUID(),
+            title: "Kvadratmeter",
+            content: 0
+        },
+        {
+            id: crypto.randomUUID(),
+            title: "Antal rum",
+            content: 0
+        },
+        {
+            id: crypto.randomUUID(),
+            title: "Hyra",
+            content: 'n/a kr/mån'
+        },
+        {
+            id: crypto.randomUUID(),
+            title: "Område",
+            content: 'n/a'
+        },
+        {
+            id: crypto.randomUUID(),
+            title: "Tillgänglig från",
+            content: 'n/a'
+        },
+        {
+            id: crypto.randomUUID(),
+            title: "Sista ansökningsdag",
+            content: 'n/a'
+        },]
       return details
-
 }
 
-
+export const fetchApartments = async (apartmentId : string | undefined) => {
+        try {
+            const data = await getAvailableApartment(apartmentId);
+            return data
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+               return error.message
+            }
+        }
+    }
