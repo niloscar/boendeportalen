@@ -30,7 +30,7 @@ export async function createMessage(payload: CreateMessagePayload) {
         const { data: userData, error: userError } = await supabase.auth.getUser()
         if (userError || !userData.user) throw new Error('Du måste vara inloggad.')
 
-        const recipientUserIds = [...new Set(await getRecipientUserIds(payload))]
+        const recipientUserIds = await getRecipientUserIds(payload)
         if (recipientUserIds.length === 0) throw new Error('Inga mottagare hittades med de aktuella filtren.')
 
         const messageResponse = await apiConfig.post<MessageResponse[]>(
@@ -95,5 +95,5 @@ async function getRecipientUserIds(payload: CreateMessagePayload) {
         { params }
     )
 
-    return response.data.map((recipient) => recipient.user_id)
+    return [...new Set(response.data.map((recipient) => recipient.user_id))]
 }
