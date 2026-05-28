@@ -1,4 +1,5 @@
-import { useLocation, Link } from 'react-router-dom';
+
+import { useLocation, Link, useParams } from 'react-router-dom';
 import { ArrowLeftIcon } from '@phosphor-icons/react'
 import ImageCarousel from '../components/searchapartment/ImageCarousel.tsx';
 import Button from '../components/ui/Button.tsx';
@@ -7,12 +8,15 @@ import type { ApartmentData, Detail } from '../types/apartment.ts';
 import ApartmentSignUp from '../components/searchapartment/ApartmentSignUp.tsx';
 import { useApartmentSignUp } from '../hooks/useApartmentSignUp.ts';
 import { useSession } from '../hooks/useAuth.ts';
+import { getDetails } from '../utils/apartments.ts'
+import { useApartmentData } from '../hooks/useApartmentData.ts';
 
 const Apartment = () => {
     const { state } = useLocation();
     const session = useSession();
-    const apartment: ApartmentData = state && state.apartment;
-    const details: Detail[] = state && state.details;
+    const { apartmentId } = useParams();
+    const apartment: ApartmentData = state ? state.apartment : useApartmentData(5);
+    const details: Detail[] = state ? state.details : apartment && getDetails(apartment);
     const {
         signUp,
         deleteSignUp,

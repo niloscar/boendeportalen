@@ -2,49 +2,11 @@ import { Link } from 'react-router-dom'
 import type { ApartmentProp } from "../../types/apartment.ts";
 import ImageCarousel from './ImageCarousel.tsx';
 import ApartmentList from './ApartmentList.tsx';
-import { formatNumber } from '../../utils/calc.ts';
 import { ArrowRightIcon } from '@phosphor-icons/react'
+import { getDetails } from '../../utils/apartments.ts'
 
 const ApartmentCard = ({ apartment }: ApartmentProp) => {
-    const calculateLastDay = apartment && subtractMonths(new Date(apartment.end_date), 1);
-    const applyBy = calculateLastDay && calculateLastDay.toISOString().split("T")[0];
-    const details = apartment && [
-        {
-            id: crypto.randomUUID(),
-            title: "Kvadratmeter",
-            content: apartment.area
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Antal rum",
-            content: apartment.rooms
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Hyra",
-            content: `${formatNumber(apartment.rent)} kr/mån`
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Område",
-            content: apartment.district
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Tillgänglig från",
-            content: apartment.end_date
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Sista ansökningsdag",
-            content: applyBy
-        },
-    ]
-
-    function subtractMonths(date: Date, months: number) {
-        date.setMonth(date.getMonth() - months);
-        return date;
-    }
+    const details = apartment ? getDetails(apartment) : null;
 
     if (!apartment || !details) {
         return (
