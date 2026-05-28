@@ -2,28 +2,56 @@ import { Link } from 'react-router-dom'
 import { signOut } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useFeatures } from '../hooks/useFeatures'
+import { useProfileData } from '../hooks/useProfileData';
 
 export default function HomePage() {
-    const { user } = useAuth()
     const { loading, loadError, visibleFeatures } = useFeatures()
+    const { user } = useAuth();
+    const userId = user?.id ?? '';
+    const {
+        clearLoadError,
+        profile,
+        setProfile,
+        contract,
+        documentUrls,
+        apartmentInfo,
+        manualDocuments,
+        floorPlanDocument,
+        appliedApartments,
+        myParking,
+        appliedParking,
+    } = useProfileData(userId, loading);
+
 
     return (
         <main className="w-full flex flex-col gap-6 justify-start items-center">
-
-            <h1 className="text-2xl font-bold">Välkommen till Boendeportalen!</h1>
-
             {loading && <p className="text-sm text-neutral-600">Laddar funktioner...</p>}
             {loadError && <p className="text-sm text-red-600">Kunde inte ladda funktioner: {loadError}</p>}
+            {user &&
+                <>
+                    <h1 className="text-2xl font-bold">Välkommen till Boendeportalen {profile?.full_name}!</h1>
 
-            {!loading && !loadError && visibleFeatures.length > 0 && (
-                <ul>
-                    {visibleFeatures.map((feature) => (
-                        <li key={feature.id}>
-                            {feature.name} - {feature.description}
-                        </li>
-                    ))}
-                </ul>
-            )}
+                    <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full'>
+                        <div className='flex items-center gap-4'>
+                            <p>Här i Boendeportalen har du din kontakt till hyresvärden. </p>
+                        </div>
+                    </section>
+                    {!loading && !loadError && visibleFeatures.length > 0 && (
+                        <section className="grid grid-cols-2 gap-6 w-full">
+                            {visibleFeatures.map((feature) => (
+                                <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full'>
+                                    <h3>{feature.name}</h3>
+                                    <p>{feature.description}</p>
+                                    <p>{feature.id}</p>
+                                    <p></p>
+                                </section>
+                            ))}
+                        </section>
+                    )}
+
+                </>
+
+            }
 
             {!user &&
                 <p>
