@@ -3,11 +3,12 @@ import type { ReportFormData } from './forms';
 
 export interface Profile {
     id?: string
-    role?: string
+    role?: 'admin' | 'tenant' | 'user'
     isAdmin?: boolean
     email?: string | null
     full_name?: string | null
-    avatar_url?: string
+    avatar_url?: string | null
+    phone?: string | null
     [key: string]: unknown
 }
 
