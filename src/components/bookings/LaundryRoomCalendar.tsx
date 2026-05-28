@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 
-import type { EventClickArg, CalendarApi } from "@fullcalendar/core";
+import type { EventClickArg } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 
 import useAuth from "../../hooks/useAuth";
@@ -31,20 +31,12 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
     //Handle window resizing
     const calendarRef = useRef<FullCalendar | null>(null);
 
+    // Checks screen-width
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
-        handleResize(); // sätt initialt värde
         window.addEventListener("resize", handleResize);
-
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
-    useEffect(() => {
-        const api: CalendarApi | undefined = calendarRef.current?.getApi();
-        if (!api) return;
-
-        api.changeView(isMobile ? "listWeek" : "timeGridWeek");
-    }, [isMobile]);
 
     // Defines a 30 day window for the calendar.
     const today = useMemo(() => new Date(), []);
@@ -101,6 +93,7 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
                 calendarRef={calendarRef}
                 calendarEvents={calendarEvents}
                 today={today}
+                isMobile={isMobile}
                 calMaxDate={calMaxDate}
                 handleEventClick={handleEventClick}
             />
@@ -128,7 +121,7 @@ export default function LaundryRoomCalendar({ bookings, timeslots, refreshBookin
                     setOpenBookDialog(false);
                     setNewBooking(null);
                 }}
-                confirmColor="green"
+                confirmColor="primary"
             />
         </div>
     );

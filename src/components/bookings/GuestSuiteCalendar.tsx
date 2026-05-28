@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 
-import type { EventInput, EventClickArg, CalendarApi } from "@fullcalendar/core";
+import type { EventInput, EventClickArg } from "@fullcalendar/core";
 import FullCalendar from "@fullcalendar/react";
 
 import type { NewBooking, Booking, GuestSuiteCalendarProps, MyExtendedProps } from "../../types/booking";
@@ -66,19 +66,9 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
     // Checks screen-width
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
-        handleResize();
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
-    // Controls calendar view based on screen-width
-    useEffect(() => {
-        const api: CalendarApi | undefined = calendarRef.current?.getApi();
-        if (!api) return;
-
-        api.changeView(isMobile ? "listWeek" : "dayGridMonth");
-    }, [isMobile]);
-
 
     // Render all calendar events - - - - - - - - - - - - - -
     // calendarEvents: Will hold all events to be displayed in calendar
@@ -147,10 +137,12 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
 
     return (
         <div>
+            <div id="parent" className="flex justify-center pb-8"></div>
             <GuestSuiteCalendarView
                 calendarRef={calendarRef}
                 calendarEvents={calendarEvents}
                 today={today}
+                isMobile={isMobile}
                 calMaxDate={calMaxDate}
                 handleEventClick={handleEventClick}
                 handleViewDidMount={handleViewDidMount}
@@ -178,7 +170,7 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
                     setOpenBookDialog(false);
                     setNewBooking(null);
                 }}
-                confirmColor="green"
+                confirmColor="primary"
             />
 
             <AlertDialog
@@ -186,7 +178,7 @@ export default function GuestSuiteCalendar({ bookings, refreshBookings }: GuestS
                 title="Information"
                 message={alertDialogMessage}
                 onConfirm={handleAlertConfirm}
-                confirmColor="green"
+                confirmColor="primary"
             />
         </div>
     );

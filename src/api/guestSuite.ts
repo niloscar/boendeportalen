@@ -32,7 +32,7 @@ export async function fetchBookedSlots(): Promise<ApiResult<Booking[]>> {
 }
 
 // Delete booking
-export async function deleteGuestSuiteBooking(id: number): Promise<ApiResult<any>> {
+export async function deleteGuestSuiteBooking(id: number): Promise<ApiResult<void>> {
     try {
         const response = await apiConfig.delete("guest_suite_bookings", {
             params: { id: `eq.${id}` }
