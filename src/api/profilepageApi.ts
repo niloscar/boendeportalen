@@ -82,7 +82,7 @@ export const getApartmentForUser = async (userId: string) => {
                 'end_date',
                 'status',
                 'contract_file_path',
-                'apartments(id,street,postcode,city,area,rooms,district,description)',
+                'apartments(id,street,house_number,stairwell,postcode,city,area,rooms,district,description)',
             ].join(','),
             tenant_id: `eq.${userId}`,
             status: 'eq.active',
@@ -211,7 +211,7 @@ export const getAppliedApartments = async (userId: string): Promise<AppliedApart
     const apartmentIds = signUps.map((s) => s.apartment_id);
     const apartmentsResponse = await apiConfig.get<ApartmentSummary[]>('/apartments', {
         params: {
-            select: 'id,street,postcode,city,area,rooms,district,description',
+            select: 'id,street,house_number,stairwell,postcode,city,area,rooms,district,description',
             id: `in.(${apartmentIds.join(',')})`,
         },
     });

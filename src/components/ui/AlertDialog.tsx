@@ -10,7 +10,7 @@ export default function AlertDialog({
 }: AlertDialogProps) {
 
     const colorMap = {
-        green: "bg-green-500 hover:bg-green-700",
+        primary: "bg-neutral-900 hover:bg-neutral-800",
         red: "bg-red-500 hover:bg-red-700"
     };
 
@@ -47,7 +47,7 @@ export default function AlertDialog({
                 <div className="pt-6 rounded-b-2xl flex justify-end bg-white">
                     <button
                         onClick={onConfirm}
-                        className={`px-4 py-2 rounded-xl text-white transition ${colorMap[confirmColor]}`}>
+                        className={`px-5 py-2.5 text-sm rounded-2xl font-semibold transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer text-white ${colorMap[confirmColor]}`}>
                         OK
                     </button>
                 </div>

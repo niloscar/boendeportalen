@@ -1,9 +1,10 @@
 const LaundryRoomInfo = () => {
     return (
         <div>
-            För att alla hyresgäster ska ha möjlighet att tvätta på ett rättvist sätt gäller följande regler:
+            
+            <div className="pt-2 pb-4">För att alla hyresgäster ska ha möjlighet att tvätta på ett rättvist sätt gäller följande regler:</div>
 
-            <ul className="list-disc list-inside text-gray-700 p-0">
+            <ul className="list-disc list-inside text-gray-600">
                 <li>Du kan endast ha en aktiv bokning åt gången.</li>
 
                 <li>Det går att boka max en månad i förväg.</li>

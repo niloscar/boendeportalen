@@ -3,10 +3,16 @@ import { useFeatures } from '../../hooks/useFeatures'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import ExpandedWidget from '../../components/admin/ExpandedWidget'
 import Widget from '../../components/admin/Widget'
+import Issues from '../../components/admin/widgets/Issues'
+import Messages from '../../components/admin/widgets/messages/Messages'
 
 import type { ComponentType } from 'react'
 
 const WIDGET_COMPONENTS = {
+    Issues,
+    Messages,
+    Tenants: () => <p>Lista över samtliga hyresgäster.</p>,
+    Resources: () => <p>Hantera uthyrningsbara resurser.</p>,
 } satisfies Record<string, ComponentType>
 
 function getWidgetComponent(componentName: string | null): ComponentType | null {
@@ -32,12 +38,10 @@ export default function DashboardPage() {
 
     const expandedWidget = widgets.find(widget => widget.name === expandedWidgetTitle)
 
-    console.log('Aktiva widgets:', widgets.map(widget => widget.name))
-
     return (
         <main>
             <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 960: 2 }}>
-                <Masonry style={{ gap: 24 }} itemStyle={{ gap: 24 }}>
+                <Masonry style={{ gap: 16 }} itemStyle={{ gap: 16 }}>
                     {widgets.map((widget) => {
                         const Component = getWidgetComponent(widget.component)
 

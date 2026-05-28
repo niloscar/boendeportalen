@@ -1,28 +1,38 @@
 import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
-import type { GuestSuiteCalendarPropsBig } from "../../types/booking";
+import type { LaundryRoomCalendarPropsBig } from "../../types/booking";
 
-export default function GuestSuiteCalendarView({
+export default function LaundryRoomCalendarView({
     calendarRef,
     calendarEvents,
     today,
+    isMobile,
     calMaxDate,
-    handleEventClick,
-    handleViewDidMount
-}: GuestSuiteCalendarPropsBig) {
+    handleEventClick
+}: LaundryRoomCalendarPropsBig) {
+
     return (
         <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
+            plugins={[timeGridPlugin, listPlugin, interactionPlugin]}
+            initialView="timeGridWeek"
             ref={calendarRef}
             headerToolbar={{
                 left: "today",
                 center: "title",
                 right: "prev,next"
+            }}
+            datesSet={() => {
+                const api = calendarRef.current?.getApi();
+                if (!api) return;
+
+                const desiredView = isMobile ? "listWeek" : "timeGridWeek";
+
+                if (api.view.type !== desiredView) {
+                    api.changeView(desiredView);
+                }
             }}
             events={calendarEvents}
             eventClassNames={(arg) => {
@@ -52,13 +62,15 @@ export default function GuestSuiteCalendarView({
             eventClick={handleEventClick}
             firstDay={1}
             locale={svLocale}
-            allDaySlot={true}
+            allDaySlot={false}
+            slotDuration="01:00:00"
+            slotMinTime="07:00:00"
+            slotMaxTime="22:00:00"
             height="auto"
             validRange={{
                 start: today.toISOString().split("T")[0],
                 end: calMaxDate.toISOString().split("T")[0]
             }}
-            viewDidMount={handleViewDidMount}
         />
     );
 }
