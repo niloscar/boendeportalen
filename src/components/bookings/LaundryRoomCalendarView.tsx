@@ -28,7 +28,7 @@ export default function LaundryRoomCalendarView({
                 const api = calendarRef.current?.getApi();
                 if (!api) return;
 
-                const desiredView = isMobile ? "listWeek" : "dayGridMonth";
+                const desiredView = isMobile ? "listWeek" : "timeGridWeek";
 
                 if (api.view.type !== desiredView) {
                     api.changeView(desiredView);

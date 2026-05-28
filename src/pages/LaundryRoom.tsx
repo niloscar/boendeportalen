@@ -1,11 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
-import { useFeatures } from '../hooks/useFeatures'
 import { fetchLaundrySlots, fetchBookedSlots } from "../api/laundryRoom";
 import type { Timeslot, Booking } from "../types/booking";
 import LaundryRoomCalendar from "../components/bookings/LaundryRoomCalendar";
 import LaundryRoomInfo from "../components/bookings/LaundryRoomInfo";
 import AlertDialog from "../components/ui/AlertDialog";
 import { WashingMachineIcon } from "@phosphor-icons/react";
+import { useFeatures } from '../hooks/useFeatures'
+import { Navigate } from "react-router-dom";
 
 export default function Laundry() {
 
@@ -13,6 +14,7 @@ export default function Laundry() {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [timeslots, setTimeslots] = useState<Timeslot[]>([]);
     const [bookings, setBookings] = useState<Booking[]>([]);
+    const { isFeatureEnabled } = useFeatures()
 
     useEffect(() => {
         (async () => {
@@ -52,11 +54,9 @@ export default function Laundry() {
         })();
     }, []);
 
-    isFeatureEnabled('tvattstuga') {
-        return(
-            <div className="mb-6 text-gray-600 text-center pb-6">Du får inte öppna denna sida.</div>
-        )
-     }
+    if (!isFeatureEnabled('tvattstuga')) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
 

@@ -5,11 +5,14 @@ import type { Booking } from "../types/booking";
 import AlertDialog from "../components/ui/AlertDialog";
 import GuestSuiteInfo from "../components/bookings/GuestSuiteInfo";
 import { BuildingApartmentIcon } from "@phosphor-icons/react";
+import { useFeatures } from '../hooks/useFeatures'
+import { Navigate } from "react-router-dom";
 
 export default function GuestSuite() {
     const [openAlertDialog, setOpenAlertDialog] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [bookings, setBookings] = useState<Booking[]>([]);
+    const { isFeatureEnabled } = useFeatures()
 
     useEffect(() => {
         async function load() {
@@ -36,6 +39,10 @@ export default function GuestSuite() {
 
         setBookings(result.data);
     }, []);
+
+    if (!isFeatureEnabled('gastlagenhet')) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <div>
