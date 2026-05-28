@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { InfoIcon } from '@phosphor-icons/react';
-import type { ApartmentDocument } from '../../api/profilepageApi';
+import type { ApartmentDocument } from '../../types/profile';
 
 interface ApartmentDocumentsSectionProps {
     documents: ApartmentDocument[];

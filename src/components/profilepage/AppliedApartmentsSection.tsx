@@ -2,7 +2,7 @@ import { HouseLineIcon } from '@phosphor-icons/react';
 import { Temporal } from '@js-temporal/polyfill';
 import { useNavigate } from 'react-router-dom';
 import { formatNumber } from '../../utils/calc';
-import type { AppliedApartmentSummary } from '../../api/profilepageApi';
+import type { AppliedApartmentSummary } from '../../types/profile';
 import type { ApartmentData, Detail } from '../../types/apartment';
 
 interface AppliedApartmentsSectionProps {

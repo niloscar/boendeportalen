@@ -1,6 +1,6 @@
 import { CarIcon } from '@phosphor-icons/react';
 import { formatNumber } from '../../utils/calc';
-import type { ParkingSpotSummary } from '../../api/profilepageApi';
+import type { ParkingSpotSummary } from '../../types/profile';
 
 interface MyParkingSectionProps {
     myParking: ParkingSpotSummary[];

@@ -19,7 +19,7 @@ import type {
     ContractSummary,
     ParkingSpotSummary,
     UserProfile,
-} from '../api/profilepageApi';
+} from '../types/profile';
 import type React from 'react';
 
 // Formats a Swedish postcode with a space separator: "12345" → "123 45"

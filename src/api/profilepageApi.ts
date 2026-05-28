@@ -1,75 +1,33 @@
 ﻿import { supabase } from '../lib/supabase';
 import apiConfig from './axiosConfig.ts';
+import type {
+    ApartmentDocument,
+    ApartmentEquipment,
+    ApartmentSummary,
+    AppliedApartmentSummary,
+    AppliedParkingSummary,
+    ContractSummary,
+    ErrorReportPayload,
+    ErrorReportRecord,
+    ParkingSpotSummary,
+    ServiceRequestPayload,
+    ServiceRequestRecord,
+    UserProfile,
+} from '../types/profile';
 
-export type UserProfile = {
-    id: string;
-    full_name: string | null;
-    email: string | null;
-    phone: string | null;
-    avatar_url: string | null;
-};
-
-export type ApartmentSummary = {
-    id: number;
-    street: string;
-    postcode: number;
-    city: string;
-    area: string | null;
-    rooms: string | null;
-    district: string | null;
-    description: string | null;
-};
-
-export type ContractSummary = {
-    id: number;
-    apartment_id: number;
-    rent: number;
-    start_date: string;
-    end_date: string | null;
-    status: 'active' | 'terminated' | 'pending';
-    contract_file_path: string | null;
-    apartments: ApartmentSummary | null;
-};
-
-export type ApartmentDocument = {
-    id: number;
-    apartment_id: number;
-    title: string;
-    file_path: string;
-    document_type: 'floor_plan' | 'manual' | 'other';
-    equipment_type: string | null;
-    created_at: string;
-};
-
-export type ApartmentEquipment = {
-    id: number;
-    apartment_id: number;
-    equipment_type: string;
-};
-
-export type ErrorReportRecord = {
-    id: number;
-};
-
-export type ServiceRequestRecord = {
-    id: number;
-};
-
-export type ErrorReportPayload = {
-    category: string;
-    subject: string;
-    location: string;
-    description: string;
-    extra_location?: string;
-    allow_master_key?: boolean;
-    has_pet?: boolean;
-    contact_first?: boolean;
-};
-
-export type ServiceRequestPayload = {
-    service_type: string;
-    location?: string;
-    description: string;
+export type {
+    ApartmentDocument,
+    ApartmentEquipment,
+    ApartmentSummary,
+    AppliedApartmentSummary,
+    AppliedParkingSummary,
+    ContractSummary,
+    ErrorReportPayload,
+    ErrorReportRecord,
+    ParkingSpotSummary,
+    ServiceRequestPayload,
+    ServiceRequestRecord,
+    UserProfile,
 };
 
 // Sanitizes a file name for Supabase Storage: strips diacritics, replaces
