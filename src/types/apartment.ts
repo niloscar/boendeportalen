@@ -37,13 +37,13 @@ export type Filter = {
 }
 
 export type ApartmentListProp =
-  | {
-      variant: 'div'
-      items: ApartmentData[]
+    | {
+        variant: 'div'
+        items: ApartmentData[]
     }
-  | {
-      variant: 'ul'
-      items: Detail[]
+    | {
+        variant: 'ul'
+        items: Detail[]
     }
 export type ApartmentProp = {
     apartment: ApartmentData | null,
@@ -65,7 +65,7 @@ export interface SignedUpData {
     end_date: string,
 }
 
-export type SignUp ={ 
+export type SignUp = {
     error: string,
     loading: boolean,
     applied: SignedUpData[],
@@ -73,3 +73,27 @@ export type SignUp ={
     deleteSignUp: () => Promise<void>,
     signUp: () => Promise<void>
 }
+
+export type reducerState = {
+    district: string[],
+    rooms: string[],
+    maxRent: number,
+    sortBy: string,
+}
+
+export type reducerAction =
+    | {
+        type: 'districtChanged',
+        value: string[],
+    } | {
+        type: 'roomChanged',
+        value: string[]
+    } | {
+        type: 'maxRentChanged',
+        value: number
+    } | {
+        type: 'sortByChanged',
+        value: string
+    } | {
+        type: 'filtersReset'
+    }

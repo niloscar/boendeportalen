@@ -19,7 +19,7 @@ const SearchApartment = () => {
         setDistrict,
         setRooms,
         setMaxRent,
-        setSortBy
+        setSortBy,
     } = useApartmentFilter();
 
     if (error) {
