@@ -3,10 +3,12 @@ import { useFeatures } from '../../hooks/useFeatures'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import ExpandedWidget from '../../components/admin/ExpandedWidget'
 import Widget from '../../components/admin/Widget'
+import Issues from '../../components/admin/widgets/Issues'
 
 import type { ComponentType } from 'react'
 
 const WIDGET_COMPONENTS = {
+    Issues
 } satisfies Record<string, ComponentType>
 
 function getWidgetComponent(componentName: string | null): ComponentType | null {
@@ -31,8 +33,6 @@ export default function DashboardPage() {
         .sort((a, b) => a.name.localeCompare(b.name, 'sv'))
 
     const expandedWidget = widgets.find(widget => widget.name === expandedWidgetTitle)
-
-    console.log('Aktiva widgets:', widgets.map(widget => widget.name))
 
     return (
         <main>
