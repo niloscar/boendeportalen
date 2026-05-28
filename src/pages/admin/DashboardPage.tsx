@@ -39,7 +39,7 @@ export default function DashboardPage() {
     const expandedWidget = widgets.find(widget => widget.name === expandedWidgetTitle)
 
     return (
-        <main>
+        <>
             <ResponsiveMasonry columnsCountBreakPoints={{ 0: 1, 960: 2 }}>
                 <Masonry style={{ gap: 16 }} itemStyle={{ gap: 16 }}>
                     {widgets.map((widget) => {
@@ -76,6 +76,6 @@ export default function DashboardPage() {
                     </ExpandedWidget>
                 )
             })()}
-        </main>
+        </>
     )
 }
