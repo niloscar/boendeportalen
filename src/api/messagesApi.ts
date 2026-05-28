@@ -11,13 +11,12 @@ import type { CreateMessagePayload, MessageResponse, MessageRecipientCandidate }
 
 export async function getMessagesForCurrentUser() {
     try {
-const response = await apiConfig.get('/my_messages', {
-    params: {
-        select: '*'
-    }
-})
-
-console.log(response.data)
+        const response = await apiConfig.get('/my_messages', {
+            params: {
+                select: '*',
+                order: 'publish_at.desc'
+            }
+        })
 
         return response.data
     } catch (error) {
@@ -31,8 +30,8 @@ export async function createMessage(payload: CreateMessagePayload) {
         const { data: userData, error: userError } = await supabase.auth.getUser()
         if (userError || !userData.user) throw new Error('Du måste vara inloggad.')
 
-        const recipientUserIds = await getRecipientUserIds(payload)
-        if (recipientUserIds.length === 0) throw new Error('Inga mottagare hittades.')
+        const recipientUserIds = [...new Set(await getRecipientUserIds(payload))]
+        if (recipientUserIds.length === 0) throw new Error('Inga mottagare hittades med de aktuella filtren.')
 
         const messageResponse = await apiConfig.post<MessageResponse[]>(
             '/messages',

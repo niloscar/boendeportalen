@@ -8,11 +8,11 @@ import FormSwitch from '../../../ui/FormSwitch'
 import { ArrowLeftIcon, ArrowRightIcon, PaperPlaneRightIcon, TimerIcon } from '@phosphor-icons/react'
 
 import type { SelectDropDownItem } from '../../../ui/SelectDropDown'
-import type { 
+import type {
     Step,
-    MessageState, 
-    MessageAction, 
-    RecipientMode, 
+    MessageState,
+    MessageAction,
+    RecipientMode,
     RecipientFilters,
     MessagesFormStepProps
 } from "../../../../types/messages"
@@ -208,7 +208,7 @@ function RecipientsStep({ state, dispatch }: MessagesFormStepProps) {
             {state.recipientMode === 'filtered_users' && (
                 <div className="flex flex-col gap-3">
                     <div className="from-group flex items-center gap-2">
-                        <FormSwitch 
+                        <FormSwitch
                             id="isTenant"
                             name="isTenant"
                             checked={state.filters.isTenant}
@@ -218,44 +218,44 @@ function RecipientsStep({ state, dispatch }: MessagesFormStepProps) {
                     </div>
 
                     {state.filters.isTenant && (
-                    <fieldset className="flex flex-col gap-2">
-                        <div className="input-group flex items-center gap-2">
-                            <label className="w-1/2">
-                                <span className="block text-sm mb-1">Husnummer</span>
-                                <input
-                                    type="number"
-                                    className="text-sm w-full border border-neutral-300 rounded-xl px-4 py-2"
-                                    placeholder="T.ex. 17"
-                                    value={state.filters.houseNumber}
-                                    onChange={(event) => handleFilterRecipientChange(
-                                        'houseNumber',
-                                        event.target.value
-                                    )}
-                                />
-                            </label>
-                            <label className="w-1/2">
-                                <span className="block text-sm mb-1">Trappuppgång</span>
-                                <input
-                                    type="text"
-                                    className={`${!state.filters.houseNumber ? 'bg-neutral-100' : ''} text-sm w-full border border-neutral-300 rounded-xl px-4 py-2`}
-                                    placeholder="T.ex. A"
-                                    value={state.filters.stairwell}
-                                    onChange={(event) => handleFilterRecipientChange(
-                                        'stairwell',
-                                        event.target.value
-                                    )}
-                                    disabled={!state.filters.houseNumber}
-                                />
-                            </label>
-                        </div>
-                        <i className="text-sm text-neutral-500 mb-2">
-                            Fälten lämnas tomma för att skicka till alla hyresgäster.
-                        </i>
-                    </fieldset>
+                        <fieldset className="flex flex-col gap-2">
+                            <div className="input-group flex items-center gap-2">
+                                <label className="w-1/2">
+                                    <span className="block text-sm mb-1">Husnummer</span>
+                                    <input
+                                        type="number"
+                                        className="text-sm w-full border border-neutral-300 rounded-xl px-4 py-2"
+                                        placeholder="T.ex. 17"
+                                        value={state.filters.houseNumber}
+                                        onChange={(event) => handleFilterRecipientChange(
+                                            'houseNumber',
+                                            event.target.value
+                                        )}
+                                    />
+                                </label>
+                                <label className="w-1/2">
+                                    <span className="block text-sm mb-1">Trappuppgång</span>
+                                    <input
+                                        type="text"
+                                        className={`${!state.filters.houseNumber ? 'bg-neutral-100' : ''} text-sm w-full border border-neutral-300 rounded-xl px-4 py-2`}
+                                        placeholder="T.ex. A"
+                                        value={state.filters.stairwell}
+                                        onChange={(event) => handleFilterRecipientChange(
+                                            'stairwell',
+                                            event.target.value
+                                        )}
+                                        disabled={!state.filters.houseNumber}
+                                    />
+                                </label>
+                            </div>
+                            <i className="text-sm text-neutral-500 mb-2">
+                                Fälten lämnas tomma för att skicka till alla hyresgäster.
+                            </i>
+                        </fieldset>
                     )}
 
                     <div className="from-group flex items-center gap-2">
-                        <FormSwitch 
+                        <FormSwitch
                             id="hasParkingSpace"
                             name="hasParkingSpace"
                             checked={state.filters.hasParkingSpace}
@@ -285,7 +285,7 @@ function RecipientsStep({ state, dispatch }: MessagesFormStepProps) {
     )
 }
 
-function MessageStep({state, dispatch}: MessagesFormStepProps) {
+function MessageStep({ state, dispatch }: MessagesFormStepProps) {
     const isSubjectValid = state.subject.trim().length > 0
     const isBodyValid = state.body.trim().length > 0
     const canContinue = isSubjectValid && isBodyValid
@@ -408,9 +408,13 @@ function ReviewStep({ state, dispatch }: MessagesFormStepProps) {
         } catch (error) {
             console.error(error)
 
+            const message = error instanceof Error
+                ? error.message
+                : 'Det gick inte att skapa utskicket. Försök igen.'
+
             dispatch({
                 type: 'SUBMIT_ERROR',
-                payload: 'Det gick inte att skapa utskicket. Försök igen.'
+                payload: message
             })
         }
     }
@@ -463,6 +467,15 @@ function ReviewStep({ state, dispatch }: MessagesFormStepProps) {
                     <p>{sendImmediately ? 'Omedelbart' : new Date(state.publishAt).toLocaleString()}</p>
                 </div>
             </section>
+
+            {state.errorMessage && (
+                <p
+                    role="alert"
+                    className="text-sm text-red-600 bg-red-100 rounded-xl px-4 py-3"
+                >
+                    {state.errorMessage}
+                </p>
+            )}
 
             <div className="button-group flex justify-between">
                 <Button

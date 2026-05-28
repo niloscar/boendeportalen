@@ -10,8 +10,8 @@ export function getRecipients(state: MessageState): string {
             filters.isTenant ? 'hyresgäster' : 'användare'
         ]
 
-        if (filters.stairwell) parts.push(`i trappuppgång ${filters.stairwell}`)
         if (filters.houseNumber) parts.push(`i hus ${filters.houseNumber}`)
+        if (filters.stairwell) parts.push(`i trappuppgång ${filters.stairwell.toUpperCase()}`)
         if (filters.hasParkingSpace) parts.push('som har en parkeringsplats')
 
         return `alla ${parts.join(' ')}`
