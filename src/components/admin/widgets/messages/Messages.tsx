@@ -1,4 +1,5 @@
 import { useReducer } from "react"
+import { createMessage } from "../../../../api/messagesApi"
 import { getRecipients, getRecipientSummary } from "./recipientSummary"
 import { Button } from "../../../ui/Button"
 import { getCurrentDateTimeLocalValue } from "../../../../utils/currentDateTimeLocal"
@@ -13,8 +14,7 @@ import type {
     MessageAction, 
     RecipientMode, 
     RecipientFilters,
-    MessagesFormStepProps,
-    CreateMessagePayload
+    MessagesFormStepProps
 } from "../../../../types/messages"
 
 const initialState: MessageState = {
@@ -374,53 +374,30 @@ function ScheduleStep({ state, dispatch }: MessagesFormStepProps) {
         </div>
     )
 }
-    import { supabase } from '../../../../lib/supabase'
-    import { useAuth } from '../../../../hooks/useAuth'
 
 function ReviewStep({ state, dispatch }: MessagesFormStepProps) {
-
-
-
-    const { profile } = useAuth()
-
-
-
-
-    function delay(ms: number) {
-        return new Promise((resolve) => {
-            setTimeout(resolve, ms)
-        })
-    }
-
     async function handleSubmitMessage() {
+        if (!state.recipientMode) {
+            dispatch({
+                type: 'SUBMIT_ERROR',
+                payload: 'Välj mottagare innan du skickar utskicket.'
+            })
 
-const { data, error } = await supabase
-    .from('messages')
-    .insert({
-        subject: 'Test',
-        body: 'Testmeddelande',
-        publish_at: new Date().toISOString(),
-        sent_immediately: true,
-        created_by_user_id: profile?.id
-    })
-    .select()
-    .single()
-
-console.log({ data, error })
+            return
+        }
 
         dispatch({ type: 'SUBMIT_START' })
 
         try {
-            // await createMessage({
-            //     recipientMode: state.recipientMode,
-            //     filters: state.filters,
-            //     selectedUserIds: state.selectedUserIds,
-            //     subject: state.subject,
-            //     body: state.body,
-            //     publishAt: state.publishAt
-            // })
-
-            await delay(5000)
+            await createMessage({
+                recipientMode: state.recipientMode,
+                filters: state.filters,
+                selectedUserIds: state.selectedUserIds,
+                subject: state.subject,
+                body: state.body,
+                publishAt: state.publishAt,
+                sendImmediately
+            })
 
             dispatch({
                 type: 'CONFIRM_MESSAGE',
@@ -428,7 +405,9 @@ console.log({ data, error })
                     sendImmediately
                 }
             })
-        } catch {
+        } catch (error) {
+            console.error(error)
+
             dispatch({
                 type: 'SUBMIT_ERROR',
                 payload: 'Det gick inte att skapa utskicket. Försök igen.'
@@ -529,50 +508,4 @@ function SuccessStep({ state, dispatch }: MessagesFormStepProps) {
             </Button>
         </div>
     )
-}
-
-
-export async function createMessage(payload: CreateMessagePayload) {
-    const { data: userData, error: userError } = await supabase.auth.getUser()
-
-    if (userError || !userData.user) {
-        throw new Error('Du måste vara inloggad.')
-    }
-
-    const recipientUserIds = await getRecipientUserIds(payload)
-
-    if (recipientUserIds.length === 0) {
-        throw new Error('Inga mottagare hittades.')
-    }
-
-    const { data: message, error: messageError } = await supabase
-        .from('messages')
-        .insert({
-            subject: payload.subject,
-            body: payload.body,
-            publish_at: payload.publishAt,
-            sent_immediately: payload.sendImmediately,
-            created_by_user_id: userData.user.id
-        })
-        .select('id')
-        .single()
-
-    if (messageError) {
-        throw messageError
-    }
-
-    const recipientRows = recipientUserIds.map((userId) => ({
-        message_id: message.id,
-        user_id: userId
-    }))
-
-    const { error: recipientsError } = await supabase
-        .from('message_recipients')
-        .insert(recipientRows)
-
-    if (recipientsError) {
-        throw recipientsError
-    }
-
-    return message
 }
