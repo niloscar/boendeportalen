@@ -23,7 +23,7 @@ import type {
 import type React from 'react';
 
 // Formats a Swedish postcode with a space separator: "12345" → "123 45"
-const formatPostcode = (postcode?: string | number) => {
+export const formatPostcode = (postcode?: string | number) => {
     if (postcode === undefined || postcode === null) return '';
     const str = String(postcode);
     const cleaned = str.replace(/\s+/g, '');
@@ -139,7 +139,8 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
 
         const { apartments } = contract;
         const formattedPostcode = formatPostcode(apartments.postcode);
-        const address = `Adress: ${apartments.street}, ${formattedPostcode} ${apartments.city}`;
+        const fullStreet = [apartments.street, apartments.house_number, apartments.stairwell].filter(Boolean).join(' ');
+        const address = `Adress: ${fullStreet}, ${formattedPostcode} ${apartments.city}`;
         const area = apartments.area ? `Storlek: ${apartments.area} kvm` : null;
         const rooms = apartments.rooms ? `Rum: ${apartments.rooms} rum` : null;
         const rent = contract.rent ? `Hyra: ${formatNumber(contract.rent)} kr/mån` : null;

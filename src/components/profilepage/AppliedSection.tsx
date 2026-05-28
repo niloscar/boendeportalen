@@ -2,6 +2,7 @@ import { HouseLineIcon, CarIcon, ArrowRightIcon } from '@phosphor-icons/react';
 import { useNavigate } from 'react-router-dom';
 import { Temporal } from '@js-temporal/polyfill';
 import { formatNumber } from '../../utils/calc';
+import { formatPostcode } from '../../hooks/useProfileData';
 import type { AppliedApartmentSummary, AppliedSectionProps } from '../../types/profile';
 import type { ApartmentData, Detail } from '../../types/apartment';
 
@@ -56,7 +57,7 @@ const AppliedSection = ({ appliedApartments, appliedParking }: AppliedSectionPro
                                         className='group w-full rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-left text-sm leading-6 transition hover:border-neutral-300 flex items-center justify-between gap-4'
                                     >
                                         <div className='space-y-1'>
-                                            <span className='block text-neutral-900'>Adress: {item.apartment.street}, {item.apartment.city}</span>
+                                            <span className='block text-neutral-900'>Adress: {[item.apartment.street, item.apartment.house_number, item.apartment.stairwell].filter(Boolean).join(' ')}, {formatPostcode(item.apartment.postcode)} {item.apartment.city}</span>
                                             {item.apartment.area && <span className='block text-neutral-900'>Storlek: {item.apartment.area} kvm</span>}
                                             {item.apartment.rooms && <span className='block text-neutral-900'>Rum: {item.apartment.rooms}</span>}
                                             {item.rent !== null && <span className='block text-neutral-900'>Hyra: {formatNumber(item.rent)} kr/mån</span>}
@@ -91,7 +92,7 @@ const AppliedSection = ({ appliedApartments, appliedParking }: AppliedSectionPro
                                         className='group w-full rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-left text-sm leading-6 transition hover:border-neutral-300 flex items-center justify-between gap-4'
                                     >
                                         <div className='space-y-1'>
-                                            <span className='block text-neutral-900'>Adress: {item.parking.address}, {item.parking.city}</span>
+                                            <span className='block text-neutral-900'>Adress: {item.parking.address}, {formatPostcode(item.parking.postalCode)} {item.parking.city}</span>
                                             <span className='block text-neutral-900'>Typ: {item.parking.type}</span>
                                             <span className='block text-neutral-900'>Hyra: {formatNumber(item.parking.price)} kr/mån</span>
                                         </div>

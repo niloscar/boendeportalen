@@ -24,6 +24,8 @@ export type UserProfile = {
 export type ApartmentSummary = {
     id: number;
     street: string;
+    house_number: string | null;
+    stairwell: string | null;
     postcode: number;
     city: string;
     area: string | null;
