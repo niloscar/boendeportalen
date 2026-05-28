@@ -8,12 +8,12 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
     const [error, setError] = useState('');
     const [applied, setApplied] = useState<SignedUpData[]>([]);
     const [totalApplications, setTotalApplications] = useState([]);
+    const [updated, setUpdated] = useState(false);
     const today = new Date().toJSON().slice(0, 10);
     const activeUntil = apartment && Temporal.PlainDate.from(apartment.end_date).add({ weeks: 2 }).toString();
 
     useEffect(() => {
         const getApartmentStatus = async () => {
-
             if (apartment) {
                 try {
                     setLoading(true);
@@ -29,9 +29,8 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
                 }
             }
         }
-
         getApartmentStatus();
-    }, [apartment, activeUntil])
+    }, [apartment, activeUntil, updated])
 
     useEffect(() => {
         const getAllApartmentStatus = async () => {
@@ -51,15 +50,14 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
             }
         }
         getAllApartmentStatus();
-    }, [apartment, today])
+    }, [apartment, today, updated])
     const signUp = async () => {
         if (apartment) {
             try {
                 setLoading(true);
                 setError('');
                 await createApartmentSignUp(apartment.id, activeUntil);
-                const data = await getApartmentSignupStatus(apartment.id, activeUntil);
-                setApplied(data);
+                setUpdated(!updated);
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     setError(error.message);
@@ -76,8 +74,7 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
                 setLoading(true);
                 setError('');
                 await deleteApartmentSignUp(applied[0].id);
-                const data = await getApartmentSignupStatus(apartment.id, activeUntil);
-                setApplied(data);
+                setUpdated(!updated)
             } catch (error: unknown) {
                 if (error instanceof Error) {
                     setError(error.message);

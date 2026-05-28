@@ -3,9 +3,6 @@ import FilterBox from '../components/ui/FilterBox'
 import Button from '../components/ui/Button'
 import useApartmentFilter from '../hooks/useApartmentFilter'
 import ApartmentList from '../components/searchapartment/ApartmentList.tsx';
-// import ApartmentFilter from '../components/searchapartment/ApartmentFilter.tsx';
-// import type { ApartmentData } from "../types/apartment.ts";
-// import { getAvailableApartments } from '../api/apartmentApi.ts';
 
 const SearchApartment = () => {
     const {
