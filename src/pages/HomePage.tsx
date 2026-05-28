@@ -1,27 +1,16 @@
 import { Link } from 'react-router-dom'
-import { signOut } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useFeatures } from '../hooks/useFeatures'
 import { useProfileData } from '../hooks/useProfileData';
+import { WashingMachineIcon, DoorOpenIcon, CarIcon, HouseLineIcon } from "@phosphor-icons/react"
 
 export default function HomePage() {
     const { loading, loadError, visibleFeatures } = useFeatures()
     const { user } = useAuth();
     const userId = user?.id ?? '';
     const {
-        clearLoadError,
         profile,
-        setProfile,
-        contract,
-        documentUrls,
-        apartmentInfo,
-        manualDocuments,
-        floorPlanDocument,
-        appliedApartments,
-        myParking,
-        appliedParking,
     } = useProfileData(userId, loading);
-
 
     return (
         <main className="w-full flex flex-col gap-6 justify-start items-center">
@@ -29,45 +18,56 @@ export default function HomePage() {
             {loadError && <p className="text-sm text-red-600">Kunde inte ladda funktioner: {loadError}</p>}
             {user &&
                 <>
-                    <h1 className="text-2xl font-bold">Välkommen till Boendeportalen {profile?.full_name}!</h1>
-
+                    <img src="https://zavnweqhytaqbpswyhcl.supabase.co/storage/v1/object/sign/apartment-files/Apartment%20images/bedroom_2.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80OTQzZjBmNi0yY2Y4LTQ1MzAtYWYwMi0yNzI2YmI0NDVhNDgiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcGFydG1lbnQtZmlsZXMvQXBhcnRtZW50IGltYWdlcy9iZWRyb29tXzIuanBnIiwiaWF0IjoxNzc5OTcxNjAxLCJleHAiOjE4MTE1MDc2MDF9.ibaq1PP6TtvVZs2GxSGNQMEIlzlI-UTDK56A7RaHRY4" className="h-48 w-full object-cover rounded-xl" />
+                    <h1 className="text-2xl font-bold">Välkommen till Boende<span className="text-green-500">Portalen</span> {profile?.full_name}!</h1>
                     <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full'>
-                        <div className='flex items-center gap-4'>
-                            <p>Här i Boendeportalen har du din kontakt till hyresvärden. </p>
+                        <div className="p-2">
+                            <p>Här i BoendePortalen hittar du allt som rör ditt boende hos oss.</p>
+                        </div>
+                        <div className="p-2">
+                            <p>Du hittar dina uppgifter under <Link to='/minasidor' className="text-green-500">Mina sidor</Link>. Här kan du uppdatera din personliga information, och se status på dina förfrågningar. </p>
                         </div>
                     </section>
                     {!loading && !loadError && visibleFeatures.length > 0 && (
                         <section className="grid grid-cols-2 gap-6 w-full">
                             {visibleFeatures.map((feature) => (
-                                <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full'>
-                                    <h3>{feature.name}</h3>
-                                    <p>{feature.description}</p>
-                                    <p>{feature.id}</p>
-                                    <p></p>
-                                </section>
+                                <Link to={feature.name == 'Boka tvättid' ? '/tvattid' : feature.name == 'Boka gästlägenhet' ? '/gastlagenhet' : feature.name == 'Parkeringar' ? '/parkeringar' : feature.name == 'Bostäder' ? '/bostader' : '/'} key={feature.id}>
+                                    <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full flex gap-4' >
+                                        <div className='self-center'>
+                                            {feature.name == 'Boka tvättid' &&
+                                                <WashingMachineIcon size={32} className="text-green-500" />
+                                            }
+                                            {
+                                                feature.name == 'Boka gästlägenhet' &&
+                                                <DoorOpenIcon size={32} className="text-green-500" />
+                                            }
+                                            {
+                                                feature.name == 'Parkeringar' &&
+                                                <CarIcon size={32} className="text-green-500" />
+                                            }
+                                            {
+                                                feature.name == 'Bostäder' &&
+                                                <HouseLineIcon size={32} className="text-green-500" />
+                                            }
+                                        </div>
+                                        <div>
+                                            <h3 className="text-lg">{feature.name}</h3>
+                                            <p>{feature.description}</p>
+                                        </div>
+                                    </section>
+                                </Link>
                             ))}
                         </section>
                     )}
 
                 </>
-
             }
 
             {!user &&
                 <p>
-                    <Link to="/inloggning" className="underline">Logga in</Link> för att se mer av webbplatsen.
-                </p>}
-
-            {user &&
-                <div className="flex gap-4 items-center">
-                    <p className="text-green-600">Inloggad som {user.email}</p>
-                    <button
-                        onClick={async () => { await signOut(); window.location.reload() }}
-                        className="py-1 px-4 bg-red-600 text-white rounded cursor-pointer hover:bg-red-700"
-                    >
-                        Logga ut
-                    </button>
-                </div>}
+                    <Link to="/inloggning" className="underline text-green-500">Logga in</Link> för att se mer av webbplatsen.
+                </p>
+            }
         </main>
     )
 }
