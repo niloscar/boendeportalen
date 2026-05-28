@@ -56,7 +56,7 @@ export default function Issues() {
                             
                         </div>
                         <button 
-                            className="text-sm font-bold text-gray-900 text-left hover:underline focus:outline-none" 
+                            className="text-sm font-bold text-gray-900 text-left hover:underline focus:outline-none cursor-pointer" 
                             onClick={() => handleToggleDetails(issue.id)}
                             aria-expanded={isOpen(issue.id)}
                             aria-controls={`issue-details-${issue.id}`}

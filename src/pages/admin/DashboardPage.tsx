@@ -9,7 +9,7 @@ import Messages from '../../components/admin/widgets/messages/Messages'
 import type { ComponentType } from 'react'
 
 const WIDGET_COMPONENTS = {
-    Issues
+    Issues,
     Messages,
     Tenants: () => <p>Lista över samtliga hyresgäster.</p>,
     Resources: () => <p>Hantera uthyrningsbara resurser.</p>,
