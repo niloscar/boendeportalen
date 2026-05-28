@@ -3,6 +3,7 @@ import type { SignUp } from '../../types/apartment.ts';
 import Button from '../../components/ui/Button.tsx';
 
 const ApartmentSignUp = ({ error, loading, applied, deleteSignUp, signUp }: SignUp) => {
+    //To prevent doubleclicks causing multiple entries
     const [submitting, setSubmitting] = useState(false);
     const processing = async () => {
         setSubmitting(true)
