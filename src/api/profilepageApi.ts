@@ -211,27 +211,6 @@ export const getContractSignedUrl = async (filePath: string | null): Promise<str
     return data.signedUrl;
 };
 
-export type ParkingSpotSummary = {
-    id: number;
-    address: string;
-    city: string;
-    postalCode: string;
-    type: string;
-    price: number;
-};
-
-export type AppliedParkingSummary = {
-    applicationId: string;
-    signUpDate: string;
-    parking: ParkingSpotSummary;
-};
-
-export type AppliedApartmentSummary = {
-    signUpId: number;
-    endDate: string;
-    rent: number | null;
-    apartment: ApartmentSummary;
-};
 
 export const getAppliedApartments = async (userId: string): Promise<AppliedApartmentSummary[]> => {
     const signUpsResponse = await apiConfig.get<Array<{ id: number; end_date: string; apartment_id: number }>>('/apartment_sign_up', {
