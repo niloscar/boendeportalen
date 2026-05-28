@@ -42,14 +42,14 @@ const ApartmentOverviewCard = ({
                     <div className='mt-4 flex gap-4'>
                         <button
                             onClick={onOpenContract}
-                            className='flex items-center gap-1.5 text-sm text-green-500 hover:text-green-700 transition-colors duration-200'
+                            className='flex cursor-pointer items-center gap-1.5 text-sm text-green-500 hover:text-green-700 transition-colors duration-200'
                         >
                             <FileTextIcon size={15} />
                             Mitt kontrakt
                         </button>
                         <button
                             onClick={onOpenFloorPlan}
-                            className='flex items-center gap-1.5 text-sm text-green-500 hover:text-green-700 transition-colors duration-200'
+                            className='flex cursor-pointer items-center gap-1.5 text-sm text-green-500 hover:text-green-700 transition-colors duration-200'
                         >
                             <NoteBlankIcon size={15} />
                             Planlösning
