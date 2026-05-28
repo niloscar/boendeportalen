@@ -12,6 +12,7 @@ const buildNavigationState = (item: AppliedApartmentSummary) => {
     const apartmentData: ApartmentData = {
         id: apartment.id,
         street: apartment.street,
+        house_number: Number(apartment.house_number) || 0,
         postcode: apartment.postcode,
         city: apartment.city,
         area: Number(apartment.area) || 0,
