@@ -8,12 +8,28 @@
 - Sofie Johnsson
 - Viktor Lindqvist 
 
+## Projektbeskrivning 
+
+Boendeportalen är en digital tjänst utvecklad för att förenkla kommunikationen och vardagen för både hyresgäster och hyresvärdar. Plattformen samlar all bostadsrelaterad information på ett ställe och gör det möjligt för användare att hantera ärenden och funktioner kopplade till sitt boende på ett smidigt och överskådligt sätt.
+
+Hyresgäster kan bland annat söka lediga lägenheter och garageplatser, boka tvättid och gästlägenhet, uppdatera sina uppgifter, göra felanmälningar, begära ny utrustning eller förbättringar samt ta del av manualer och dokument.
+
+För hyresvärdar erbjuder Boendeportalen ett administrativt gränssnitt där de kan hantera hyresgäster, funktioner, meddelanden och annat innehåll i portalen. Detta skapar en effektiv och centraliserad arbetsprocess för fastighetsförvaltningen.
+
 ## Tech stack
 
 - TypeScript
 - React
 - Tailwind CSS
 - PostgreSQL
+
+## Installation
+
+Kommandon för att köra projektet lokalt:
+```
+npm i
+npm run dev
+```
 
 ## Projektstandard
 
