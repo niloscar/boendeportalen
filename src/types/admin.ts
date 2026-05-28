@@ -4,7 +4,6 @@ export type AdminSubPage = {
     slug: string
     title: string
     component: ComponentType
-    authRequired: boolean
 }
 
 export type Feature = {
