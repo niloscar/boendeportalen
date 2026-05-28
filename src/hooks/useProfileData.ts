@@ -6,14 +6,20 @@ import {
     getApartmentEquipment,
     getApartmentForUser,
     getApartmentFileSignedUrl,
+    getAppliedApartments,
+    getAppliedParking,
+    getMyParking,
     getUserProfile,
 } from '../api/profilepageApi';
 import type {
     ApartmentDocument,
     ApartmentEquipment,
+    AppliedApartmentSummary,
+    AppliedParkingSummary,
     ContractSummary,
+    ParkingSpotSummary,
     UserProfile,
-} from '../api/profilepageApi';
+} from '../types/profile';
 import type React from 'react';
 
 // Formats a Swedish postcode with a space separator: "12345" → "123 45"
@@ -37,6 +43,9 @@ export interface ProfileData {
     apartmentInfo: string[] | null;
     manualDocuments: ApartmentDocument[];
     floorPlanDocument: ApartmentDocument | null;
+    appliedApartments: AppliedApartmentSummary[];
+    myParking: ParkingSpotSummary[];
+    appliedParking: AppliedParkingSummary[];
 }
 
 /**
@@ -51,6 +60,9 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
     const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
     const [documentUrls, setDocumentUrls] = useState<Record<number, string>>({});
     const [equipment, setEquipment] = useState<ApartmentEquipment[]>([]);
+    const [appliedApartments, setAppliedApartments] = useState<AppliedApartmentSummary[]>([]);
+    const [myParking, setMyParking] = useState<ParkingSpotSummary[]>([]);
+    const [appliedParking, setAppliedParking] = useState<AppliedParkingSummary[]>([]);
 
     useEffect(() => {
         const loadProfileData = async () => {
@@ -72,6 +84,15 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
 
                 setProfile(profileData);
                 setContract(contractData);
+
+                const [applied, myParkingData, appliedParkingData] = await Promise.all([
+                    getAppliedApartments(userId),
+                    getMyParking(userId),
+                    getAppliedParking(userId),
+                ]);
+                setAppliedApartments(applied);
+                setMyParking(myParkingData);
+                setAppliedParking(appliedParkingData);
 
                 if (contractData?.apartment_id) {
                     const [documentsData, equipmentData] = await Promise.all([
@@ -153,5 +174,8 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
         apartmentInfo,
         manualDocuments,
         floorPlanDocument,
+        appliedApartments,
+        myParking,
+        appliedParking,
     };
 }
