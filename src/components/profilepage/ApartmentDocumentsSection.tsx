@@ -63,7 +63,7 @@ const ApartmentDocumentsSection = ({
                                                 href={url}
                                                 target='_blank'
                                                 rel='noreferrer'
-                                                className='flex items-center justify-between border-l-2 border-green-500 pl-3 py-1 text-sm font-medium text-neutral-900 transition hover:border-green-700'
+                                                className='flex items-center justify-between rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-sm font-medium text-neutral-900 transition hover:border-neutral-300'
                                             >
                                                 <span>{doc.title}</span>
                                                 <span className='text-xs text-gray-500'>PDF</span>
@@ -71,7 +71,7 @@ const ApartmentDocumentsSection = ({
                                         ) : (
                                             <div
                                                 key={doc.id}
-                                                className='flex items-center justify-between border-l-2 border-neutral-300 pl-3 py-1 text-sm font-medium text-neutral-400'
+                                                className='flex items-center justify-between rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-sm font-medium text-neutral-400'
                                             >
                                                 <span>{doc.title}</span>
                                                 <span className='text-xs'>Ej tillgänglig</span>

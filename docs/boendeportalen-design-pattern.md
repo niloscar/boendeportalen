@@ -17,7 +17,8 @@ In this document, we share what we have used for our different styling component
 - **Light Gray**: `gray-500` (disabled text, footer text)
 
 ### Usage
-- Use `green-500` for primary buttons and interactive elements
+- Use `green-900` for primary buttons and interactive elements
+- Use `green-500`  for call‑to‑action elements that require additional visual emphasis.
 - Use `neutral-900` for primary headings and text
 - Use `neutral-200` for input field backgrounds and secondary button backgrounds
 - Use `white` for main content containers
@@ -30,6 +31,13 @@ bg-neutral-900 text-white font-semibold rounded-2xl cursor-pointer hover:bg-neut
 ```
 **Usage**: Login button, submit buttons, main actions
 **Applied in**: Login.tsx
+
+### Visually Enhanced Button (Call-to-action)
+```
+bg-green-500 text-white font-semibold rounded-2xl cursor-pointer hover:bg-green-700 transition duration-200
+```
+**Usage**: Navigation
+**Applied in**: GuestSuite.tsx
 
 ### Secondary Button (Social/Alternative)
 ```

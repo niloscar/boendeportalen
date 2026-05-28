@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, ReactElement } from "react";
 
 export type Crumb = {
     title: string
@@ -16,15 +16,15 @@ export type ConfirmDialogProps = {
     isProcessing: boolean;
     onConfirm: () => void;
     onCancel: () => void;
-    confirmColor: "green" | "red";
+    confirmColor: "primary" | "red";
 };
 
 export type AlertDialogProps = {
     open: boolean;
-    title?: string;
+    title?: string | ReactElement;
     message?: React.ReactNode;
     onConfirm: () => void;
-    confirmColor: "green" | "red";
+    confirmColor: "primary" | "red";
 };
 
 export type FormSwitchProps = {

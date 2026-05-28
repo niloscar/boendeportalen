@@ -24,6 +24,8 @@ export type UserProfile = {
 export type ApartmentSummary = {
     id: number;
     street: string;
+    house_number: string | null;
+    stairwell: string | null;
     postcode: number;
     city: string;
     area: string | null;
@@ -128,11 +130,8 @@ export interface ApartmentOverviewCardProps {
     imageSrc: string;
 }
 
-export interface AppliedApartmentsSectionProps {
+export interface AppliedSectionProps {
     appliedApartments: AppliedApartmentSummary[];
-}
-
-export interface AppliedParkingSectionProps {
     appliedParking: AppliedParkingSummary[];
 }
 

@@ -67,6 +67,7 @@ export type GuestSuiteCalendarPropsBig = {
     calendarRef: React.RefObject<FullCalendar | null>;
     calendarEvents: EventInput[];
     today: Date;
+    isMobile: boolean;
     calMaxDate: Date;
     handleEventClick: (e: EventClickArg) => void;
     handleViewDidMount: () => void | null;
@@ -76,6 +77,7 @@ export type LaundryRoomCalendarPropsBig = {
     calendarRef: React.RefObject<FullCalendar | null>;
     calendarEvents: EventInput[];
     today: Date;
+    isMobile: boolean;
     calMaxDate: Date;
     handleEventClick: (e: EventClickArg) => void;
 };
