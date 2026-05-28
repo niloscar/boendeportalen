@@ -1,18 +1,25 @@
 import { useEffect, useMemo, useState } from 'react';
 import { isNonEmptyString } from '../utils/strings';
+import { formatNumber } from '../utils/calc';
 import {
     getApartmentDocuments,
     getApartmentEquipment,
     getApartmentForUser,
     getApartmentFileSignedUrl,
+    getAppliedApartments,
+    getAppliedParking,
+    getMyParking,
     getUserProfile,
 } from '../api/profilepageApi';
 import type {
     ApartmentDocument,
     ApartmentEquipment,
+    AppliedApartmentSummary,
+    AppliedParkingSummary,
     ContractSummary,
+    ParkingSpotSummary,
     UserProfile,
-} from '../api/profilepageApi';
+} from '../types/profile';
 import type React from 'react';
 
 // Formats a Swedish postcode with a space separator: "12345" → "123 45"
@@ -23,11 +30,6 @@ const formatPostcode = (postcode?: string | number) => {
     if (cleaned.length === 5) return `${cleaned.slice(0, 3)} ${cleaned.slice(3)}`;
     if (cleaned.length === 6) return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 5)}`;
     return str;
-};
-
-const formatRent = (rent?: number) => {
-    if (typeof rent !== 'number') return '';
-    return rent.toLocaleString('sv-SE');
 };
 
 export interface ProfileData {
@@ -41,6 +43,9 @@ export interface ProfileData {
     apartmentInfo: string[] | null;
     manualDocuments: ApartmentDocument[];
     floorPlanDocument: ApartmentDocument | null;
+    appliedApartments: AppliedApartmentSummary[];
+    myParking: ParkingSpotSummary[];
+    appliedParking: AppliedParkingSummary[];
 }
 
 /**
@@ -55,6 +60,9 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
     const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
     const [documentUrls, setDocumentUrls] = useState<Record<number, string>>({});
     const [equipment, setEquipment] = useState<ApartmentEquipment[]>([]);
+    const [appliedApartments, setAppliedApartments] = useState<AppliedApartmentSummary[]>([]);
+    const [myParking, setMyParking] = useState<ParkingSpotSummary[]>([]);
+    const [appliedParking, setAppliedParking] = useState<AppliedParkingSummary[]>([]);
 
     useEffect(() => {
         const loadProfileData = async () => {
@@ -76,6 +84,15 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
 
                 setProfile(profileData);
                 setContract(contractData);
+
+                const [applied, myParkingData, appliedParkingData] = await Promise.all([
+                    getAppliedApartments(userId),
+                    getMyParking(userId),
+                    getAppliedParking(userId),
+                ]);
+                setAppliedApartments(applied);
+                setMyParking(myParkingData);
+                setAppliedParking(appliedParkingData);
 
                 if (contractData?.apartment_id) {
                     const [documentsData, equipmentData] = await Promise.all([
@@ -125,7 +142,7 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
         const address = `Adress: ${apartments.street}, ${formattedPostcode} ${apartments.city}`;
         const area = `Storlek: ${apartments.area ? `${apartments.area} kvm` : null}`;
         const rooms = `Rum: ${apartments.rooms ? `${apartments.rooms} rum` : null}`;
-        const rent = `Hyra: ${contract.rent ? `${formatRent(contract.rent)} kr/mån` : null}`;
+        const rent = `Hyra: ${contract.rent ? `${formatNumber(contract.rent)} kr/mån` : null}`;
 
         return [address, area, rooms, rent].filter(isNonEmptyString);
     }, [contract]);
@@ -157,5 +174,8 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
         apartmentInfo,
         manualDocuments,
         floorPlanDocument,
+        appliedApartments,
+        myParking,
+        appliedParking,
     };
 }

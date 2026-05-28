@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import type React from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
-import ApartmentFilter from '../components/SearchApartmentPage/ApartmentFilter.tsx';
+import ApartmentList from '../components/searchapartment/ApartmentList.tsx';
+import ApartmentFilter from '../components/searchapartment/ApartmentFilter.tsx';
 import type { ApartmentData } from "../types/apartment.ts";
 import { getAvailableApartments } from '../api/apartmentApi.ts';
 
@@ -80,24 +80,26 @@ const SearchApartment = () => {
     }
 
     if (error) {
-        return (<div>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </div>)
+        return (<div className="w-full flex flex-col items-center gap-6">
+            <p>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </p>
+        </div>)
     }
 
     return (
-        <div className="flex flex-col items-center gap-6 p-6 max-w-6xl">
-            <h1 className="text-3xl md:text-5xl">Lediga lägenheter</h1>
+        <div className="w-full flex flex-col items-center gap-6">
+            <h1 className="text-3xl md:text-5xl font-bold">Lediga lägenheter</h1>
             <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} filtersVisibility={filtersVisibility} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} setVisibility={setVisibility} />
             {loading ?
-                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start">
-                    <Skeleton variant="rounded" className="w-xs" height="502px" />
-                    <Skeleton variant="rounded" className="w-xs" height="502px" />
-                    <Skeleton variant="rounded" className="w-xs" height="502px" />
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full">
+                    <Skeleton variant="rounded" className="w-full" height="502px" />
+                    <Skeleton variant="rounded" className="w-full" height="502px" />
+                    <Skeleton variant="rounded" className="w-full" height="502px" />
                 </div>
                 :
                 apartments.length < 1 ?
                     <div>Kunde inte hitta några lediga lägenheter</div>
                     :
-                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start">
+                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full">
                         <ApartmentList variant="div" items={filteredApartments} />
                     </div>
             }

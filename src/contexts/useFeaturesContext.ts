@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { FeaturesContext } from './FeaturesContext'
+import { FeaturesContext } from './featuresContext'
 
 export function useFeaturesContext() {
     const context = useContext(FeaturesContext)

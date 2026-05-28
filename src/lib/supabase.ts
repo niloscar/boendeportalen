@@ -22,7 +22,7 @@ export const getUser = async () => {
     return data?.user ?? null;
 }
 
-export const resetPasswordForEmail = (email: string) => supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/auth?type=recovery' });
+export const resetPasswordForEmail = (email: string) => supabase.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/inloggning?type=recovery' });
 
 export const updateUser = (data: { password?: string; email?: string }) => supabase.auth.updateUser(data)
 
@@ -51,7 +51,7 @@ export const signInWithProvider = async (provider: Provider) => {
     return supabase.auth.signInWithOAuth({
         provider,
         options: {
-            redirectTo: window.location.origin,
+            redirectTo: window.location.origin + '/inloggning',
         },
     });
 };
