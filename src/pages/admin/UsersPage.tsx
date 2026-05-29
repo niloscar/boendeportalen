@@ -202,7 +202,7 @@ export default function UsersPage() {
                     <col className="w-20" />
                 </colgroup>
 
-                <thead>
+                <thead className="text-sm">
                 <tr>
                     <th className="pr-2 py-1">Namn</th>
                     <th className="px-2 py-1">Telefon</th>
