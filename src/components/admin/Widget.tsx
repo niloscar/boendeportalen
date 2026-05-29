@@ -6,7 +6,7 @@ export default function Widget({ title, slug, description, children, onExpand }:
         <section className="p-4 border border-gray-200 bg-white shadow-md rounded-2xl w-full flex flex-col gap-3 relative">
             
             <figure className="bg-gray-200 h-20 rounded-tl-xl rounded-tr-xl flex items-center justify-center -m-4 mb-0 overflow-hidden">
-                <img alt={title} src={`/widgetimg/${slug}.png`} className="w-full h-auto object-cover" />
+                <img alt={title} src={`/widgetimg/${slug}.png`} className="h-full w-full object-cover" />
             </figure>
 
             <h2 className="text-xl font-semibold">{title}</h2>

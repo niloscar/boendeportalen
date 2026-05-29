@@ -5,7 +5,7 @@ export default function ExpandedWidget({ title, slug, description, onClose, chil
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start md:items-center justify-center p-6">
             <div className="bg-white rounded-2xl w-full max-w-6xl p-6 relative">
                 <figure className="bg-gray-200 h-20 rounded-tl-xl rounded-tr-xl flex items-center justify-center -m-6 mb-6 overflow-hidden">
-                    <img alt={title} src={`/widgetimg/${slug}.png`} className="w-full h-auto object-cover" />
+                    <img alt={title} src={`/widgetimg/${slug}.png`} className="w-full h-full object-cover" />
                 </figure>
 
                 <button
