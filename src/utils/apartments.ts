@@ -53,7 +53,7 @@ export const fetchApartments = async (apartmentId : string) => {
             return data
         } catch (error: unknown) {
             if (error instanceof Error) {
-               new Error('Kunde inte hämta lägenheten.')
+               throw new Error('Kunde inte hämta lägenheten.')
             }
         }
     }
