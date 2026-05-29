@@ -21,6 +21,8 @@ const Apartment = () => {
     const [details, setDetails] = useState<Detail[] | null>(
         state?.details ?? null
     );
+    const finalDayToApply = details && details.find(d => d.title == 'Sista ansökningsdag');
+    const finalDateToApply = finalDayToApply && new Date(finalDayToApply.content);
     useEffect(() => {
         if (!state?.apartment && apartmentId) {
             const loadApartment = async () => {
@@ -74,8 +76,11 @@ const Apartment = () => {
                 <ul className="grid md:grid-cols-2 md:gap-y-1">
                     <ApartmentList variant="ul" items={details} />
                 </ul>
-                {session ?
+                {session ? 
+                finalDateToApply && finalDateToApply >= new Date() ?
                     <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} totalApplications={totalApplications} /> :
+                    <div>Det går inte längre att ansöka denna lägenhet.</div>
+                    :
                     <div>Du måste vara inloggad för att anmäla intressse. Vänligen <Link to="/inloggning" className="text-blue-500 hover:underline">logga in</Link> eller registrera ett konto.</div>
                 }
             </article>
