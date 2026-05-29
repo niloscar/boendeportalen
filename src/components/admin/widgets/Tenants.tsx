@@ -1,29 +1,28 @@
 import { useEffect, useState } from 'react'
-import { GearSixIcon } from '@phosphor-icons/react'
 import SortButton from '../../ui/SortButton'
 import type { ChangeEvent } from 'react'
 
 const MOCK_TENANTS = [
-    { id: 1, fname: 'John', lname: 'Doe', house: '1', entrance: 'A', apartment: '1001',  status: 'Aktiv', date: '2023-01-01' },
-    { id: 2, fname: 'Jane', lname: 'Smith', house: '1', entrance: 'B', apartment: '1001',  status: 'Inaktiv', date: '2023-02-01' },
-    { id: 3, fname: 'Alice', lname: 'Johnson', house: '1', entrance: 'A', apartment: '1002', status: 'Aktiv', date: '2023-03-01' },
-    { id: 4, fname: 'Bob', lname: 'Brown', house: '1', entrance: 'B', apartment: '1002', status: 'Aktiv', date: '2023-04-01' },
-    { id: 5, fname: 'Charlie', lname: 'Davis', house: '1', entrance: 'A', apartment: '1003', status: 'Inaktiv', date: '2023-05-01' },
-    { id: 6, fname: 'Eve', lname: 'Miller', house: '1', entrance: 'B', apartment: '1003', status: 'Aktiv', date: '2023-06-01' },
-    { id: 7, fname: 'Frank', lname: 'Wilson', house: '1', entrance: 'A', apartment: '1004', status: 'Aktiv', date: '2023-07-01' },
-    { id: 8, fname: 'Grace', lname: 'Moore', house: '1', entrance: 'B', apartment: '1004', status: 'Inaktiv', date: '2023-08-01' },
-    { id: 9, fname: 'Hank', lname: 'Taylor', house: '1', entrance: 'A', apartment: '1101', status: 'Aktiv', date: '2023-09-01' },
-    { id: 10, fname: 'Ivy', lname: 'Anderson', house: '1', entrance: 'B', apartment: '1101', status: 'Aktiv', date: '2023-10-01' },
-    { id: 11, fname: 'Jack', lname: 'Thomas', house: '2', entrance: 'A', apartment: '1001', status: 'Inaktiv', date: '2023-11-01' },
-    { id: 12, fname: 'Karen', lname: 'Jackson', house: '2', entrance: 'B', apartment: '1001', status: 'Aktiv', date: '2023-12-01' },
-    { id: 13, fname: 'Leo', lname: 'White', house: '2', entrance: 'A', apartment: '1002', status: 'Aktiv', date: '2024-01-01' },
-    { id: 14, fname: 'Mia', lname: 'Harris', house: '2', entrance: 'B', apartment: '1002', status: 'Inaktiv', date: '2024-02-01' },
-    { id: 15, fname: 'Nina', lname: 'Martin', house: '2', entrance: 'A', apartment: '1003', status: 'Aktiv', date: '2024-03-01' },
-    { id: 16, fname: 'Oscar', lname: 'Garcia', house: '2', entrance: 'B', apartment: '1003', status: 'Aktiv', date: '2024-04-01' },
-    { id: 17, fname: 'Paul', lname: 'Clark', house: '2', entrance: 'A', apartment: '1004', status: 'Inaktiv', date: '2024-05-01' },
-    { id: 18, fname: 'Quinn', lname: 'Rodriguez', house: '2', entrance: 'B', apartment: '1004', status: 'Aktiv', date: '2024-06-01' },
-    { id: 19, fname: 'Rachel', lname: 'Lewis', house: '2', entrance: 'A', apartment: '1105', status: 'Aktiv', date: '2024-07-01' },
-    { id: 20, fname: 'Steve', lname: 'Lee', house: '2', entrance: 'B', apartment: '1105', status: 'Inaktiv', date: '2024-08-01' },
+    { id: 1, fname: 'John', lname: 'Doe', house: '1', entrance: 'A', apartment: '1001', date: '2023-01-01' },
+    { id: 2, fname: 'Jane', lname: 'Smith', house: '1', entrance: 'B', apartment: '1001', date: '2023-02-01' },
+    { id: 3, fname: 'Alice', lname: 'Johnson', house: '1', entrance: 'A', apartment: '1002', date: '2023-03-01' },
+    { id: 4, fname: 'Bob', lname: 'Brown', house: '1', entrance: 'B', apartment: '1002', date: '2023-04-01' },
+    { id: 5, fname: 'Charlie', lname: 'Davis', house: '1', entrance: 'A', apartment: '1003', date: '2023-05-01' },
+    { id: 6, fname: 'Eve', lname: 'Miller', house: '1', entrance: 'B', apartment: '1003', date: '2023-06-01' },
+    { id: 7, fname: 'Frank', lname: 'Wilson', house: '1', entrance: 'A', apartment: '1004', date: '2023-07-01' },
+    { id: 8, fname: 'Grace', lname: 'Moore', house: '1', entrance: 'B', apartment: '1004', date: '2023-08-01' },
+    { id: 9, fname: 'Hank', lname: 'Taylor', house: '1', entrance: 'A', apartment: '1101', date: '2023-09-01' },
+    { id: 10, fname: 'Ivy', lname: 'Anderson', house: '1', entrance: 'B', apartment: '1101', date: '2023-10-01' },
+    { id: 11, fname: 'Jack', lname: 'Thomas', house: '2', entrance: 'A', apartment: '1001', date: '2023-11-01' },
+    { id: 12, fname: 'Karen', lname: 'Jackson', house: '2', entrance: 'B', apartment: '1001', date: '2023-12-01' },
+    { id: 13, fname: 'Leo', lname: 'White', house: '2', entrance: 'A', apartment: '1002', date: '2024-01-01' },
+    { id: 14, fname: 'Mia', lname: 'Harris', house: '2', entrance: 'B', apartment: '1002', date: '2024-02-01' },
+    { id: 15, fname: 'Nina', lname: 'Martin', house: '2', entrance: 'A', apartment: '1003', date: '2024-03-01' },
+    { id: 16, fname: 'Oscar', lname: 'Garcia', house: '2', entrance: 'B', apartment: '1003', date: '2024-04-01' },
+    { id: 17, fname: 'Paul', lname: 'Clark', house: '2', entrance: 'A', apartment: '1004', date: '2024-05-01' },
+    { id: 18, fname: 'Quinn', lname: 'Rodriguez', house: '2', entrance: 'B', apartment: '1004', date: '2024-06-01' },
+    { id: 19, fname: 'Rachel', lname: 'Lewis', house: '2', entrance: 'A', apartment: '1105', date: '2024-07-01' },
+    { id: 20, fname: 'Steve', lname: 'Lee', house: '2', entrance: 'B', apartment: '1105', date: '2024-08-01' },
 ]
 
 const TENANT_KEY_MAP = {
@@ -32,7 +31,6 @@ const TENANT_KEY_MAP = {
     house: 'Hus',
     apartment: 'Lgh.nr',
     entrance: 'Uppgång',
-    status: 'Status',
     date: 'Tilläggsdatum',
 }
 
@@ -127,13 +125,13 @@ export default function AdminTenants() {
     return (
         <>
             <search>
-                <label htmlFor="resident-search" className="sr-only">Sök boende</label>
+                <label htmlFor="resident-search" className="sr-only">Sök hyresgäst</label>
                 <input
                     id="resident-search"
                     name="search"
-                    className="w-full rounded-2xl bg-white border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full rounded-2xl bg-neutral-100 p-3 focus:outline-none focus:ring-2 focus:ring-green-500"
                     type="search"
-                    placeholder="Sök boende..."
+                    placeholder="Sök hyresgäst..."
                     value={searchTerm}
                     onChange={handleSearch}
                 />
@@ -141,14 +139,14 @@ export default function AdminTenants() {
 
             {isSearching && <p className="text-sm text-gray-500">Söker...</p>}
             {searchError && <p className="text-sm text-red-500">{searchError.message}</p>}
-            {showEmptyState && <p className="text-sm text-gray-500">Inga boende hittades.</p>}
+            {showEmptyState && <p className="text-sm text-gray-500">Inga hyresgäster hittades.</p>}
             {hasResults && !isSearching && (
                 <>
-                    <p className="text-sm text-gray-500">{sortedSearchResults.length} boende visas.</p>
+                    <p className="text-sm text-gray-500">{sortedSearchResults.length} hyresgäster visas.</p>
                     <div className="overflow-auto">
                         <table className="search-results w-full table-auto">
                             <thead>
-                                <tr className="search-filters">
+                                <tr>
                                     {Object.entries(TENANT_KEY_MAP).map(([key, label]) => {
                                         const sortField = key as SortField
                                         const isActive = searchResultOrder.field === sortField
@@ -159,7 +157,7 @@ export default function AdminTenants() {
                                         return (
                                             <th 
                                                 key={key}
-                                                className="text-left pb-3 not-last:pr-1"
+                                                className="px-2 py-1 first:pl-0 last:pr-0"
                                             >
                                                 <SortButton
                                                     onClick={() => handleSortChange(sortField)}
@@ -171,24 +169,20 @@ export default function AdminTenants() {
                                             </th>
                                         )
                                     })}
-                                    <th></th>
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody className="text-sm text-neutral-600">
                                 {sortedSearchResults.map(tenant => (
                                     <tr 
                                         key={tenant.id}
-                                        className="not-last:border-b border-gray-200 hover:bg-gray-100"
-                                    >
+                                        className="hover:text-neutral-900"
+                                        >
                                         {Object.keys(TENANT_KEY_MAP).map((key) => (
-                                            <td key={key} className="py-1.5">
+                                            <td key={key} className="px-2 py-1 h-9 first:pl-0 last:pr-0">
                                                 {tenant[key as keyof Tenant]}
                                             </td>
                                         ))}
-                                        <td className="py-1.5">
-                                            <GearSixIcon aria-hidden="true" focusable="false" />
-                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
