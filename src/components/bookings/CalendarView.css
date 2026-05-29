@@ -1,0 +1,117 @@
+/* FullCalendar Styling */
+
+/* Fix box-sizing */
+.fc,
+.fc * {
+    box-sizing: border-box;
+}
+
+/* Text */
+.fc .fc-toolbar-title,
+.fc .fc-col-header-cell-cushion,
+.fc .fc-timegrid-slot-label-cushion {
+    color: #171717;
+    /* text-neutral-900 */
+    font-weight: 400;
+    /* font-normal */
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.5rem;
+    /* text-2xl */
+    line-height: 2rem;
+    font-weight: 700;
+    /* font-bold */
+}
+
+.fc .fc-timegrid-slot-label-cushion {
+    font-size: 0.75rem !important;
+    /* text-xs */
+}
+
+/* Buttons */
+.fc .fc-button {
+    border: 0;
+    border-radius: 1rem;
+    /* rounded-2xl */
+    font-weight: 600;
+    /* font-semibold */
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background-color: #171717;
+    /* neutral-900 */
+    color: white;
+    padding: 0.625rem 1.25rem;
+    /* px-5 py-2.5 */
+    font-size: 0.875rem;
+    /* text-sm */
+}
+
+.fc .fc-button-group .fc-button {
+    padding: 0.625rem 0.625rem;
+    /* px-2.5 */
+    background-color: #22c55e;
+    /* green-500 */
+}
+
+.fc .fc-button:hover {
+    background-color: #0f0f0f;
+    /* neutral-800 */
+}
+
+.fc .fc-button-group .fc-button:hover {
+    background-color: #15803d;
+    /* green-700 */
+}
+
+.fc .fc-button:disabled,
+.fc .fc-button.fc-button-disabled,
+.fc .fc-button-group .fc-button:disabled {
+    background-color: #d4d4d4;
+    /* neutral-300 */
+    color: #6b7280;
+    /* gray-500 */
+    cursor: not-allowed;
+}
+
+.fc .fc-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #22c55e;
+    /* ring-2 ring-green-500 */
+}
+
+/* List view */
+.fc-list-event-time,
+.fc-list-event-graphic {
+    display: none;
+}
+
+.fc .fc-list-event:hover td {
+    background-color: transparent !important;
+}
+
+/* Remove borders */
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border: 0;
+}
+
+/* Center toolbar */
+.fc-toolbar-chunk {
+    text-align: center;
+}
+
+/* Events */
+.fc-timegrid-event {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    /* p-4 */
+}
+
+.fc-list-event {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    /* p-2 */
+}

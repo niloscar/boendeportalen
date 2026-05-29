@@ -4,6 +4,7 @@ import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import svLocale from "@fullcalendar/core/locales/sv";
 import type { LaundryRoomCalendarPropsBig } from "../../types/booking";
+import './CalendarView.css'
 
 export default function LaundryRoomCalendarView({
     calendarRef,
