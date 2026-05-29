@@ -7,27 +7,33 @@ import MobileMenu from './MobileMenu'
 
 const Header: React.FC = () => {
     const { user, profile } = useAuth()
+
     const isLoggedIn = Boolean(user)
-    const isAdmin = Boolean(profile?.isAdmin || String(profile?.role ?? '').toLowerCase() === 'admin')
+
+    // We check for admin access based on the profile's `isAdmin` flag or if their role is set to 'admin' (case-insensitive) to determine if admin links should be shown.
+    const isAdmin = Boolean(
+        profile?.isAdmin ||
+        String(profile?.role ?? '').toLowerCase() === 'admin'
+    )
 
     const { isFeatureEnabled } = useFeatures()
 
+    // Using `getNavigationLinks` to get the appropriate set of navigation links based on the user's authentication and admin status,
+    // and specifying 'header' to filter out any links that are only meant for the footer.
+    // This keeps the header navigation dynamic and in sync with the user's permissions.
     const navigationLinks = getNavigationLinks(
         { isLoggedIn, isAdmin },
         'header'
     )
 
+    // Filter links based on feature toggles
     const filteredLinks = navigationLinks.filter(link => {
-        if (link.href === '/') return true
-        if (link.href === '/admin') return true
+        if (link.href === '/') return true          // Show Home
+        if (link.href === '/admin') return true     // Show Admin if admin
 
         const featureKey = link.href.replace(/^\//, '')
         return isFeatureEnabled(featureKey)
     })
-    // We check for admin access based on the profile's `isAdmin` flag or if their role is set to 'admin' (case-insensitive) to determine if admin links should be shown.
-    const isAdmin = Boolean(profile?.isAdmin || String(profile?.role ?? '').toLowerCase() === 'admin')
-    // Using `getNavigationLinks` to get the appropriate set of navigation links based on the user's authentication and admin status, and specifying 'header' to filter out any links that are only meant for the footer. This keeps the header navigation dynamic and in sync with the user's permissions.
-    const navigationLinks = getNavigationLinks({ isLoggedIn: Boolean(user), isAdmin }, 'header')
 
     return (
         <header className="bg-white border-b border-neutral-200/70">
