@@ -18,8 +18,8 @@ const Header: React.FC = () => {
     )
 
     const filteredLinks = navigationLinks.filter(link => {
-        if (link.href === '/') return true          // Hem ska alltid visas
-        if (link.href === '/admin') return true     // Admin ska alltid visas om man är admin
+        if (link.href === '/') return true
+        if (link.href === '/admin') return true
 
         const featureKey = link.href.replace(/^\//, '')
         return isFeatureEnabled(featureKey)

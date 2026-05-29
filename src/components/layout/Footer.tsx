@@ -10,16 +10,14 @@ const Footer: React.FC = () => {
 
     const { isFeatureEnabled } = useFeatures()
 
-    // 1. Hämta länkar baserat på auth/admin
     const navigationLinks = getNavigationLinks(
         { isLoggedIn, isAdmin },
         'footer'
     )
 
-    // 2. Filtrera baserat på features
     const filteredLinks = navigationLinks.filter(link => {
-        if (link.href === '/') return true        // Hem ska alltid visas
-        if (link.href === '/admin') return true   // Admin ska alltid visas om man är admin
+        if (link.href === '/') return true 
+        if (link.href === '/admin') return true
 
         const featureKey = link.href.replace(/^\//, '')
         return isFeatureEnabled(featureKey)
