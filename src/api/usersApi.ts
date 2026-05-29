@@ -10,7 +10,7 @@ export const getUsers = async () => {
     }
 }
 
-export const getUserById = async (userId: number) => {
+export const getUserById = async (userId: string) => {
     try {
         const response = await apiConfig.get(`/users?id=eq.${userId}`);
         return response.data[0]
@@ -20,7 +20,7 @@ export const getUserById = async (userId: number) => {
     }
 }
 
-export const updateUser = async (userId: number, data: Partial<{ name: string; email: string }>) => {
+export const updateUser = async (userId: string, data: Partial<{ name: string; email: string }>) => {
     try {
         const response = await apiConfig.patch(
             `/users?id=eq.${userId}`,
@@ -34,7 +34,7 @@ export const updateUser = async (userId: number, data: Partial<{ name: string; e
     }
 }
 
-export const deleteUser = async (userId: number) => {
+export const deleteUser = async (userId: string) => {
     try {
         await apiConfig.delete(`/users?id=eq.${userId}`);
     } catch(error){
