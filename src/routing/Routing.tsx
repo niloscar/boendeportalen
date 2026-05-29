@@ -4,6 +4,7 @@ import useAuth from '../hooks/useAuth'
 import { hasAdminAccess } from '../utils/accessControl'
 import type { RouteGuardProps } from '../types/routing'
 
+// Simple loading fallback shown while auth or lazy routes initialize.
 export function RouteLoadingFallback() {
     return (
         <div className='flex w-full justify-center items-center text-center text-sm text-gray-600'>
@@ -12,6 +13,7 @@ export function RouteLoadingFallback() {
     )
 }
 
+// Route that should only be visible to unauthenticated users. Redirects to home when a user is already signed in.
 export function PublicOnlyRoute({ children, user, loading }: RouteGuardProps) {
     if (loading) return <RouteLoadingFallback />
     if (user) return <Navigate to='/' replace />
@@ -19,6 +21,7 @@ export function PublicOnlyRoute({ children, user, loading }: RouteGuardProps) {
     return children
 }
 
+// Route that requires authentication. If not authenticated, redirect the user to the login page.
 export function PrivateRoute({ children, user, loading }: RouteGuardProps) {
     if (loading) return <RouteLoadingFallback />
     if (!user) return <Navigate to='/inloggning' replace />
@@ -26,6 +29,7 @@ export function PrivateRoute({ children, user, loading }: RouteGuardProps) {
     return children
 }
 
+// Route that requires the user to have admin privileges. Uses `hasAdminAccess` to determine if the current profile should be allowed to view admin routes.
 export function AdminRoute({ children, user, loading, profile }: RouteGuardProps) {
     if (loading) return <RouteLoadingFallback />
     if (!user) return <Navigate to='/inloggning' replace />

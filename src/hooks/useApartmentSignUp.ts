@@ -10,7 +10,7 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
     const [totalApplications, setTotalApplications] = useState([]);
     const [updated, setUpdated] = useState(false);
     const today = new Date().toJSON().slice(0, 10);
-    const activeUntil = apartment && Temporal.PlainDate.from(apartment.end_date).add({ weeks: 2 }).toString();
+    const activeUntil = apartment && apartment.end_date && Temporal.PlainDate.from(apartment.end_date).add({ weeks: 2 }).toString();
 
     useEffect(() => {
         const getApartmentStatus = async () => {

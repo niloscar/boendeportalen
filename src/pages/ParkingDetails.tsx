@@ -11,6 +11,7 @@ import useParkingLocation from '../hooks/useParkingLocation'
 import { formatNumber } from '../utils/calc'
 import type { ParkingSpot } from '../types/parking'
 
+// Parking details page. Loads parking spot by ID from URL and then shows details about the spot.
 export default function ParkingDetails() {
     const { parkingId } = useParams()
     const navigate = useNavigate()
@@ -168,6 +169,7 @@ export default function ParkingDetails() {
 
                         <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100">
                             {mapLocation ? (
+                                // Using the LeafletMap component to show the location of the parking spot.
                                 <LeafletMap location={mapLocation} {...lightGrayMapPreset} />
                             ) : mapLoading ? (
                                 <div className="flex h-72 items-center justify-center p-4 text-center text-neutral-600">Laddar karta...</div>

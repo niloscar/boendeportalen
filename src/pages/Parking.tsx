@@ -30,6 +30,7 @@ export default function Parking() {
             <h1 className="text-3xl md:text-5xl font-bold">Lediga parkeringsplatser</h1>
             <p className="text-gray-600">Här hittar du lediga parkeringsplatser i din närhet.</p>
 
+            {/* Filter box for searching and filtering parking spots. Adding all fields needed for the parking list page. */}
             <FilterBox
                 fields={[
                     {
@@ -89,6 +90,7 @@ export default function Parking() {
                 footer={<Button type="button" variant="secondary" size="md" onClick={resetFilters}>Rensa filter</Button>}
             />
 
+            {/* Parking spot list component. */}
             <ParkingList
                 currentSpots={currentSpots}
                 totalPages={totalPages}

@@ -9,6 +9,7 @@ export default function useParkingApplication({ parkingId, userId }: UseParkingA
     const [error, setError] = useState<string | null>(null)
     const hasContext = Boolean(parkingId && userId)
 
+    // Checks if the user has already applied on mount. Changes `isActive` accordingly.
     useEffect(() => {
         if (!hasContext || !parkingId || !userId) return
 
@@ -44,6 +45,7 @@ export default function useParkingApplication({ parkingId, userId }: UseParkingA
         }
     }, [hasContext, parkingId, userId])
 
+    // Handles applying. Checking if user already applied and stops them. On success, sets `hasApplied` to true and creates a parking application in the database.
     const apply = async () => {
         if (!parkingId || !userId) return
 
@@ -75,6 +77,7 @@ export default function useParkingApplication({ parkingId, userId }: UseParkingA
         }
     }
 
+    // Handles removing an application. Deletes from database and sets `hasApplied` to false.
     const removeApplication = async () => {
         if (!parkingId || !userId) return
 
