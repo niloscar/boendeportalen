@@ -6,7 +6,6 @@ import { useApartmentSignUp } from '../../hooks/useApartmentSignUp.ts';
 
 
 const ApartmentSignUp = ({ apartment }: ApartmentProp) => {
-    const [submitting, setSubmitting] = useState(false);
     const {
         signUp,
         deleteSignUp,
@@ -22,11 +21,6 @@ const ApartmentSignUp = ({ apartment }: ApartmentProp) => {
         totalApplications
     } = useApartmentSignUp({ apartment });
 
-    const processing = async () => {
-        setSubmitting(true)
-        window.setTimeout(() => { setSubmitting(false) }, 500)
-    }
-
     if (error || errorStatus || errorSignUp || errorRemove) {
         return (<div>
             <p>Kunde inte hämta information om ansökning. Vänligen ladda om sidan. </p>
@@ -40,7 +34,7 @@ const ApartmentSignUp = ({ apartment }: ApartmentProp) => {
     }
     if (applied.length > 0) {
         return (<>
-            <Button variant="secondary" size="md" type="button" children="Ta bort intresseanmälan" onClick={() => { deleteSignUp(); processing() }} disabled={submitting} />
+            <Button variant="secondary" size="md" type="button" children="Ta bort intresseanmälan" onClick={deleteSignUp} disabled={loadingSignUp || loadingRemove || loading || loadingStatus} />
         </>)
     }
     if (totalApplications.length >= 3) {
@@ -50,7 +44,7 @@ const ApartmentSignUp = ({ apartment }: ApartmentProp) => {
     }
     return (
         <>
-            <Button variant="primary" size="md" type="button" children="Anmäl intresse" onClick={() => { signUp(); processing() }} disabled={submitting} />
+            <Button variant="primary" size="md" type="button" children="Anmäl intresse" onClick={signUp} disabled={loadingSignUp || loadingRemove || loading || loadingStatus}/>
         </>
     )
 }
