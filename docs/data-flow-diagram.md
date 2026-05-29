@@ -131,6 +131,8 @@ flowchart TD
     SA -->|"Klientfiltrering (rum, hyra, område)"| LIST["ApartmentList<br/>+ ApartmentCard"]
 
     LIST -->|"Klickar på lägenhet"| DET["Apartment<br/>/bostader/:apartmentId"]
+    DET -->|"Ingen state — hämtar via useParams"| DB0[("all_apartments (vy)")]
+    DB0 -->|"ApartmentData"| DET
     DET -->|"getApartmentSignupStatus()"| DB2[("apartment_sign_up")]
     DB2 -->|"Redan anmäld?"| DET
 
@@ -206,17 +208,17 @@ flowchart TD
 
     %% Inställningar / feature flags
     SET -->|"useFeatures()"| FC["FeaturesProvider"]
-    FC -->|"getFeatures()"| DBF[("features")]
-    DBF -->|"Feature[]"| FC
+    FC -->|"getFeatures()"| DBFWT[("features_with_type (vy)")]
+    DBFWT -->|"Feature[]"| FC
     SET -->|"toggleFeature() → saveFeatures()"| SAVE["updateFeatureStatuses()"]
-    SAVE -->|"PATCH features"| DBF
+    SAVE -->|"PATCH is_active"| DBFFT[("features_feature_types")]
 
     %% Dashboard-widgetar (styrs av admin_widgets-flaggor)
     DASH -->|"is_active admin_widgets"| WGRID["Widget-rutnät<br/>(Masonry)"]
     WGRID --> WISSUES["Issues"]
     WGRID --> WMSG["Messages<br/>(se sektion 8)"]
     WGRID --> WTEN["Tenants"]
-    WGRID --> WRES["Resources"]
+    WGRID --> WRES["Resources (platshållare)"]
 
     WISSUES -->|"getIssues()"| VER[("admin_error_reports (vy)")]
 
@@ -254,21 +256,30 @@ flowchart TD
 |-------------|-------------|
 | `auth.users` | Supabase-hanterade användarkonton |
 | `users` | Utökad användarprofil (namn, telefon, roll) |
-| `available_apartments` | Lediga lägenheter att söka |
 | `apartments` | Alla lägenheter (inkl. hyrda) |
+| `apartment_images` | Bilder kopplade till en lägenhet |
 | `apartment_equipment` | Utrustning kopplad till en lägenhet |
-| `contracts` | Hyreskontrakt (kopplar hyresgäst ↔ lägenhet) |
-| `apartment_sign_up` | Intresseanmälningar på lägenheter |
 | `apartment_documents` | Manualer, planritningar etc. |
+| `availabilities` | Tillgänglighetsperioder för lägenheter |
+| `rents` | Hyreshistorik per lägenhet |
+| `apartment_sign_up` | Intresseanmälningar på lägenheter |
+| `contracts` | Hyreskontrakt (kopplar hyresgäst ↔ lägenhet) |
+| `available_apartments` *(vy)* | Lediga lägenheter att söka |
+| `all_apartments` *(vy)* | Alla lägenheter oavsett status |
 | `laundry_time_slots` | Tillgängliga tvättstider |
 | `laundry_bookings` | Bokade tvättider |
 | `guest_suite_bookings` | Bokade gästlägenheter |
 | `parking_spots` | Parkeringsplatser |
 | `parking_applications` | Ansökningar om parkering |
+| `error_report_categories` | Kategorier för felanmälningar |
 | `error_reports` | Felanmälningar |
 | `error_report_attachments` | Bilagor till felanmälningar |
+| `service_request_categories` | Kategorier för serviceärenden |
 | `service_requests` | Serviceärenden |
-| `features` | Feature flags |
+| `features` | Feature-definitioner |
+| `feature_types` | Typer/användarnivåer för features |
+| `features_feature_types` | Koppling feature ↔ feature_type, styr `is_active` |
+| `features_with_type` *(vy)* | Features med tillhörande typ och aktiveringsstatus |
 | `messages` | Meddelanden skapade av admin |
 | `message_recipients` | Koppling meddelande ↔ mottagare |
 | `admin_error_reports` *(vy)* | Adminvy över felanmälningar (Issues-widget) |
