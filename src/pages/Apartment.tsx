@@ -27,7 +27,6 @@ const Apartment = () => {
     const finalDayToApply = details && details.find(d => d.title == 'Sista ansökningsdag');
     const finalDateToApply = finalDayToApply && new Date(finalDayToApply.content);
     useEffect(() => {
-        if (apartmentLoading) return;
         if (!state?.apartment && apartmentId) {
             const loadApartment = async () => {
                 try {

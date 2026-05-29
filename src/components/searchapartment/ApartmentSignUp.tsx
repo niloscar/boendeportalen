@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { ApartmentProp } from '../../types/apartment.ts';
 import Button from '../../components/ui/Button.tsx';
