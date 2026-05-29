@@ -55,8 +55,8 @@ function Auth() {
                     </div>
                 </div>
 
-                <div className='w-full lg:w-1/2 2xl:w-1/3 min-h-0 flex bg-white items-stretch justify-center px-5 py-6 sm:px-8 sm:py-8 md:px-8 md:py-8 lg:px-8 lg:py-8 xl:px-10 xl:py-10 2xl:px-12 2xl:py-12 overflow-hidden lg:overflow-hidden'>
-                    <div className='w-full min-h-0 flex flex-col gap-4 sm:gap-6 md:gap-5 lg:gap-6 overflow-hidden'>
+                <div className='w-full lg:w-1/2 2xl:w-1/3 min-h-0 flex bg-white items-stretch justify-center px-5 py-6 sm:px-8 sm:py-8 md:px-8 md:py-8 lg:px-8 lg:py-8 xl:px-10 xl:py-10 2xl:px-12 2xl:py-12'>
+                    <div className='w-full min-h-0 flex flex-col gap-4 sm:gap-6 md:gap-5 lg:gap-6'>
                         <div className='flex flex-row items-start sm:items-center flex-wrap justify-between gap-1'>
                             <Link to='/' className='text-2xl sm:text-3xl xl:text-3xl 2xl:text-4xl text-neutral-900 font-extrabold leading-tight'>Boende<span className='text-green-500'>Portalen</span></Link>
                             <div className='hidden lg:block text-right'>
@@ -73,7 +73,7 @@ function Auth() {
                             </p>
                         </div>
 
-                        <div className={`${styles.formSwap} ${isSwitching ? styles.formSwapOut : styles.formSwapIn} overflow-hidden`}>
+                        <div className={`${styles.formSwap} ${isSwitching ? styles.formSwapOut : styles.formSwapIn}`}>
                             {isLogin ? (
                                 <Login onSwitchToRegister={() => switchAuthMode(false)} onForgotPassword={() => setShowForgot(true)} />
                             ) : (
