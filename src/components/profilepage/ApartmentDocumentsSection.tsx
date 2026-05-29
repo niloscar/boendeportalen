@@ -49,40 +49,40 @@ const ApartmentDocumentsSection = ({
             </p>
 
             {grouped.length > 0 ? (
-                        <div className='mt-6 space-y-6 sm:columns-2 sm:gap-6 sm:space-y-0'>
-                            {grouped.map(([key, docs]) => (
-                                <div key={key} className='mb-6 break-inside-avoid flex flex-col gap-2'>
-                                    <h3 className='text-xs font-semibold uppercase tracking-wide text-neutral-500'>
-                                        {key}
-                                    </h3>
-                                    {docs.map((doc) => {
-                                        const url = documentUrls[doc.id];
-                                        return url ? (
-                                            <a
-                                                key={doc.id}
-                                                href={url}
-                                                target='_blank'
-                                                rel='noreferrer'
-                                                className='flex items-center justify-between rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-sm font-medium text-neutral-900 transition hover:border-neutral-300'
-                                            >
-                                                <span>{doc.title}</span>
-                                                <span className='text-xs text-gray-500'>PDF</span>
-                                            </a>
-                                        ) : (
-                                            <div
-                                                key={doc.id}
-                                                className='flex items-center justify-between rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-sm font-medium text-neutral-400'
-                                            >
-                                                <span>{doc.title}</span>
-                                                <span className='text-xs'>Ej tillgänglig</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            ))}
+                <div className='mt-6 space-y-6 sm:columns-2 sm:gap-6 sm:space-y-0'>
+                    {grouped.map(([key, docs]) => (
+                        <div key={key} className='mb-6 break-inside-avoid flex flex-col gap-2'>
+                            <h3 className='text-xs font-semibold uppercase tracking-wide text-neutral-500'>
+                                {key}
+                            </h3>
+                            {docs.map((doc) => {
+                                const url = documentUrls[doc.id];
+                                return url ? (
+                                    <a
+                                        key={doc.id}
+                                        href={url}
+                                        target='_blank'
+                                        rel='noreferrer'
+                                        className='flex items-center justify-between rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-sm font-medium text-neutral-900 transition hover:border-neutral-300'
+                                    >
+                                        <span>{doc.title}</span>
+                                        <span className='text-xs text-gray-500'>PDF</span>
+                                    </a>
+                                ) : (
+                                    <div
+                                        key={doc.id}
+                                        className='flex items-center justify-between rounded-2xl bg-neutral-100 border border-neutral-200 p-4 text-sm font-medium text-neutral-400'
+                                    >
+                                        <span>{doc.title}</span>
+                                        <span className='text-xs'>Ej tillgänglig</span>
+                                    </div>
+                                );
+                            })}
                         </div>
-                    ) : (
-                        <p className='mt-6 text-sm text-gray-600'>Inga dokument uppladdade ännu.</p>
+                    ))}
+                </div>
+            ) : (
+                <p className='mt-6 text-sm text-gray-600'>Inga dokument uppladdade ännu.</p>
             )}
         </section>
     );
