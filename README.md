@@ -19,22 +19,22 @@ För hyresvärdar erbjuder Boendeportalen ett administrativt gränssnitt där de
 ## Tech stack
 
 **Frontend**
-React
-React Router
-Tailwind CSS
-TypeScript
-Vite
+- React
+- React Router
+- Tailwind CSS
+- TypeScript
+- Vite
 
 **Backend/Data**
-PostgreSQL
-Supabase
-Supabase Auth
+- PostgreSQL
+- Supabase
+- Supabase Auth
 
 **UI/Övrigt**
-Axios
-FullCalendar
-Leaflet
-Phosphor Icons
+- Axios
+- FullCalendar
+- Leaflet
+- Phosphor Icons
 
 ## Installation
 
