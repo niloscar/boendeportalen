@@ -142,7 +142,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setFullName(e.target.value)}
                         required
                         placeholder='Johan Andersson'
-                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -154,7 +154,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setPhone(e.target.value)}
                         required
                         placeholder='0701234567'
-                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -166,7 +166,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         placeholder='johan.andersson@example.com'
-                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -178,7 +178,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         placeholder='********'
-                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-sm sm:text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="w-full px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6 text-base bg-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
                 </div>
                 <div className="flex flex-col gap-2">
