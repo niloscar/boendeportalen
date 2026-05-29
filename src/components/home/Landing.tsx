@@ -15,8 +15,8 @@ export default function Landing({ profileName, loading, loadError, visibleFeatur
     return (
         <>
             <img src={userImageUrl} className="h-48 w-full object-cover rounded-2xl" />
-            <h1 className="text-2xl font-bold">Välkommen till Boende<span className="text-green-500">Portalen</span>, {profileName}!</h1>
-            <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full'>
+            <h1 className="text-3xl font-bold">Välkommen till Boende<span className="text-green-500">Portalen</span>, {profileName}!</h1>
+            <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full text-neutral-700'>
                 <div className="p-2">
                     <p>Här i BoendePortalen hittar du allt som rör ditt boende hos oss.</p>
                 </div>
@@ -47,8 +47,8 @@ export default function Landing({ profileName, loading, loadError, visibleFeatur
                                     }
                                 </div>
                                 <div>
-                                    <h3 className="text-lg">{feature.name}</h3>
-                                    <p>{feature.description}</p>
+                                    <h3 className="text-lg text-neutral-900 font-semibold">{feature.name}</h3>
+                                    <p className="text-neutral-700">{feature.description}</p>
                                 </div>
                             </section>
                         </Link>

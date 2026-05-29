@@ -34,7 +34,7 @@ export default function Home({ loading, loadError, visibleFeatures }: LandingPro
             <section className="w-full rounded-3xl border border-green-100 bg-gradient-to-br from-white via-white to-green-50 p-6 shadow-md sm:p-8">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-4">
-                        <h1 className="text-3xl font-bold text-green-600 sm:text-4xl">Välkommen till BoendePortalen</h1>
+                        <h1 className="text-3xl font-bold sm:text-4xl">Välkommen till Boende<span className="text-green-500">Portalen</span></h1>
                         <p className="text-neutral-700">Här samlar vi allt på ett ställe: uppgifter, ansökningar och funktioner som gör ditt boende smidigare.</p>
                     </div>
 
@@ -68,8 +68,8 @@ export default function Home({ loading, loadError, visibleFeatures }: LandingPro
                                         {feature.slug === 'bostader' && <HouseLineIcon size={32} className="text-green-500" />}
                                     </div>
                                     <div>
-                                        <h3 className="text-lg">{feature.name}</h3>
-                                        <p>{feature.description}</p>
+                                        <h3 className="text-lg text-neutral-900 font-semibold">{feature.name}</h3>
+                                        <p className="text-neutral-700">{feature.description}</p>
                                     </div>
                                 </section>
                             </Link>
