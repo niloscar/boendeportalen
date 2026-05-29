@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
+import { useFeatures } from '../../hooks/useFeatures'
 import { getNavigationLinks } from '../../config/navigation'
 import { ArrowRightIcon } from '@phosphor-icons/react'
 import MobileMenu from './MobileMenu'
@@ -8,18 +9,33 @@ const Header: React.FC = () => {
     const { user, profile } = useAuth()
     const isAdmin = Boolean(profile?.isAdmin || String(profile?.role ?? '').toLowerCase() === 'admin')
     const navigationLinks = getNavigationLinks({ isLoggedIn: Boolean(user), isAdmin }, 'header')
+    const { isFeatureEnabled } = useFeatures()
 
+    console.log(navigationLinks)
     return (
         <header className="bg-white border-b border-neutral-200/70">
             <div className="container mx-auto flex items-center justify-between gap-4 px-4 py-4">
                 <h1 className="text-xl text-neutral-900 font-extrabold leading-tight"><NavLink to="/">Boende<span className="text-green-500">Portalen</span></NavLink></h1>
                 <nav aria-label="Huvudnavigering" className="hidden md:block">
                     <ul className="flex items-center gap-2 text-sm text-neutral-700">
-                        {navigationLinks.map((link) => (
-                            <li key={link.href}>
-                                <NavLink to={link.href} className={({ isActive }) => `transition-colors hover:text-neutral-950 py-3 px-2 rounded-lg hover:bg-neutral-100 ${isActive ? 'font-semibold text-neutral-950 bg-neutral-100' : ''}`}>{link.label}</NavLink>
-                            </li>
-                        ))}
+                        {navigationLinks
+                            .filter(link => {
+                                if (link.href === '/') return true //Show Home
+                                if (link.href === '/admin') return true //Show Admin
+
+                                const featureKey = link.href.replace(/^\//, '')
+                                console.log(featureKey + " " + isFeatureEnabled(featureKey))
+                                return isFeatureEnabled(featureKey)
+                            })
+                            .map(link => (
+                                <li key={link.href}>
+                                    <NavLink
+                                        to={link.href}
+                                        className={({ isActive }) => `transition-colors hover:text-neutral-950 py-3 px-2 rounded-lg hover:bg-neutral-100 ${isActive ? 'font-semibold text-neutral-950 bg-neutral-100' : ''}`}>
+                                        {link.label}
+                                    </NavLink>
+                                </li>
+                            ))}
                     </ul>
                 </nav>
                 <div className="flex items-center gap-3 md:gap-4">

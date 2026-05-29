@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
+import { useFeatures } from '../../hooks/useFeatures'
 import { getNavigationLinks } from '../../config/navigation'
 
 const Footer: React.FC = () => {
     const { user, profile } = useAuth()
     const isAdmin = Boolean(profile?.isAdmin || String(profile?.role ?? '').toLowerCase() === 'admin')
     const navigationLinks = getNavigationLinks({ isLoggedIn: Boolean(user), isAdmin }, 'footer')
+    const { isFeatureEnabled } = useFeatures()
 
     return (
         <footer className="border-t border-neutral-200/70 bg-white">
@@ -13,11 +15,20 @@ const Footer: React.FC = () => {
                 © {new Date().getFullYear()} BoendePortalen. Alla rättigheter förbehållna.
                 <nav aria-label="Sidfotsnavigering">
                     <ul className="flex flex-wrap items-center justify-center gap-4">
-                        {navigationLinks.map((link) => (
-                            <li key={link.href}>
-                                <Link className="transition-colors hover:text-neutral-950" to={link.href}>{link.label}</Link>
-                            </li>
-                        ))}
+                        {navigationLinks
+                            .filter(link => {
+                                if (link.href === '/') return true //Show Home
+                                if (link.href === '/admin') return true //Show Admin
+
+                                const featureKey = link.href.replace(/^\//, '')
+                                console.log(featureKey + " " + isFeatureEnabled(featureKey))
+                                return isFeatureEnabled(featureKey)
+                            })
+                            .map(link => (
+                                <li key={link.href}>
+                                    <Link className="transition-colors hover:text-neutral-950" to={link.href}>{link.label}</Link>
+                                </li>
+                            ))}
                     </ul>
                 </nav>
             </div>
