@@ -34,6 +34,7 @@ export type FeaturesByType = Record<string, {
 
 export type WidgetProps = {
     title: string
+    slug: string
     description: string | null
     children: ReactNode
     onExpand: () => void

@@ -38,8 +38,6 @@ export default function SettingsPage() {
         }
     }
 
-    console.log('Alla funktioner:', features) // Logga alla funktioner för felsökning
-
     const sortedFeatureGroups = useMemo(() => {
         const visibleSettingsFeatures = features.filter((feature) =>
             feature.type_slug !== 'admin_widgets' || feature.component !== null
