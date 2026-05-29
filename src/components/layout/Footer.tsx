@@ -1,27 +1,11 @@
 import { Link } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
-import { useFeatures } from '../../hooks/useFeatures'
 import { getNavigationLinks } from '../../config/navigation'
 
 const Footer: React.FC = () => {
     const { user, profile } = useAuth()
-    const isLoggedIn = Boolean(user)
     const isAdmin = Boolean(profile?.isAdmin || String(profile?.role ?? '').toLowerCase() === 'admin')
-
-    const { isFeatureEnabled } = useFeatures()
-
-    const navigationLinks = getNavigationLinks(
-        { isLoggedIn, isAdmin },
-        'footer'
-    )
-
-    const filteredLinks = navigationLinks.filter(link => {
-        if (link.href === '/') return true 
-        if (link.href === '/admin') return true
-
-        const featureKey = link.href.replace(/^\//, '')
-        return isFeatureEnabled(featureKey)
-    })
+    const navigationLinks = getNavigationLinks({ isLoggedIn: Boolean(user), isAdmin }, 'footer')
 
     return (
         <footer className="border-t border-neutral-200/70 bg-white">
@@ -29,11 +13,9 @@ const Footer: React.FC = () => {
                 © {new Date().getFullYear()} BoendePortalen. Alla rättigheter förbehållna.
                 <nav aria-label="Sidfotsnavigering">
                     <ul className="flex flex-wrap items-center justify-center gap-4">
-                        {filteredLinks.map(link => (
+                        {navigationLinks.map((link) => (
                             <li key={link.href}>
-                                <Link className="transition-colors hover:text-neutral-950" to={link.href}>
-                                    {link.label}
-                                </Link>
+                                <Link className="transition-colors hover:text-neutral-950" to={link.href}>{link.label}</Link>
                             </li>
                         ))}
                     </ul>
