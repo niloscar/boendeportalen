@@ -5,13 +5,13 @@ import { getAvailableApartment } from '../api/apartmentApi.ts';
 export const getUniqueOptions = (apartments: ApartmentData[], key: 'district' | 'rooms') => Array.from(new Set(apartments.map((apartment) => apartment[key]))).sort((a, b) => a.localeCompare(b, 'sv-SE'))
 
 export function getDetails(apartment: ApartmentData) {
-    const calculateLastDay = apartment && subtractMonths(new Date(apartment.end_date), 1);
-    const applyBy = calculateLastDay && calculateLastDay.toISOString().split("T")[0];
+    const calculateLastDay = apartment.end_date ? subtractMonths(new Date(apartment.end_date), 1) : null;
+    const applyBy = calculateLastDay ? calculateLastDay.toISOString().split("T")[0] : 'Går ej att ansöka';
     function subtractMonths(date: Date, months: number) {
         date.setMonth(date.getMonth() - months);
         return date;
     }
-    const details = apartment ? [
+    const details = apartment && [
         {
             id: crypto.randomUUID(),
             title: "Kvadratmeter",
@@ -35,43 +35,14 @@ export function getDetails(apartment: ApartmentData) {
         {
             id: crypto.randomUUID(),
             title: "Tillgänglig från",
-            content: apartment.end_date
+            content: apartment.end_date ? apartment.end_date : 'Inget slutdatum finns'
         },
         {
             id: crypto.randomUUID(),
             title: "Sista ansökningsdag",
-            content: applyBy
+            content: apartment.end_date ? applyBy : 'Går ej att ansöka'
         },
-    ] : [ {
-            id: crypto.randomUUID(),
-            title: "Kvadratmeter",
-            content: 0
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Antal rum",
-            content: 0
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Hyra",
-            content: 'n/a kr/mån'
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Område",
-            content: 'n/a'
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Tillgänglig från",
-            content: 'n/a'
-        },
-        {
-            id: crypto.randomUUID(),
-            title: "Sista ansökningsdag",
-            content: 'n/a'
-        },]
+    ] 
       return details
 }
 
