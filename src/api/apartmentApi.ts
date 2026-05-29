@@ -12,7 +12,7 @@ export const getAvailableApartments = async () => {
 };
 export const getAvailableApartment = async (apartmentId : string | undefined) => {
     try {
-        const response = await apiConfig.get(`/available_apartments?id=eq.${apartmentId}`);
+        const response = await apiConfig.get(`/all_apartments?id=eq.${apartmentId}`);
         return response.data[0];
     } catch (err) {
         console.log(`Kunde inte hämta lägenheter, ${err}`);
