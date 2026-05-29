@@ -1,11 +1,29 @@
 import { Link } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
+import { useFeatures } from '../../hooks/useFeatures'
 import { getNavigationLinks } from '../../config/navigation'
 
 const Footer: React.FC = () => {
     const { user, profile } = useAuth()
+    const isLoggedIn = Boolean(user)
     const isAdmin = Boolean(profile?.isAdmin || String(profile?.role ?? '').toLowerCase() === 'admin')
-    const navigationLinks = getNavigationLinks({ isLoggedIn: Boolean(user), isAdmin }, 'footer')
+
+    const { isFeatureEnabled } = useFeatures()
+
+    // 1. Hämta länkar baserat på auth/admin
+    const navigationLinks = getNavigationLinks(
+        { isLoggedIn, isAdmin },
+        'footer'
+    )
+
+    // 2. Filtrera baserat på features
+    const filteredLinks = navigationLinks.filter(link => {
+        if (link.href === '/') return true        // Hem ska alltid visas
+        if (link.href === '/admin') return true   // Admin ska alltid visas om man är admin
+
+        const featureKey = link.href.replace(/^\//, '')
+        return isFeatureEnabled(featureKey)
+    })
 
     return (
         <footer className="border-t border-neutral-200/70 bg-white">
@@ -13,9 +31,11 @@ const Footer: React.FC = () => {
                 © {new Date().getFullYear()} BoendePortalen. Alla rättigheter förbehållna.
                 <nav aria-label="Sidfotsnavigering">
                     <ul className="flex flex-wrap items-center justify-center gap-4">
-                        {navigationLinks.map((link) => (
+                        {filteredLinks.map(link => (
                             <li key={link.href}>
-                                <Link className="transition-colors hover:text-neutral-950" to={link.href}>{link.label}</Link>
+                                <Link className="transition-colors hover:text-neutral-950" to={link.href}>
+                                    {link.label}
+                                </Link>
                             </li>
                         ))}
                     </ul>
