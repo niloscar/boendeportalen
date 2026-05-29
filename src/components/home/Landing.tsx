@@ -24,7 +24,7 @@ export default function Landing({ profileName, loading, loadError, visibleFeatur
                     <p>Du hittar dina uppgifter under <Link to='/minasidor' className="text-green-500">Mina sidor</Link>. Här kan du uppdatera din personliga information, och se status på dina förfrågningar. </p>
                 </div>
             </section>
-            {!loading && !loadError && visibleFeatures.length > 0 && (
+            {(!loading && !loadError && visibleFeatures.length > 0) && (
                 <section className="grid grid-cols-2 gap-6 w-full">
                     {visibleFeatures.map((feature) => (
                         <Link to={featureRoutes[feature.slug] ?? '/'} key={feature.id}>

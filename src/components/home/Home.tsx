@@ -56,7 +56,7 @@ export default function Home({ loading, loadError, visibleFeatures }: LandingPro
                     </article>
                 ))}
             </section>
-            {!loading && !loadError && visibleFeatures.length > 0 && (
+            {(!loading && !loadError && visibleFeatures.length > 0) && (
                 <>
                     <h1 className="text-2xl font-bold">Hitta enkelt hos oss</h1>
                     <section className="grid grid-cols-2 gap-6 w-full">
