@@ -1,24 +1,19 @@
-import type { Profile } from "../types/profile";
-import apiConfig from "./axiosConfig"
+import type { Profile } from '../types/profile'
+import apiConfig from './axiosConfig'
 
 export const getUsers = async () => {
-    try {
-        const response = await apiConfig.get(`/users`);
-        return response.data
-    } catch(error){
-        console.error(`Kunde inte hämta användare, ${error}`)
-        throw error
-    }
+    const response = await apiConfig.get('/users?order=full_name.asc')
+    return response.data as Profile[]
 }
 
-export const getUserById = async (userId: string) => {
-    try {
-        const response = await apiConfig.get(`/users?id=eq.${userId}`);
-        return response.data[0]
-    } catch(error){
-        console.error(`Kunde inte hämta användare, ${error}`)
-        throw error
-    }
+export const getUserById = async (userId: Profile['id']) => {
+    if (!userId) throw new Error('Saknar användar-id')
+
+    const response = await apiConfig.get(
+        `/users?id=eq.${encodeURIComponent(String(userId))}`
+    )
+
+    return response.data[0] as Profile | undefined
 }
 
 export const updateUser = async (
@@ -27,33 +22,27 @@ export const updateUser = async (
 ) => {
     if (!userId) throw new Error('Saknar användar-id')
 
-    try {
-        const response = await apiConfig.patch(
-            `/users?id=eq.${userId}`,
-            data,
-            { headers: { Prefer: 'return=representation' } }
-        )
+    const response = await apiConfig.patch(
+        `/users?id=eq.${encodeURIComponent(String(userId))}`,
+        data,
+        { headers: { Prefer: 'return=representation' } }
+    )
 
-        const updatedUser = Array.isArray(response.data)
-            ? response.data[0]
-            : response.data
+    const updatedUser = Array.isArray(response.data)
+        ? response.data[0]
+        : response.data
 
-        if (!updatedUser) {
-            throw new Error('API:t returnerade ingen uppdaterad användare')
-        }
-
-        return updatedUser as Profile
-    } catch (error) {
-        console.error('Kunde inte uppdatera användare:', error)
-        throw error
+    if (!updatedUser) {
+        throw new Error('API:t returnerade ingen uppdaterad användare')
     }
+
+    return updatedUser as Profile
 }
 
-export const deleteUser = async (userId: string) => {
-    try {
-        await apiConfig.delete(`/users?id=eq.${userId}`);
-    } catch(error){
-        console.error(`Kunde inte ta bort användare, ${error}`)
-        throw error
-    }
+export const deleteUser = async (userId: Profile['id']) => {
+    if (!userId) throw new Error('Saknar användar-id')
+
+    await apiConfig.delete(
+        `/users?id=eq.${encodeURIComponent(String(userId))}`
+    )
 }

@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react"
-import { getUsers, updateUser } from "../../api/usersApi"
-import { FloppyDiskIcon, PencilSimpleIcon, TrashIcon } from "@phosphor-icons/react"
+import axios from 'axios'
+import { forwardRef, useEffect, useRef, useState } from 'react'
+import { deleteUser, getUsers, updateUser } from '../../api/usersApi'
+import ConfirmDialog from '../../components/ui/ConfirmDialog'
+import { FloppyDiskIcon, PencilSimpleIcon, TrashIcon } from '@phosphor-icons/react'
 
-import type { ReactNode } from "react"
-import type { Profile } from "../../types/profile"
+import type { ReactNode } from 'react'
+import type { Profile } from '../../types/profile'
 
 type EditableRole = 'user' | 'admin'
 type EditableUserField = 'full_name' | 'phone' | 'email' | 'role'
@@ -19,14 +21,19 @@ export default function UsersPage() {
     const [saveError, setSaveError] = useState<string | null>(null)
     const [savingUserId, setSavingUserId] = useState<Profile['id'] | null>(null)
 
+    const [userToDelete, setUserToDelete] = useState<Profile | null>(null)
+    const [deleteError, setDeleteError] = useState<string | null>(null)
+    const [deletingUserId, setDeletingUserId] = useState<Profile['id'] | null>(null)
+
+    const fullNameInputRef = useRef<HTMLInputElement | null>(null)
+
     useEffect(() => {
         const fetchUsers = async () => {
             setLoading(true)
             try {
                 const usersData = await getUsers()
                 setUsers(usersData)
-            } catch (error) {
-                console.error('Kunde inte hämta användare:', error)
+            } catch {
                 setLoadError('Kunde inte hämta användare')
             } finally {
                 setLoading(false)
@@ -51,13 +58,37 @@ export default function UsersPage() {
     const handleEditUser = (user: Profile) => {
         if (!user.id) return
 
+        setSaveError(null)
+        setDeleteError(null)
         setEditingUserId(user.id)
         setEditedUser({ ...user })
     }
 
     const handleCancelEditUser = () => {
+        setSaveError(null)
+        setDeleteError(null)
         setEditingUserId(null)
         setEditedUser(null)
+    }
+
+    const getEditableRole = (role: Profile['role']): EditableRole => (
+        role === 'admin' ? 'admin' : 'user'
+    )
+
+    const getRoleLabel = (role: Profile['role']) => (
+        role === 'admin' ? 'Admin' : 'Användare'
+    )
+
+    // Preserve tenant/staff roles when the UI value is "user".
+    // Only explicitly change role when promoting to admin or demoting from admin.
+    const getRoleForSave = (
+        originalRole: Profile['role'],
+        editedRole: Profile['role']
+    ): Profile['role'] => {
+        if (editedRole === 'admin') return 'admin'
+        if (originalRole === 'admin') return 'user'
+
+        return originalRole
     }
 
     const hasUserChanged = (originalUser: Profile, editedUser: Profile) => {
@@ -70,7 +101,16 @@ export default function UsersPage() {
     }
 
     const handleSaveUser = async () => {
+        setSaveError(null)
+        setDeleteError(null)
+
         if (!editedUser?.id) return
+
+        if (!editedUser.full_name?.trim()) {
+            setSaveError('Fältet för namn kan inte lämnas tomt.')
+            fullNameInputRef.current?.focus()
+            return
+        }
 
         const originalUser = users.find(user => user.id === editedUser.id)
 
@@ -81,15 +121,14 @@ export default function UsersPage() {
             return
         }
 
-        setSaveError(null)
         setSavingUserId(editedUser.id)
 
         try {
             const updatedUser = await updateUser(editedUser.id, {
-                full_name: editedUser.full_name,
+                full_name: editedUser.full_name.trim(),
                 phone: editedUser.phone,
                 email: editedUser.email,
-                role: editedUser.role === 'admin' ? 'admin' : originalUser.role,
+                role: getRoleForSave(originalUser.role, editedUser.role),
             })
 
             setUsers(users.map(user =>
@@ -97,64 +136,94 @@ export default function UsersPage() {
             ))
 
             handleCancelEditUser()
-        } catch (error) {
-            console.error('Kunde inte spara användare:', error)
+        } catch {
             setSaveError('Kunde inte spara ändringarna. Försök igen.')
         } finally {
             setSavingUserId(null)
         }
     }
 
-    const handleDeleteUser = (user: Profile) => {
-        if (!user.id) return
-
-        if (editingUserId === user.id) {
-            handleCancelEditUser()
-        }
-
-        setUsers(users.filter(u => u.id !== user.id))
+    const handleOpenDeleteDialog = (user: Profile) => {
+        setUserToDelete(user)
     }
 
-    const getEditableRole = (role: Profile['role']): EditableRole => (role === 'admin') ? 'admin' : 'user' // All non admin roles are considered 'user' for editing purposes
-    const getRoleLabel = (role: Profile['role']) => (role === 'admin') ? 'Admin' : 'Användare' // Same as above but for display purposes
+    const handleCloseDeleteDialog = () => {
+        setUserToDelete(null)
+    }
+
+    const handleDeleteUser = async () => {
+        setSaveError(null)
+        setDeleteError(null)
+
+        if (!userToDelete?.id) return
+
+        setDeletingUserId(userToDelete.id)
+
+        try {
+            await deleteUser(userToDelete.id)
+
+            if (editingUserId === userToDelete.id) {
+                handleCancelEditUser()
+            }
+
+            setUsers(users.filter(user => user.id !== userToDelete.id))
+            setUserToDelete(null)
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 409) {
+                setDeleteError('Användaren kan inte tas bort eftersom den är kopplad till ett kontrakt.')
+                return
+            }
+
+            setDeleteError('Kunde inte ta bort användaren. Försök igen.')
+        } finally {
+            setDeletingUserId(null)
+            setUserToDelete(null)
+        }
+    }
 
     if (loading) return <p className="text-sm text-neutral-600 text-center w-full">Laddar inställningar...</p>
     if (loadError) return <p className="text-red-600 text-center w-full">Kunde inte ladda inställningar: {loadError}</p>
 
     return (
-        <main className="py-6 border-t border-neutral-200 bg-white rounded-xl p-6 shadow-md">
+        <div className="py-6 border-t border-neutral-200 bg-white rounded-xl p-6 shadow-md overflow-x-auto">
 
-            {saveError && <p className="my-4 text-red-600 text-center w-full">{saveError}</p>}
+            {(saveError || deleteError) && (
+                <p className="my-4 text-red-600 text-center w-full">
+                    {saveError ?? deleteError}
+                </p>
+            )}
 
-            <table className="w-full table-fixed text-left border-collapse">
+            <table className="md:table-fixed w-full text-left border-collapse">
                 <colgroup>
-                    <col className="w-[32%]" />
-                    <col className="w-[17%]" />
-                    <col className="w-[32%]" />
-                    <col className="w-[19%]" />
-                    <col className="w-24" />
+                    <col />
+                    <col />
+                    <col />
+                    <col />
+                    <col className="w-20" />
                 </colgroup>
 
-                <thead>
-                    <tr>
-                        <th className="pr-2 py-1">Namn</th>
-                        <th className="px-2 py-1">Telefon</th>
-                        <th className="px-2 py-1">Email</th>
-                        <th className="px-2 py-1">Roll</th>
-                        <th className="pl-2 py-1"></th>
-                    </tr>
+                <thead className="text-sm">
+                <tr>
+                    <th className="pr-2 py-1">Namn</th>
+                    <th className="px-2 py-1">Telefon</th>
+                    <th className="px-2 py-1">Email</th>
+                    <th className="px-2 py-1">Roll</th>
+                    <th className="pl-2 py-1"></th>
+                </tr>
                 </thead>
 
                 <tbody className="text-sm text-neutral-600">
                     {users.map(user => {
                         const isEditing = editingUserId === user.id
                         const isSaving = savingUserId === user.id
+                        const isDeleting = deletingUserId === user.id
                         const currentUser = isEditing && editedUser ? editedUser : user
 
                         return (
                             <tr key={user.id} className="hover:text-neutral-900">
                                 <td className="pr-2">
                                     <ToggleableInput
+                                        ref={isEditing ? fullNameInputRef : undefined}
                                         id={`full_name-${user.id}`}
                                         name={`full_name-${user.id}`}
                                         value={currentUser.full_name ?? ''}
@@ -199,21 +268,23 @@ export default function UsersPage() {
                                     />
                                 </td>
 
-                                <td className="w-0 pl-2 whitespace-nowrap text-right">
-                                    {isEditing && (
-                                        <button
-                                            type="button"
-                                            disabled={isSaving}
-                                            onClick={() => handleDeleteUser(user)}
-                                            className="cursor-pointer mr-2 text-red-700 hover:text-red-900"
-                                        >
-                                            <TrashIcon size={20} />
-                                        </button>
-                                    )}
+                                <td className="pl-2 whitespace-nowrap">
+                                      <button
+                                        type="button"
+                                        disabled={!isEditing || isSaving || isDeleting}
+                                        onClick={() => handleOpenDeleteDialog(user)}
+                                        aria-hidden={!isEditing}
+                                        tabIndex={isEditing ? 0 : -1}
+                                        className={`mr-2 text-red-700 hover:text-red-900 disabled:cursor-not-allowed disabled:opacity-50 ${
+                                        isEditing ? 'cursor-pointer' : 'invisible'
+                                        }`}
+                                    >
+                                        <TrashIcon size={20} />
+                                    </button>
 
                                     <button
                                         type="button"
-                                        disabled={isSaving}
+                                        disabled={isSaving || isDeleting}
                                         onClick={() => {
                                             if (isSaving) return
 
@@ -234,7 +305,20 @@ export default function UsersPage() {
                     })}
                 </tbody>
             </table>
-        </main>
+
+            {userToDelete && (
+                <ConfirmDialog
+                    open={!!userToDelete}
+                    title="Ta bort användare?"
+                    message={`Är du säker på att du vill ta bort ${userToDelete.full_name ?? 'den här användaren'}?`}
+                    isProcessing={deletingUserId === userToDelete.id}
+                    onConfirm={handleDeleteUser}
+                    onCancel={handleCloseDeleteDialog}
+                    confirmColor="red"
+                />
+            )}
+
+        </div>
     )
 }
 
@@ -248,7 +332,7 @@ type ToggleableInputProps = {
     type?: 'text' | 'email' | 'tel'
 }
 
-function ToggleableInput({
+const ToggleableInput = forwardRef<HTMLInputElement, ToggleableInputProps>(function ToggleableInput({
     id,
     name,
     value,
@@ -256,11 +340,12 @@ function ToggleableInput({
     onChange,
     displayValue,
     type = 'text'
-}: ToggleableInputProps) {
+}, ref) {
     return (
         <div className="h-9 flex items-center">
             {isEditing ? (
                 <input
+                    ref={ref}
                     className="block h-8 w-full box-border bg-neutral-100 border 
                         border-neutral-300 rounded px-2 -m-[calc(var(--spacing)*2+1px)]
                         outline-green-500"
@@ -277,7 +362,7 @@ function ToggleableInput({
             )}
         </div>
     )
-}
+})
 
 type ToggleableSelectProps = {
     id: string
