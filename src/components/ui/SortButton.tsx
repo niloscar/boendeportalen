@@ -7,7 +7,7 @@ const SortButton = ({ onClick, children, value, isActive }: { onClick: () => voi
     return (
         <button
             type="button"
-            className="flex items-center gap-0.5 text-sm font-bold text-gray-700 cursor-pointer hover:underline"
+            className="flex items-center gap-0.5 text-sm font-bold text-gray-900 cursor-pointer hover:underline"
             onClick={onClick} 
             value={value}
         >
