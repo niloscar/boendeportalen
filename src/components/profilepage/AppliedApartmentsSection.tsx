@@ -19,6 +19,8 @@ const buildNavigationState = (item: AppliedApartmentSummary) => {
         description: apartment.description ?? '',
         rent: item.rent ?? 0,
         end_date: Temporal.PlainDate.from(endDate).subtract({ weeks: 2 }).toString(),
+        house_number: 0,
+        apartment_number: 0,
         images: [],
     };
 
