@@ -2,11 +2,11 @@
 
 ## Grupp 2
 
-- Erica Friberg
-- Oscar Nilsson
-- Sebastian Valdemarsson
-- Sofie Johnsson
-- Viktor Lindqvist 
+- Erica Friberg – Hem, Lägenheter, API-config
+- Oscar Nilsson – Admin inkl. undersidor, Features-kontext
+- Sebastian Valdemarsson – Mina sidor inkl. undersidor
+- Sofie Johnsson – Tvättstuga, Gästlägenhet
+- Viktor Lindqvist – Parkeringar, Registrering/Inloggning, routing och autentisering
 
 ## Projektbeskrivning 
 
@@ -18,10 +18,23 @@ För hyresvärdar erbjuder Boendeportalen ett administrativt gränssnitt där de
 
 ## Tech stack
 
-- TypeScript
+**Frontend**
 - React
+- React Router
 - Tailwind CSS
+- TypeScript
+- Vite
+
+**Backend/Data**
 - PostgreSQL
+- Supabase
+- Supabase Auth
+
+**UI/Övrigt**
+- Axios
+- FullCalendar
+- Leaflet
+- Phosphor Icons
 
 ## Installation
 
