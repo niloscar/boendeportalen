@@ -2,18 +2,47 @@
 
 ## Grupp 2
 
-- Erica Friberg
-- Oscar Nilsson
-- Sebastian Valdemarsson
-- Sofie Johnsson
-- Viktor Lindqvist 
+- Erica Friberg – Hem, Lägenheter, API-config
+- Oscar Nilsson – Admin inkl. undersidor, Features-kontext
+- Sebastian Valdemarsson – Mina sidor inkl. undersidor
+- Sofie Johnsson – Tvättstuga, Gästlägenhet
+- Viktor Lindqvist – Parkeringar, Registrering/Inloggning, routing och autentisering
+
+## Projektbeskrivning 
+
+Boendeportalen är en digital tjänst utvecklad för att förenkla kommunikationen och vardagen för både hyresgäster och hyresvärdar. Plattformen samlar all bostadsrelaterad information på ett ställe och gör det möjligt för användare att hantera ärenden och funktioner kopplade till sitt boende på ett smidigt och överskådligt sätt.
+
+Hyresgäster kan bland annat söka lediga lägenheter och garageplatser, boka tvättid och gästlägenhet, uppdatera sina uppgifter, göra felanmälningar, begära ny utrustning eller förbättringar samt ta del av manualer och dokument.
+
+För hyresvärdar erbjuder Boendeportalen ett administrativt gränssnitt där de kan hantera hyresgäster, funktioner, meddelanden och annat innehåll i portalen. Detta skapar en effektiv och centraliserad arbetsprocess för fastighetsförvaltningen.
 
 ## Tech stack
 
-- TypeScript
+**Frontend**
 - React
+- React Router
 - Tailwind CSS
+- TypeScript
+- Vite
+
+**Backend/Data**
 - PostgreSQL
+- Supabase
+- Supabase Auth
+
+**UI/Övrigt**
+- Axios
+- FullCalendar
+- Leaflet
+- Phosphor Icons
+
+## Installation
+
+Kommandon för att köra projektet lokalt:
+```
+npm i
+npm run dev
+```
 
 ## Projektstandard
 

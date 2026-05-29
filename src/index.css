@@ -1,1 +1,7 @@
+@import "@fontsource/inter";
 @import "tailwindcss";
+
+body {
+    font-family: "Inter";
+    background-color: oklch(97% 0 0);
+}
