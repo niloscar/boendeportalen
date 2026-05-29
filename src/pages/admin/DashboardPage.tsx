@@ -5,15 +5,16 @@ import ExpandedWidget from '../../components/admin/ExpandedWidget'
 import Widget from '../../components/admin/Widget'
 import Issues from '../../components/admin/widgets/Issues'
 import Messages from '../../components/admin/widgets/messages/Messages'
+import Tenants from '../../components/admin/widgets/Tenants'
 
 import type { ComponentType } from 'react'
 
 const WIDGET_COMPONENTS = {
     Issues,
     Messages,
-    Tenants: () => <p>Lista över samtliga hyresgäster.</p>,
+    Tenants,
     Resources: () => <p>Hantera uthyrningsbara resurser.</p>,
-} satisfies Record<string, ComponentType>
+}
 
 function getWidgetComponent(componentName: string | null): ComponentType | null {
     if (!componentName) return null
@@ -63,9 +64,9 @@ export default function DashboardPage() {
             </ResponsiveMasonry>
 
             {expandedWidget && (() => {
-                const Component = getWidgetComponent(expandedWidget.component)
+                const component = renderWidgetComponent(expandedWidget.component, { expanded: true })
 
-                if (!Component) return null
+                if (!component) return null
 
                 return (
                     <ExpandedWidget
@@ -74,10 +75,31 @@ export default function DashboardPage() {
                         description={expandedWidget.description}
                         onClose={() => setExpandedWidgetTitle(null)}
                     >
-                        <Component />
+                        {component}
                     </ExpandedWidget>
                 )
             })()}
         </main>
     )
+}
+
+function renderWidgetComponent(componentName: string | null, props?: { expanded?: boolean }) {
+    if (!componentName) return null
+
+    switch (componentName) {
+        case 'Tenants':
+            return <Tenants rowsPerPage={props?.expanded ? 20 : undefined} />
+
+        case 'Issues':
+            return <Issues />
+
+        case 'Messages':
+            return <Messages />
+
+        case 'Resources':
+            return <p>Hantera uthyrningsbara resurser.</p>
+
+        default:
+            return null
+    }
 }
