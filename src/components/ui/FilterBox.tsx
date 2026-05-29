@@ -88,6 +88,7 @@ function renderField(field: FilterBoxField) {
     )
 }
 
+// Filter box used on apartments and parking pages. Accepts a flexible `fields` prop that can render different filter types, depending on what the page needs. For fields options, visit `FilterBoxField` in `src/types/ui.ts`.
 export default function FilterBox({
     fields,
     className = '',

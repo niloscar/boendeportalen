@@ -45,6 +45,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
         const trimmedPhone = phone.trim()
         const trimmedEmail = email.trim().toLowerCase()
 
+        // Validation upon registration. Checks for valid full name, phone number, email format, password strength and match, and cooldown for rate limiting. Sets error messages accordingly.
         const fullNameRegex = /^[A-Za-zA-Za-z\u00C0-\u017F\s'-]{2,100}$/
         const phoneRegex = /^\+?[0-9\s-]{7,15}$/
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -109,6 +110,7 @@ function Register({ onSwitchToLogin }: RegisterProps) {
                         },
                     ])
 
+                    // We upsert a profile row after signup. If this fails the user account may still exist in supabase auth users, but the profile data won't be saved. We then show a success or error message accordingly.
                     if (upsertError) {
                         setError('Registrering lyckades, men kunde inte uppdatera användarprofil. Kontakta support.')
                         console.error('Profile upsert error', upsertError)

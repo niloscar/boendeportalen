@@ -26,6 +26,7 @@ function Login({ onSwitchToRegister, onForgotPassword }: LoginProps) {
         }
     }
 
+    // Handles form submission for email/password login. Redirects to home page on success and sets an error message on failure.
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setError(null)
