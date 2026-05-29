@@ -47,7 +47,7 @@ export default function Home({ loading, loadError, visibleFeatures }: LandingPro
             <h1 className="text-2xl font-bold">Varför välja oss?</h1>
             <section className="grid w-full gap-6 md:grid-cols-3">
                 {marketingCards.map((card) => (
-                    <article key={card.title} className="flex flex-col gap-2 rounded-2xl border border-neutral-200 bg-gradient-to-br from-white via-white to-green-50 p-6 shadow-md">
+                    <article key={card.title} className="flex flex-col gap-2 rounded-2xl border border-neutral-200 bg-gradient-to-br from-white via-white to-green-50 p-6 shadow-md min-h-min">
                         <div className="flex items-center gap-3">
                             {card.icon}
                             <h2 className="text-xl font-semibold text-neutral-900">{card.title}</h2>
@@ -59,10 +59,10 @@ export default function Home({ loading, loadError, visibleFeatures }: LandingPro
             {(!loading && !loadError && visibleFeatures.length > 0) && (
                 <>
                     <h1 className="text-2xl font-bold">Hitta enkelt hos oss</h1>
-                    <section className="grid grid-cols-2 gap-6 w-full">
+                    <section className="grid lg:grid-cols-2 gap-6 w-full">
                         {visibleFeatures.map((feature) => (
                             <Link to={featureRoutes[feature.slug] ?? '/'} key={feature.id}>
-                                <section className='rounded-2xl border border-neutral-200 bg-white p-6 shadow-md sm:p-8 w-full flex gap-4' >
+                                <section className='flex gap-4 rounded-2xl border border-neutral-200 bg-gradient-to-br from-white via-white to-green-50 p-6 shadow-md p-6 sm:p-8 w-full ' >
                                     <div className='self-center'>
                                         {feature.slug === 'parkeringar' && <CarIcon size={32} className="text-green-500" />}
                                         {feature.slug === 'bostader' && <HouseLineIcon size={32} className="text-green-500" />}
