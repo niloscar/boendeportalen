@@ -4,6 +4,7 @@ import Register from '../components/auth/Register';
 import ForgotPassword from '../components/auth/ForgotPassword';
 import ResetPassword from '../components/auth/ResetPassword';
 import styles from './Auth.module.css';
+import { Link } from 'react-router-dom';
 
 const isRecoveryFlow = () => {
     const searchParams = new URLSearchParams(window.location.search)
@@ -57,7 +58,7 @@ function Auth() {
                 <div className='w-full lg:w-1/2 2xl:w-1/3 min-h-0 flex bg-white items-stretch justify-center px-5 py-6 sm:px-8 sm:py-8 md:px-8 md:py-8 lg:px-8 lg:py-8 xl:px-10 xl:py-10 2xl:px-12 2xl:py-12 overflow-hidden lg:overflow-hidden'>
                     <div className='w-full min-h-0 flex flex-col gap-4 sm:gap-6 md:gap-5 lg:gap-6 overflow-hidden'>
                         <div className='flex flex-row items-start sm:items-center flex-wrap justify-between gap-1'>
-                            <h2 className='text-2xl sm:text-3xl xl:text-3xl 2xl:text-4xl text-neutral-900 font-extrabold leading-tight'>Boende<span className='text-green-500'>Portalen</span></h2>
+                            <Link to='/' className='text-2xl sm:text-3xl xl:text-3xl 2xl:text-4xl text-neutral-900 font-extrabold leading-tight'>Boende<span className='text-green-500'>Portalen</span></Link>
                             <div className='hidden lg:block text-right'>
                                 <div className='text-gray-600 text-xs whitespace-nowrap'>{weekday} {formattedTime}</div>
                             </div>
