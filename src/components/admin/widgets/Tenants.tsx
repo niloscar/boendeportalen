@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import SortButton from '../../ui/SortButton'
 import type { ChangeEvent } from 'react'
+import { ArrowLeftIcon, ArrowRightIcon } from '@phosphor-icons/react'
 
+// Mocking tenant data until we have enough real tenants in the system to make it meaningful.
 const MOCK_TENANTS = [
     { id: 1, fname: 'John', lname: 'Doe', house: '1', entrance: 'A', apartment: '1001', date: '2023-01-01' },
     { id: 2, fname: 'Jane', lname: 'Smith', house: '1', entrance: 'B', apartment: '1001', date: '2023-02-01' },
@@ -48,20 +50,21 @@ type SearchResultOrder = {
     direction: SortDirection
 }
 
-export default function AdminTenants() {
+export default function Tenants({ rowsPerPage = 5 }) {
     const [searchTerm, setSearchTerm] = useState('')
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
     const [searchResultOrder, setSearchResultOrder] = useState<SearchResultOrder>({ field: 'fname', direction: 'asc' })
     const [isSearching, setIsSearching] = useState(false)
     const [searchError, setSearchError] = useState<{ message: string, details: unknown } | null>(null)
+    const [currentPage, setCurrentPage] = useState(1)
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
 
         setSearchTerm(value)
+        setCurrentPage(1)
         setSearchError(null)
 
-        // If the search term is empty, reset the search results and state.
         if (!value) {
             setDebouncedSearchTerm('')
             setIsSearching(false)
@@ -100,6 +103,8 @@ export default function AdminTenants() {
         : MOCK_TENANTS
 
     const handleSortChange = (field: SortField) => {
+        setCurrentPage(1)
+
         setSearchResultOrder((currentOrder) => {
             if (currentOrder.field !== field) return { field, direction: 'asc' }
 
@@ -118,6 +123,13 @@ export default function AdminTenants() {
 
         return 0
     })
+
+    const totalPages = Math.ceil(sortedSearchResults.length / rowsPerPage)
+
+    const paginatedSearchResults = sortedSearchResults.slice(
+        (currentPage - 1) * rowsPerPage,
+        currentPage * rowsPerPage
+    )
 
     const hasResults = sortedSearchResults.length > 0
     const showEmptyState = !hasResults && !isSearching && !searchError
@@ -142,7 +154,9 @@ export default function AdminTenants() {
             {showEmptyState && <p className="text-sm text-gray-500">Inga hyresgäster hittades.</p>}
             {hasResults && !isSearching && (
                 <>
-                    <p className="text-sm text-gray-500">{sortedSearchResults.length} hyresgäster visas.</p>
+                    <p className="text-sm text-gray-500">
+                        Hittade totalt {sortedSearchResults.length} {sortedSearchResults.length === 1 ? 'hyresgäst' : 'hyresgäster'}.
+                    </p>
                     <div className="overflow-auto">
                         <table className="search-results w-full table-auto">
                             <thead>
@@ -173,7 +187,7 @@ export default function AdminTenants() {
                             </thead>
 
                             <tbody className="text-sm text-neutral-600">
-                                {sortedSearchResults.map(tenant => (
+                                {paginatedSearchResults.map(tenant => (
                                     <tr 
                                         key={tenant.id}
                                         className="hover:text-neutral-900"
@@ -188,6 +202,34 @@ export default function AdminTenants() {
                             </tbody>
                         </table>
                     </div>
+                    {!isSearching && !searchError && (
+                        <nav
+                            className="mt-4 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm text-neutral-500"
+                            aria-label="Sökresultat pagination"
+                        >
+                            <button
+                                className="flex items-center cursor-pointer gap-1 transition-opacity disabled:opacity-50"
+                                onClick={() => setCurrentPage(page => Math.max(page - 1, 1))}
+                                disabled={currentPage === 1}
+                            >
+                                <ArrowLeftIcon size={20} />
+                                <span>Föregående</span>
+                            </button>
+
+                            <p className="text-sm text-gray-500">
+                                Sida {currentPage} av {totalPages}
+                            </p>
+
+                            <button 
+                                className="flex items-center cursor-pointer gap-1 justify-self-end transition-opacity disabled:opacity-50"
+                                onClick={() => setCurrentPage(page => Math.min(page + 1, totalPages))}
+                                disabled={currentPage === totalPages}
+                            >
+                                <span>Nästa</span>
+                                <ArrowRightIcon size={20} />
+                            </button>
+                        </nav>
+                    )}
                 </>
             )}
         </>

@@ -3,6 +3,25 @@ import type React from 'react';
 export interface ApartmentData {
     id: number,
     street: string,
+    house_number?: number,
+    stairwell?: string,
+    apartment_number?: number,
+    postcode: number,
+    city: string,
+    area: number,
+    rooms: string,
+    district: string,
+    description: string,
+    rent: number,
+    end_date: string | null,
+    images: ApartmentImages[]
+}
+export interface ApartmentFilterData {
+    id: number,
+    street: string,
+    house_number?: number,
+    stairwell?: string,
+    apartment_number?: number,
     postcode: number,
     city: string,
     area: number,
@@ -16,7 +35,7 @@ export interface ApartmentData {
 export interface Detail {
     id: string,
     title: string,
-    content: string | number
+    content: string | number 
 }
 
 export interface ApartmentImages {
@@ -37,13 +56,13 @@ export type Filter = {
 }
 
 export type ApartmentListProp =
-  | {
-      variant: 'div'
-      items: ApartmentData[]
+    | {
+        variant: 'div'
+        items: ApartmentData[]
     }
-  | {
-      variant: 'ul'
-      items: Detail[]
+    | {
+        variant: 'ul'
+        items: Detail[]
     }
 export type ApartmentProp = {
     apartment: ApartmentData | null,
@@ -51,6 +70,7 @@ export type ApartmentProp = {
 export type ApartmentImagesProp = {
     images: ApartmentImages[],
     size: string,
+    rounded: boolean,
 }
 
 export type ListProp = {
@@ -64,10 +84,35 @@ export interface SignedUpData {
     end_date: string,
 }
 
-export type SignUp ={ 
+export type SignUp = {
     error: string,
     loading: boolean,
     applied: SignedUpData[],
+    totalApplications: SignedUpData[],
     deleteSignUp: () => Promise<void>,
     signUp: () => Promise<void>
 }
+
+export type reducerState = {
+    district: string[],
+    rooms: string[],
+    maxRent: number,
+    sortBy: string,
+}
+
+export type reducerAction =
+    | {
+        type: 'districtChanged',
+        value: string[],
+    } | {
+        type: 'roomChanged',
+        value: string[]
+    } | {
+        type: 'maxRentChanged',
+        value: number
+    } | {
+        type: 'sortByChanged',
+        value: string
+    } | {
+        type: 'filtersReset'
+    }

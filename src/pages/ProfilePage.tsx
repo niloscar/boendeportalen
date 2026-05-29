@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import type { ReportFormData } from '../components/ProfilePage/ReportForm';
+import type { ReportFormData } from '../types/forms';
 import { ArrowLeftIcon } from '@phosphor-icons/react';
 import Button from '../components/ui/Button';
 import profilePageImage from '../assets/profilepage.webp';
-import ApartmentOverviewCard from '../components/ProfilePage/ApartmentOverviewCard';
-import ApartmentDocumentsSection from '../components/ProfilePage/ApartmentDocumentsSection';
-import PersonalInfoSection from '../components/ProfilePage/PersonalInfoSection';
-import ProfileFormsSection from '../components/ProfilePage/ProfileFormsSection';
-import ProfilePageSkeleton from '../components/ProfilePage/ProfilePageSkeleton';
-import type { ActiveForm } from '../components/ProfilePage/ProfileFormsSection';
+import ApartmentOverviewCard from '../components/profilepage/ApartmentOverviewCard';
+import AppliedSection from '../components/profilepage/AppliedSection';
+import MyParkingSection from '../components/profilepage/MyParkingSection';
+import ApartmentDocumentsSection from '../components/profilepage/ApartmentDocumentsSection';
+import PersonalInfoSection from '../components/profilepage/PersonalInfoSection';
+import ProfileFormsSection from '../components/profilepage/ProfileFormsSection';
+import ProfilePageSkeleton from '../components/profilepage/ProfilePageSkeleton';
+import type { ActiveForm } from '../types/profile';
 import useAuth from '../hooks/useAuth';
 import { useProfileData } from '../hooks/useProfileData';
 import {
@@ -41,6 +43,9 @@ const ProfilePage = () => {
         apartmentInfo,
         manualDocuments,
         floorPlanDocument,
+        appliedApartments,
+        myParking,
+        appliedParking,
     } = useProfileData(userId, loading);
 
     // Ref used to scroll the page back to top when a form subview opens
@@ -212,13 +217,10 @@ const ProfilePage = () => {
                     <ProfilePageSkeleton />
                 ) : activeForm ? (
                     <>
-                        <button
-                            onClick={closeForm}
-                            className='flex w-fit items-center gap-1.5 text-sm text-neutral-500 transition-colors duration-200 hover:text-neutral-900'
-                        >
+                        <Button variant='secondary' size='md' onClick={closeForm} className='flex w-fit items-center gap-1.5'>
                             <ArrowLeftIcon size={16} />
                             Tillbaka
-                        </button>
+                        </Button>
                         <ProfileFormsSection
                             activeForm={activeForm}
                             onCloseForm={closeForm}
@@ -237,18 +239,28 @@ const ProfilePage = () => {
                             onSave={handleProfileSave}
                             onAvatarUpload={handleAvatarUpload}
                         />
-                        <ApartmentOverviewCard
-                            apartmentInfo={apartmentInfo}
-                            onErrorReport={() => openForm('error')}
-                            onServiceRequest={() => openForm('service')}
-                            onOpenContract={openContract}
-                            onOpenFloorPlan={openFloorPlan}
-                            imageSrc={profilePageImage}
-                        />
-                        <ApartmentDocumentsSection
-                            documents={manualDocuments}
-                            documentUrls={documentUrls}
-                        />
+                        {contract && (
+                            <ApartmentOverviewCard
+                                apartmentInfo={apartmentInfo}
+                                onErrorReport={() => openForm('error')}
+                                onServiceRequest={() => openForm('service')}
+                                onOpenContract={openContract}
+                                onOpenFloorPlan={openFloorPlan}
+                                imageSrc={profilePageImage}
+                            />
+                        )}
+                        {myParking.length > 0 && (
+                            <MyParkingSection myParking={myParking} />
+                        )}
+                        {(appliedApartments.length > 0 || appliedParking.length > 0) && (
+                            <AppliedSection appliedApartments={appliedApartments} appliedParking={appliedParking} />
+                        )}
+                        {contract && (
+                            <ApartmentDocumentsSection
+                                documents={manualDocuments}
+                                documentUrls={documentUrls}
+                            />
+                        )}
                     </>
                 )}
             </main>

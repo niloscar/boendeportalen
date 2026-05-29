@@ -34,8 +34,8 @@ export function useLaundryRoomEvents(bookings: Booking[], timeslots: Timeslot[],
                 result.push({
                     id: String(booking.id),
                     title: isOwner
-                        ? `${slot.start}-${slot.end} Bokad`
-                        : `${slot.start}-${slot.end} Upptaget`,
+                        ? `${slot.start}-${slot.end} <br>Bokad`
+                        : `${slot.start}-${slot.end} <br>Upptaget`,
                     start: `${booking.date}T${slot.start}`,
                     end: `${booking.date}T${slot.end}`,
                     extendedProps: {
@@ -57,7 +57,7 @@ export function useLaundryRoomEvents(bookings: Booking[], timeslots: Timeslot[],
                     if (!isBooked) {
                         result.push({
                             id: `free-${date}-${slot.id}`,
-                            title: `${slot.start}-${slot.end} Ledig`,
+                            title: `${slot.start}-${slot.end} <br>Ledig`,
                             start: `${date}T${slot.start}`,
                             end: `${date}T${slot.end}`,
                             extendedProps: {

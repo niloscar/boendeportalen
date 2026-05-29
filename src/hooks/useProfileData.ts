@@ -6,18 +6,24 @@ import {
     getApartmentEquipment,
     getApartmentForUser,
     getApartmentFileSignedUrl,
+    getAppliedApartments,
+    getAppliedParking,
+    getMyParking,
     getUserProfile,
 } from '../api/profilepageApi';
 import type {
     ApartmentDocument,
     ApartmentEquipment,
+    AppliedApartmentSummary,
+    AppliedParkingSummary,
     ContractSummary,
+    ParkingSpotSummary,
     UserProfile,
-} from '../api/profilepageApi';
+} from '../types/profile';
 import type React from 'react';
 
 // Formats a Swedish postcode with a space separator: "12345" → "123 45"
-const formatPostcode = (postcode?: string | number) => {
+export const formatPostcode = (postcode?: string | number) => {
     if (postcode === undefined || postcode === null) return '';
     const str = String(postcode);
     const cleaned = str.replace(/\s+/g, '');
@@ -37,6 +43,9 @@ export interface ProfileData {
     apartmentInfo: string[] | null;
     manualDocuments: ApartmentDocument[];
     floorPlanDocument: ApartmentDocument | null;
+    appliedApartments: AppliedApartmentSummary[];
+    myParking: ParkingSpotSummary[];
+    appliedParking: AppliedParkingSummary[];
 }
 
 /**
@@ -51,6 +60,9 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
     const [documents, setDocuments] = useState<ApartmentDocument[]>([]);
     const [documentUrls, setDocumentUrls] = useState<Record<number, string>>({});
     const [equipment, setEquipment] = useState<ApartmentEquipment[]>([]);
+    const [appliedApartments, setAppliedApartments] = useState<AppliedApartmentSummary[]>([]);
+    const [myParking, setMyParking] = useState<ParkingSpotSummary[]>([]);
+    const [appliedParking, setAppliedParking] = useState<AppliedParkingSummary[]>([]);
 
     useEffect(() => {
         const loadProfileData = async () => {
@@ -72,6 +84,15 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
 
                 setProfile(profileData);
                 setContract(contractData);
+
+                const [applied, myParkingData, appliedParkingData] = await Promise.all([
+                    getAppliedApartments(userId),
+                    getMyParking(userId),
+                    getAppliedParking(userId),
+                ]);
+                setAppliedApartments(applied);
+                setMyParking(myParkingData);
+                setAppliedParking(appliedParkingData);
 
                 if (contractData?.apartment_id) {
                     const [documentsData, equipmentData] = await Promise.all([
@@ -118,10 +139,11 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
 
         const { apartments } = contract;
         const formattedPostcode = formatPostcode(apartments.postcode);
-        const address = `Adress: ${apartments.street}, ${formattedPostcode} ${apartments.city}`;
-        const area = `Storlek: ${apartments.area ? `${apartments.area} kvm` : null}`;
-        const rooms = `Rum: ${apartments.rooms ? `${apartments.rooms} rum` : null}`;
-        const rent = `Hyra: ${contract.rent ? `${formatNumber(contract.rent)} kr/mån` : null}`;
+        const fullStreet = [apartments.street, apartments.house_number, apartments.stairwell].filter(Boolean).join(' ');
+        const address = `Adress: ${fullStreet}, ${formattedPostcode} ${apartments.city}`;
+        const area = apartments.area ? `Storlek: ${apartments.area} kvm` : null;
+        const rooms = apartments.rooms ? `Rum: ${apartments.rooms} rum` : null;
+        const rent = contract.rent ? `Hyra: ${formatNumber(contract.rent)} kr/mån` : null;
 
         return [address, area, rooms, rent].filter(isNonEmptyString);
     }, [contract]);
@@ -153,5 +175,8 @@ export function useProfileData(userId: string, authLoading: boolean): ProfileDat
         apartmentInfo,
         manualDocuments,
         floorPlanDocument,
+        appliedApartments,
+        myParking,
+        appliedParking,
     };
 }

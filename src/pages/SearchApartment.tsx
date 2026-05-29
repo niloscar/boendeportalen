@@ -1,103 +1,104 @@
-import { useState, useEffect } from 'react';
-import type React from 'react';
 import Skeleton from '@mui/material/Skeleton';
-import ApartmentList from '../components/SearchApartmentPage/ApartmentList.tsx';
-import ApartmentFilter from '../components/SearchApartmentPage/ApartmentFilter.tsx';
-import type { ApartmentData } from "../types/apartment.ts";
-import { getAvailableApartments } from '../api/apartmentApi.ts';
+import FilterBox from '../components/ui/FilterBox'
+import Button from '../components/ui/Button'
+import useApartmentFilter from '../hooks/useApartmentFilter'
+import ApartmentList from '../components/searchapartment/ApartmentList.tsx';
 
 const SearchApartment = () => {
-    const [apartments, setApartments] = useState<ApartmentData[]>([]);
-    const [filteredApartments, setFilteredApartments] = useState<ApartmentData[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [rooms, setRooms] = useState<string[]>([]);
-    const [maxRent, setMaxRent] = useState(20000);
-    const [district, setDistrict] = useState<string[]>([]);
-    const [filtersVisibility, setFilterVisibility] = useState<boolean>(false);
-
-    const fetchApartments = async () => {
-        try {
-            setLoading(true);
-            setError('');
-            const data = await getAvailableApartments();
-            setApartments(data);
-            setFilteredApartments(data);
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                setError(error.message);
-            }
-        } finally {
-            setLoading(false);
-        }
-    }
-    useEffect(() => {
-        (async () => {
-            await fetchApartments();
-        })();
-    }, []);
-    const filterResults: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-        e.preventDefault();
-        const filterRooms = rooms.length > 0 ? apartments.filter((a) => rooms.some((room) => room === a.rooms)) : apartments;
-        const filterRent = filterRooms.filter(a => a.rent < maxRent);
-        const filterArea = district.length > 0 ? filterRent.filter((a) => district.some((dr) => dr === a.district)) : filterRent;
-        setFilteredApartments(filterArea);
-        setFilterVisibility(false);
-    }
-    const setVisibility = (visibility: boolean) => {
-        setFilterVisibility(visibility)
-    }
-    const selectedRooms: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-        const isRoomChecked = rooms.find(r => r == e.target.name);
-        if (!isRoomChecked) {
-            setRooms([
-                ...rooms,
-                e.target.name
-            ])
-        } else {
-            setRooms(
-                rooms.filter(r =>
-                    r !== e.target.name)
-            )
-        };
-    }
-    const changeRent: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-        setMaxRent(parseInt(e.target.value));
-    }
-    const selectedDistrict: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-        const isDistrictChecked = district.find(a => a == e.target.name);
-        if (!isDistrictChecked) {
-            setDistrict([
-                ...district,
-                e.target.name
-            ])
-        } else {
-            setDistrict(
-                district.filter(a =>
-                    a !== e.target.name)
-            )
-        };
-    }
+    const {
+        filteredApartments,
+        loading,
+        error,
+        rooms,
+        maxRent,
+        district,
+        districtOptions,
+        roomOptions,
+        sortBy,
+        resetFilters,
+        setDistrict,
+        setRooms,
+        setMaxRent,
+        setSortBy,
+    } = useApartmentFilter();
 
     if (error) {
-        return (<div>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </div>)
+        return (<div className="w-full flex flex-col items-center gap-6">
+            <p>Problem med att hämta lägenheter. Vänligen ladda om sidan och försök igen. </p>
+        </div>)
     }
 
     return (
         <div className="w-full flex flex-col items-center gap-6">
             <h1 className="text-3xl md:text-5xl font-bold">Lediga lägenheter</h1>
-            <ApartmentFilter rooms={rooms} maxRent={maxRent} district={district} filtersVisibility={filtersVisibility} selectedRooms={selectedRooms} changeRent={changeRent} selectedDistrict={selectedDistrict} filterResults={filterResults} setVisibility={setVisibility} />
+            <FilterBox
+                fields={[
+                    {
+                        kind: 'dropdown',
+                        label: 'Stad / Område',
+                        summary: district.length === 0 ? 'Alla städer' : `${district.length} ${district.length === 1 ? 'vald' : 'valda'}`,
+                        options: districtOptions.map((city) => ({
+                            label: city,
+                            value: city,
+                            checked: district.includes(city),
+                            onToggle: () => {
+                                const next = district.includes(city) ? district.filter((value) => value !== city) : [...district, city]
+                                setDistrict(next)
+                            },
+                        })),
+                        onClear: () => setDistrict([]),
+                    },
+                    {
+                        kind: 'dropdown',
+                        label: 'Antal rum',
+                        summary: rooms.length === 0 ? 'Alla antal rum' : `${rooms.length} ${rooms.length === 1 ? 'vald' : 'valda'}`,
+                        options: roomOptions.map((type) => ({
+                            label: type,
+                            value: type,
+                            checked: rooms.includes(type),
+                            onToggle: () => {
+                                const next = rooms.includes(type) ? rooms.filter((value) => value !== type) : [...rooms, type]
+                                setRooms(next)
+                            },
+                        })),
+                        onClear: () => setRooms([]),
+                    },
+                    {
+                        kind: 'range',
+                        label: 'Max hyra',
+                        min: 5000,
+                        max: 20000,
+                        value: maxRent,
+                        onChange: (value) => setMaxRent(value),
+                    },
+                    {
+                        kind: 'select',
+                        label: 'Sortera',
+                        value: sortBy,
+                        onChange: (value) => setSortBy(value as typeof sortBy),
+                        ariaLabel: 'Sortera bostäder',
+                        options: [
+                            { value: 'price-asc', label: 'Pris: lägst först' },
+                            { value: 'price-desc', label: 'Pris: högst först' },
+                            { value: 'date-asc', label: 'Tillgänglig: tidigast först' },
+                            { value: 'date-desc', label: 'Tillgänglig: senast först' },
+                            { value: 'address-asc', label: 'Adress: A-Ö' },
+                        ],
+                    },
+                ]}
+                footer={<Button type="button" variant="secondary" size="md" onClick={resetFilters}>Rensa filter</Button>}
+            />
             {loading ?
-                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start w-full">
+                <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full">
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                     <Skeleton variant="rounded" className="w-full" height="502px" />
                 </div>
                 :
-                apartments.length < 1 ?
+                filteredApartments.length < 1 ?
                     <div>Kunde inte hitta några lediga lägenheter</div>
                     :
-                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 auto-cols-max gap-4 items-start w-full">
+                    <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 items-start w-full">
                         <ApartmentList variant="div" items={filteredApartments} />
                     </div>
             }

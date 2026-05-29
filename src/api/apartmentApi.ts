@@ -10,14 +10,34 @@ export const getAvailableApartments = async () => {
         throw err;
     }
 };
+export const getAvailableApartment = async (apartmentId: string) => {
+    if (!apartmentId) throw new Error('Lägenhets ID saknas');
+
+    try {
+        const response = await apiConfig.get(`/all_apartments?id=eq.${apartmentId}`);
+        return response.data[0];
+    } catch (err) {
+        console.log(`Kunde inte hämta lägenheter, ${err}`);
+        throw err;
+    }
+};
+
 
 // Fetch if already signed up for apartment
-export const getApartmentSignupStatus = async (bearer: string | undefined, apartment_id: number, end_date: string | null) => {
-    const config = {
-        headers: { Authorization: `Bearer ${bearer}` }
-    }
+export const getApartmentSignupStatus = async (apartment_id: number, end_date: string | null) => {
     try {
-        const response = await apiConfig.get(`/apartment_sign_up?select=id,apartment_id,end_date,sign_up_date&apartment_id=eq.${apartment_id}&end_date=eq.${end_date}`, config);
+        const response = await apiConfig.get(`/apartment_sign_up?select=id,apartment_id,end_date,sign_up_date&apartment_id=eq.${apartment_id}&end_date=eq.${end_date}`);
+        return response.data;
+    } catch (err) {
+        console.log(`Kunde inte hitta tidigare intresseanmälningar, ${err}`);
+        throw err;
+    }
+};
+
+//Fetch status for all applications 
+export const getAllApartmentSignups = async (end_date: string | null) => {
+    try {
+        const response = await apiConfig.get(`/apartment_sign_up?select=id,apartment_id,end_date,sign_up_date&end_date=gte.${end_date}`);
         return response.data;
     } catch (err) {
         console.log(`Kunde inte hitta tidigare intresseanmälningar, ${err}`);
@@ -26,15 +46,12 @@ export const getApartmentSignupStatus = async (bearer: string | undefined, apart
 };
 
 //Sign up for apartment
-export async function createApartmentSignUp(bearer: string | undefined, apartment_id: number, end_date: string | null) {
-    const config = {
-        headers: { Authorization: `Bearer ${bearer}` }
-    }
+export async function createApartmentSignUp(apartment_id: number, end_date: string | null) {
     try {
         const response = await apiConfig.post("/apartment_sign_up", {
             apartment_id: apartment_id,
             end_date: end_date
-        }, config);
+        });
         return response.status;
     } catch (error) {
         console.error("Kunde inte skapa intresseanmälan: ", error);
@@ -43,12 +60,9 @@ export async function createApartmentSignUp(bearer: string | undefined, apartmen
 }
 
 //Delete sign up to apartment
-export const deleteApartmentSignUp = async (bearer: string | undefined, signUpId: number) => {
-    const config = {
-        headers: { Authorization: `Bearer ${bearer}` }
-    }
+export const deleteApartmentSignUp = async (signUpId: number) => {
     try {
-        const response = await apiConfig.delete(`/apartment_sign_up?id=eq.${signUpId}`, config);
+        const response = await apiConfig.delete(`/apartment_sign_up?id=eq.${signUpId}`);
         return response;
     } catch (err) {
         console.log(`Kunde inte ta bort intresseanmälan ${err}`);

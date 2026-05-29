@@ -8,6 +8,7 @@ export type NavigationLink = {
     href: string
     requiresAuth?: boolean
     requiresAdmin?: boolean
+    slug?: string
     onlyForPart?: NavigationPart
 }
 

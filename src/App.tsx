@@ -14,7 +14,8 @@ const SearchApartmentPage = lazy(() => import('./pages/SearchApartment'))
 const ApartmentPage = lazy(() => import('./pages/Apartment'))
 const ProfilePage = lazy(() => import('./pages/ProfilePage'))
 const Parking = lazy(() => import('./pages/Parking'))
-const LaundryPage = lazy(() => import('./pages/Laundry'))
+const ParkingDetails = lazy(() => import('./pages/ParkingDetails'))
+const LaundryRoomPage = lazy(() => import('./pages/LaundryRoom'))
 const GuestSuitePage = lazy(() => import('./pages/GuestSuite'))
 
 function LazyRoute({ children }: { children: ReactNode }) {
@@ -27,22 +28,22 @@ function App() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className={isAuthPage ? 'flex-1 flex w-full' : 'flex-1 flex py-10 w-full max-w-6xl mx-auto'}>
+            {!isAuthPage ? <Header /> : null}
+            <main className={isAuthPage ? 'flex-1 flex w-full min-h-0' : 'flex-1 flex py-10 w-full max-w-6xl mx-auto px-4'}>
                 <Routes>
                     <Route path="/inloggning" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
                     <Route path="/minasidor" element={<PrivateRouteWrapper><LazyRoute><ProfilePage /></LazyRoute></PrivateRouteWrapper>} />
-                    <Route path="/tvattid" element={<PrivateRouteWrapper><LazyRoute><LaundryPage /></LazyRoute></PrivateRouteWrapper>} />
+                    <Route path="/tvattstuga" element={<PrivateRouteWrapper><LazyRoute><LaundryRoomPage /></LazyRoute></PrivateRouteWrapper>} />
                     <Route path="/gastlagenhet" element={<PrivateRouteWrapper><LazyRoute><GuestSuitePage /></LazyRoute></PrivateRouteWrapper>} />
                     <Route path="/bostader" element={<LazyRoute><SearchApartmentPage /></LazyRoute>} />
                     <Route path="/bostader/:apartmentId" element={<LazyRoute><ApartmentPage /></LazyRoute>} />
                     <Route path="/parkeringar" element={<LazyRoute><Parking /></LazyRoute>} />
-                    <Route path="/parkeringar/:parkingId" element={<div>Detaljsida för parkeringsplats (under utveckling)</div>} />
+                    <Route path="/parkeringar/:parkingId" element={<LazyRoute><ParkingDetails /></LazyRoute>} />
                     <Route path="/admin/*" element={<AdminRouteWrapper><LazyRoute><AdminPage /></LazyRoute></AdminRouteWrapper>} />
                     <Route path="/" element={<HomePage />} />
                 </Routes>
             </main>
-            <Footer />
+            {!isAuthPage ? <Footer /> : null}
         </div>
     )
 }

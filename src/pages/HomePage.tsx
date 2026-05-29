@@ -1,42 +1,35 @@
-import { Link } from 'react-router-dom'
-import { signOut } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useFeatures } from '../hooks/useFeatures'
+import { useProfileData } from '../hooks/useProfileData';
+import Landing from '../components/home/Landing'
+import Home from '../components/home/Home'
 
 export default function HomePage() {
-    const { user } = useAuth()
-    const { loading, loadError, features } = useFeatures()
-
-    const filteredFeatures = features.filter(feature => feature.is_active && feature.type_slug === 'tenant_features')
+    const { loading, loadError, visibleFeatures } = useFeatures()
+    const { user, loading: userLoading } = useAuth();
+    const userId = user?.id ?? '';
+    const {
+        profile,
+    } = useProfileData(userId, userLoading);
 
     return (
         <main className="w-full flex flex-col gap-6 justify-start items-center">
-            
-            <h1 className="text-2xl font-bold">Välkommen till Boendeportalen!</h1>
-            <p>Det här är en placeholder för startsidan.</p>
-
-            {!user && 
-                <p>
-                    <Link to="/inloggning" className="underline">Logga in</Link> för att se mer av webbplatsen.
-                </p>}
-
-            {user && loading && <p className="text-sm text-neutral-600">Laddar funktioner...</p> }
-            {user && loadError && <p className="text-sm text-red-600">Kunde inte ladda funktioner: {loadError}</p>}
-            {user && !loading && !loadError && filteredFeatures.length > 0 && (
-                <ul>
-                    {filteredFeatures.map((feature) => (
-                        <li key={feature.id}>
-                            {feature.name} - {feature.description}
-                        </li>
-                    ))}
-                </ul>
+            {loading || userLoading && <p className="text-sm text-neutral-600">Laddar funktioner...</p>}
+            {loadError && <p className="text-sm text-red-600">Kunde inte ladda funktioner: {loadError}</p>}
+            {user ? (
+                <Landing
+                    profileName={profile?.full_name}
+                    loading={loading}
+                    loadError={loadError}
+                    visibleFeatures={visibleFeatures}
+                />
+            ) : (
+                <Home
+                    loading={loading}
+                    loadError={loadError}
+                    visibleFeatures={visibleFeatures}
+                />
             )}
-
-            {user && 
-                <div className="flex gap-4 items-center">
-                    <p className="text-green-600">Inloggad som {user?.email}</p>
-                    <button onClick={async () => { await signOut(); window.location.reload(); }} className="py-1 px-4 bg-red-600 text-white rounded cursor-pointer hover:bg-red-700">Logga ut</button>
-                </div>}
         </main>
     )
 }

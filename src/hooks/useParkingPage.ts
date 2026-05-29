@@ -5,6 +5,7 @@ import { filterParkingSpots, getUniqueOptions, paginateParkingSpots, sortParking
 import { parkingPageReducer } from '../reducers/parkingPageReducer'
 import { readParkingPageState, saveParkingPageState } from '../storage/parkingStorage'
 
+// Handles all functionality related to the parking page. This includes loading parking spots, applying filters and pagination. Saving and loading page state to localStorage so that filters and pagination are preserved on refresh.
 export default function useParkingPage() {
     const [pageState, dispatch] = useReducer(parkingPageReducer, undefined, readParkingPageState)
     const [parkingSpots, setParkingSpots] = useState<ParkingSpot[]>([])

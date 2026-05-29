@@ -8,69 +8,80 @@ body {
 
 /* FullCalendar Styling */
 
-/* Text */
-.fc .fc-toolbar-title,
-.fc .fc-col-header-cell-cushion,
-.fc .fc-timegrid-slot-label-cushion {
-    @apply text-neutral-900 font-normal;
-}
+    /* Fix box-sizing */
+    .fc,
+    .fc * {
+        box-sizing: border-box;
+    }
 
-.fc .fc-timegrid-slot-label-cushion {
-    @apply !text-xs;
-}
+    /* Text */
+    .fc .fc-toolbar-title,
+    .fc .fc-col-header-cell-cushion,
+    .fc .fc-timegrid-slot-label-cushion {
+        @apply text-neutral-900 font-normal;
+    }
 
-/* Buttons */
-.fc .fc-button {
-    @apply bg-green-500 text-white rounded-2xl px-4 py-2 border-0 transition duration-200;
-}
+    .fc .fc-toolbar-title {
+        @apply text-2xl font-bold;
+    }
 
-.fc .fc-button:hover {
-    @apply bg-green-700;
-}
+    .fc .fc-timegrid-slot-label-cushion {
+        @apply !text-xs;
+    }
 
-.fc .fc-button:disabled,
-.fc .fc-button.fc-button-disabled {
-    @apply bg-neutral-300 text-gray-500 cursor-not-allowed;
-}
+    /* Buttons */
+    .fc .fc-button {
+        @apply border-0 rounded-2xl font-semibold transition duration-200 cursor-pointer bg-neutral-900 text-white px-5 py-2.5 text-sm;
+    }
 
-.fc .fc-button:focus,
-.fc .fc-button-primary:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
+    .fc .fc-button-group .fc-button {
+        @apply px-2.5 bg-green-500;
+    }
 
-/* Prev/Next disabled */
-[data-prev-disabled="true"] .fc-prev-button,
-[data-next-disabled="true"] .fc-next-button {
-    @apply bg-neutral-300 text-gray-500 cursor-not-allowed opacity-50 pointer-events-none;
-}
+    .fc .fc-button:hover {
+        @apply bg-neutral-800;
+    }
 
-/* List view */
-.fc-list-event-time,
-.fc-list-event-graphic {
-    @apply hidden;
-}
+    .fc .fc-button-group .fc-button:hover {
+        @apply bg-green-700;
+    }
 
-.fc .fc-list-event:hover td {
-    background-color: transparent !important;
-}
+    .fc .fc-button:disabled,
+    .fc .fc-button.fc-button-disabled,
+    .fc .fc-button-group .fc-button:disabled {
+        @apply bg-neutral-300 text-gray-500 cursor-not-allowed;
+    }
 
-/* Remove borders */
-.fc-theme-standard td,
-.fc-theme-standard th {
-    @apply border-0;
-}
+    .fc .fc-button:focus {
+        @apply outline-none ring-2 ring-green-500;
+    }
 
-/* Center toolbar */
-.fc-toolbar-chunk {
-    @apply text-center;
-}
+    /* List view */
+    .fc-list-event-time,
+    .fc-list-event-graphic {
+        @apply hidden;
+    }
 
-button {
-    cursor: pointer;
-}
+    .fc .fc-list-event:hover td {
+        @apply !bg-transparent;
+    }
 
-button:disabled {
-    cursor: not-allowed;
-}
+    /* Remove borders */
+    .fc-theme-standard td,
+    .fc-theme-standard th {
+        @apply border-0;
+    }
+
+    /* Center toolbar */
+    .fc-toolbar-chunk {
+        @apply text-center;
+    }
+
+    /* Events */
+    .fc-timegrid-event {
+        @apply flex items-center p-4;
+    }
+
+    .fc-list-event {
+        @apply flex items-center p-2;
+    }
