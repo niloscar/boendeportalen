@@ -1,12 +1,12 @@
 import { useState, useEffect, useMemo, useReducer } from 'react';
 import { getAvailableApartments } from '../api/apartmentApi.ts';
-import type { ApartmentData } from '../types/apartment.ts';
+import type { ApartmentFilterData } from '../types/apartment.ts';
 import { getUniqueOptions } from '../utils/apartments.ts';
 import { apartmentReducer, apartmentDetails } from '../reducers/apartmentReducer.ts';
 
 export default function useApartmentFilter() {
-    const [apartments, setApartments] = useState<ApartmentData[]>([]);
-    const [filteredApartments, setFilteredApartments] = useState<ApartmentData[]>([]);
+    const [apartments, setApartments] = useState<ApartmentFilterData[]>([]);
+    const [filteredApartments, setFilteredApartments] = useState<ApartmentFilterData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
