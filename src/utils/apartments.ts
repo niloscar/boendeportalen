@@ -46,13 +46,14 @@ export function getDetails(apartment: ApartmentData) {
       return details
 }
 
-export const fetchApartments = async (apartmentId : string | undefined) => {
+export const fetchApartments = async (apartmentId : string) => {
+     if (!apartmentId) throw new Error('Lägenhets ID saknas');
         try {
             const data = await getAvailableApartment(apartmentId);
             return data
         } catch (error: unknown) {
             if (error instanceof Error) {
-               return error.message
+               new Error('Kunde inte hämta lägenheten.')
             }
         }
     }
