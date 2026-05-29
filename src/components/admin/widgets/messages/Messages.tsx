@@ -224,7 +224,7 @@ function RecipientsStep({ state, dispatch }: MessagesFormStepProps) {
                                     <span className="block text-sm mb-1">Husnummer</span>
                                     <input
                                         type="number"
-                                        className="text-sm w-full border border-neutral-300 rounded-xl px-4 py-2"
+                                        className="w-full border border-neutral-300 rounded-xl px-4 py-2"
                                         placeholder="T.ex. 17"
                                         value={state.filters.houseNumber}
                                         onChange={(event) => handleFilterRecipientChange(
@@ -237,7 +237,7 @@ function RecipientsStep({ state, dispatch }: MessagesFormStepProps) {
                                     <span className="block text-sm mb-1">Trappuppgång</span>
                                     <input
                                         type="text"
-                                        className={`${!state.filters.houseNumber ? 'bg-neutral-100' : ''} text-sm w-full border border-neutral-300 rounded-xl px-4 py-2`}
+                                        className={`${!state.filters.houseNumber ? 'bg-neutral-100' : ''} w-full border border-neutral-300 rounded-xl px-4 py-2`}
                                         placeholder="T.ex. A"
                                         value={state.filters.stairwell}
                                         onChange={(event) => handleFilterRecipientChange(
@@ -292,11 +292,11 @@ function MessageStep({ state, dispatch }: MessagesFormStepProps) {
 
     return (
         <div className="flex flex-col mt-2 gap-6">
-            <label className="text-sm text-gray-700">
+            <label className="text-gray-700">
                 <span className="block text-sm mb-1">Ämne</span>
                 <input
                     type="text"
-                    className="text-sm border border-neutral-300 outline-green-500 rounded-xl px-4 py-3 w-full"
+                    className="border border-neutral-300 outline-green-500 rounded-xl px-4 py-3 w-full"
                     placeholder="Ämne"
                     value={state.subject}
                     onChange={(event) => dispatch({
@@ -306,10 +306,10 @@ function MessageStep({ state, dispatch }: MessagesFormStepProps) {
                 />
             </label>
 
-            <label className="text-sm text-gray-700">
+            <label className="text-gray-700">
                 <span className="block text-sm mb-1">Meddelande</span>
                 <textarea
-                    className="text-sm border border-neutral-300 outline-green-500 rounded-xl p-4 w-full h-32"
+                    className="border border-neutral-300 outline-green-500 rounded-xl p-4 w-full h-32"
                     placeholder="Skriv ditt meddelande här..."
                     value={state.body}
                     onChange={(event) => dispatch({
@@ -346,7 +346,7 @@ function ScheduleStep({ state, dispatch }: MessagesFormStepProps) {
                 <span className="block text-sm mb-1">Välj datum och tid för utskicket</span>
                 <input
                     type="datetime-local"
-                    className="text-sm border border-neutral-300 rounded-xl px-4 py-3 w-full outline-green-500"
+                    className="border border-neutral-300 rounded-xl px-4 py-3 w-full outline-green-500"
                     placeholder="Välj datum och tid för utskicket"
                     value={state.publishAt}
                     onChange={(event) => dispatch({
