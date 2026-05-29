@@ -28,8 +28,8 @@ function App() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className={isAuthPage ? 'flex-1 flex w-full' : 'flex-1 flex py-10 w-full max-w-6xl mx-auto px-4'}>
+            {!isAuthPage ? <Header /> : null}
+            <main className={isAuthPage ? 'flex-1 flex w-full min-h-0' : 'flex-1 flex py-10 w-full max-w-6xl mx-auto px-4'}>
                 <Routes>
                     <Route path="/inloggning" element={<PublicOnlyRouteWrapper><LazyRoute><AuthPage /></LazyRoute></PublicOnlyRouteWrapper>} />
                     <Route path="/minasidor" element={<PrivateRouteWrapper><LazyRoute><ProfilePage /></LazyRoute></PrivateRouteWrapper>} />
@@ -43,7 +43,7 @@ function App() {
                     <Route path="/" element={<HomePage />} />
                 </Routes>
             </main>
-            <Footer />
+            {!isAuthPage ? <Footer /> : null}
         </div>
     )
 }
