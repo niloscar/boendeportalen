@@ -37,7 +37,7 @@ export default function AdminPage() {
     const SubPageComponent = currentPage.component
 
     return (
-        <div className="container px-6 flex flex-col gap-3">
+        <div className="w-full flex flex-col gap-3">
             <h1 className="text-3xl md:text-5xl font-bold m-0 text-center">Administration</h1>
             
             <DropDown

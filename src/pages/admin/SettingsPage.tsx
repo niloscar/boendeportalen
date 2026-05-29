@@ -91,7 +91,7 @@ export default function SettingsPage() {
     if (loadError) return <p className="text-red-600 text-center w-full">Kunde inte ladda inställningar: {loadError}</p>
 
     return (
-        <main className="py-6">
+        <>
             <form className="flex flex-col gap-6 md:items-start" onSubmit={ handleSubmit }>
 
                 {sortedFeatureGroups.map(({ type, type_name, type_description, features }) => (
@@ -136,7 +136,7 @@ export default function SettingsPage() {
                     {buttonText}
                 </Button>
             </form>
-        </main>
+        </>
     )
 }
 

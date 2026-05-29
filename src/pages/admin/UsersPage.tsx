@@ -123,11 +123,10 @@ export default function UsersPage() {
 
     return (
         <main className="py-6 border-t border-neutral-200 bg-white rounded-xl p-6 shadow-md">
-            <h2 className="text-xl font-bold text-neutral-900">Hantera användare</h2>
 
-            {saveError && <p className="mt-4 text-red-600 text-center w-full">{saveError}</p>}
+            {saveError && <p className="my-4 text-red-600 text-center w-full">{saveError}</p>}
 
-            <table className="w-full table-fixed mt-4 text-left border-collapse">
+            <table className="w-full table-fixed text-left border-collapse">
                 <colgroup>
                     <col className="w-[32%]" />
                     <col className="w-[17%]" />
@@ -138,11 +137,11 @@ export default function UsersPage() {
 
                 <thead>
                     <tr>
-                        <th className="px-2 py-1">Namn</th>
+                        <th className="pr-2 py-1">Namn</th>
                         <th className="px-2 py-1">Telefon</th>
                         <th className="px-2 py-1">Email</th>
                         <th className="px-2 py-1">Roll</th>
-                        <th className="px-2 py-1"></th>
+                        <th className="pl-2 py-1"></th>
                     </tr>
                 </thead>
 
@@ -154,7 +153,7 @@ export default function UsersPage() {
 
                         return (
                             <tr key={user.id} className="hover:text-neutral-900">
-                                <td className="px-2">
+                                <td className="pr-2">
                                     <ToggleableInput
                                         id={`full_name-${user.id}`}
                                         name={`full_name-${user.id}`}
@@ -200,7 +199,7 @@ export default function UsersPage() {
                                     />
                                 </td>
 
-                                <td className="w-0 px-2 whitespace-nowrap text-right">
+                                <td className="w-0 pl-2 whitespace-nowrap text-right">
                                     {isEditing && (
                                         <button
                                             type="button"
