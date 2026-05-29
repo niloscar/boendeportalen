@@ -1,5 +1,6 @@
 import { CarIcon } from '@phosphor-icons/react';
 import { formatNumber } from '../../utils/calc';
+import { formatPostcode } from '../../hooks/useProfileData';
 import type { MyParkingSectionProps } from '../../types/profile';
 
 const MyParkingSection = ({ myParking }: MyParkingSectionProps) => (
@@ -17,7 +18,7 @@ const MyParkingSection = ({ myParking }: MyParkingSectionProps) => (
         <ul className='mt-4 space-y-4 text-sm leading-6 text-gray-700'>
             {myParking.map((spot) => (
                 <li key={spot.id}>
-                    <p>Adress: {spot.address}, {spot.city}</p>
+                    <p>Adress: {spot.address}, {formatPostcode(spot.postalCode)} {spot.city}</p>
                     <p>Typ: {spot.type}</p>
                     <p>Hyra: {formatNumber(spot.price)} kr/mån</p>
                 </li>

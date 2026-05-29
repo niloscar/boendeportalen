@@ -1,3 +1,4 @@
+import type { Profile } from "../types/profile";
 import apiConfig from "./axiosConfig"
 
 export const getUsers = async () => {
@@ -10,7 +11,7 @@ export const getUsers = async () => {
     }
 }
 
-export const getUserById = async (userId: number) => {
+export const getUserById = async (userId: string) => {
     try {
         const response = await apiConfig.get(`/users?id=eq.${userId}`);
         return response.data[0]
@@ -20,21 +21,35 @@ export const getUserById = async (userId: number) => {
     }
 }
 
-export const updateUser = async (userId: number, data: Partial<{ name: string; email: string }>) => {
+export const updateUser = async (
+    userId: Profile['id'],
+    data: Partial<Profile>
+) => {
+    if (!userId) throw new Error('Saknar användar-id')
+
     try {
         const response = await apiConfig.patch(
             `/users?id=eq.${userId}`,
             data,
             { headers: { Prefer: 'return=representation' } }
-        );
-        return response.data[0]
-    } catch(error){
-        console.error(`Kunde inte uppdatera användare, ${error}`)
+        )
+
+        const updatedUser = Array.isArray(response.data)
+            ? response.data[0]
+            : response.data
+
+        if (!updatedUser) {
+            throw new Error('API:t returnerade ingen uppdaterad användare')
+        }
+
+        return updatedUser as Profile
+    } catch (error) {
+        console.error('Kunde inte uppdatera användare:', error)
         throw error
     }
 }
 
-export const deleteUser = async (userId: number) => {
+export const deleteUser = async (userId: string) => {
     try {
         await apiConfig.delete(`/users?id=eq.${userId}`);
     } catch(error){

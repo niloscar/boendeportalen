@@ -3,11 +3,12 @@ import type { ReportFormData } from './forms';
 
 export interface Profile {
     id?: string
-    role?: string
+    role?: 'admin' | 'tenant' | 'user'
     isAdmin?: boolean
     email?: string | null
     full_name?: string | null
-    avatar_url?: string
+    avatar_url?: string | null
+    phone?: string | null
     [key: string]: unknown
 }
 
@@ -24,6 +25,8 @@ export type UserProfile = {
 export type ApartmentSummary = {
     id: number;
     street: string;
+    house_number: string | null;
+    stairwell: string | null;
     postcode: number;
     city: string;
     area: string | null;
@@ -128,11 +131,8 @@ export interface ApartmentOverviewCardProps {
     imageSrc: string;
 }
 
-export interface AppliedApartmentsSectionProps {
+export interface AppliedSectionProps {
     appliedApartments: AppliedApartmentSummary[];
-}
-
-export interface AppliedParkingSectionProps {
     appliedParking: AppliedParkingSummary[];
 }
 

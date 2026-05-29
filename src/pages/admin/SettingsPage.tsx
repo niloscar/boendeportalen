@@ -39,7 +39,11 @@ export default function SettingsPage() {
     }
 
     const sortedFeatureGroups = useMemo(() => {
-        const featuresByType = features.reduce<FeaturesByType>((groupedFeatures, feature) => {
+        const visibleSettingsFeatures = features.filter((feature) =>
+            feature.type_slug !== 'admin_widgets' || feature.component !== null
+        )
+
+        const featuresByType = visibleSettingsFeatures.reduce<FeaturesByType>((groupedFeatures, feature) => {
             if (!groupedFeatures[feature.type_slug]) {
                 groupedFeatures[feature.type_slug] = {
                     type_name: feature.type_name,
