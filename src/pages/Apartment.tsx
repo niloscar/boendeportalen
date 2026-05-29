@@ -7,7 +7,6 @@ import Button from '../components/ui/Button.tsx';
 import ApartmentList from '../components/searchapartment/ApartmentList.tsx';
 import type { ApartmentData, Detail } from '../types/apartment.ts';
 import ApartmentSignUp from '../components/searchapartment/ApartmentSignUp.tsx';
-import { useApartmentSignUp } from '../hooks/useApartmentSignUp.ts';
 import { useSession } from '../hooks/useAuth.ts';
 import { getDetails, fetchApartments } from '../utils/apartments.ts'
 import Skeleton from '@mui/material/Skeleton';
@@ -52,15 +51,6 @@ const Apartment = () => {
         }
     }, [state?.apartment, apartmentId]);
 
-    const {
-        signUp,
-        deleteSignUp,
-        loading,
-        error,
-        applied,
-        totalApplications
-    } = useApartmentSignUp({ apartment });
-
     if (!apartment || !details || apartmentError != '') {
         return (
             <section className="flex flex-col items-center gap-6 p-6 w-full">
@@ -98,7 +88,8 @@ const Apartment = () => {
                     </ul>
                     {session ?
                         finalDateToApply && finalDateToApply >= new Date() ?
-                            <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} totalApplications={totalApplications} /> :
+                            // <ApartmentSignUp error={error} loading={loading} applied={applied} deleteSignUp={deleteSignUp} signUp={signUp} totalApplications={totalApplications} />
+                            <ApartmentSignUp apartment={apartment}/> :
                             <div>Det går inte längre att ansöka denna lägenhet.</div>
                         :
                         <div>Du måste vara inloggad för att anmäla intressse. Vänligen <Link to="/inloggning" className="text-blue-500 hover:underline">logga in</Link> eller registrera ett konto.</div>
