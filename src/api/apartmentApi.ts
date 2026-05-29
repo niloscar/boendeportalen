@@ -10,6 +10,16 @@ export const getAvailableApartments = async () => {
         throw err;
     }
 };
+export const getAvailableApartment = async (apartmentId : string | undefined) => {
+    try {
+        const response = await apiConfig.get(`/all_apartments?id=eq.${apartmentId}`);
+        return response.data[0];
+    } catch (err) {
+        console.log(`Kunde inte hämta lägenheter, ${err}`);
+        throw err;
+    }
+};
+
 
 // Fetch if already signed up for apartment
 export const getApartmentSignupStatus = async (apartment_id: number, end_date: string | null) => {

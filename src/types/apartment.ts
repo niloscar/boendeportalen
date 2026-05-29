@@ -13,13 +13,29 @@ export interface ApartmentData {
     district: string,
     description: string,
     rent: number,
+    end_date: string | null,
+    images: ApartmentImages[]
+}
+export interface ApartmentFilterData {
+    id: number,
+    street: string,
+    house_number?: number,
+    stairwell?: string,
+    apartment_number?: number,
+    postcode: number,
+    city: string,
+    area: number,
+    rooms: string,
+    district: string,
+    description: string,
+    rent: number,
     end_date: string,
     images: ApartmentImages[]
 }
 export interface Detail {
     id: string,
     title: string,
-    content: string | number | null
+    content: string | number 
 }
 
 export interface ApartmentImages {
