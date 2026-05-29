@@ -34,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     setProfile(null)
 
                     if (currentSession) {
+                        // Log out if we expected a session but couldn't get a valid user, to avoid inconsistent state.
                         void supabase.auth.signOut()
                     }
 
@@ -60,6 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             }
         }
 
+        // Prevent multiple syncs in quick succession. Example, when user switches back and forth between tabs.
         const syncIfNeeded = () => {
             const now = Date.now()
             if (now - lastSyncRef.current < 1000) return

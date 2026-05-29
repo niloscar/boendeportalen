@@ -6,7 +6,9 @@ import MobileMenu from './MobileMenu'
 
 const Header: React.FC = () => {
     const { user, profile } = useAuth()
+    // We check for admin access based on the profile's `isAdmin` flag or if their role is set to 'admin' (case-insensitive) to determine if admin links should be shown.
     const isAdmin = Boolean(profile?.isAdmin || String(profile?.role ?? '').toLowerCase() === 'admin')
+    // Using `getNavigationLinks` to get the appropriate set of navigation links based on the user's authentication and admin status, and specifying 'header' to filter out any links that are only meant for the footer. This keeps the header navigation dynamic and in sync with the user's permissions.
     const navigationLinks = getNavigationLinks({ isLoggedIn: Boolean(user), isAdmin }, 'header')
 
     return (
