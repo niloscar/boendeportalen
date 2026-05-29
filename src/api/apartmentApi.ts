@@ -10,7 +10,9 @@ export const getAvailableApartments = async () => {
         throw err;
     }
 };
-export const getAvailableApartment = async (apartmentId : string | undefined) => {
+export const getAvailableApartment = async (apartmentId: string) => {
+    if (!apartmentId) throw new Error('Lägenhets ID saknas');
+
     try {
         const response = await apiConfig.get(`/all_apartments?id=eq.${apartmentId}`);
         return response.data[0];

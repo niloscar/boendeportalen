@@ -6,6 +6,12 @@ import { createApartmentSignUp, getApartmentSignupStatus, deleteApartmentSignUp,
 export function useApartmentSignUp({ apartment }: ApartmentProp) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [loadingStatus, setLoadingStatus] = useState(false);
+    const [errorStatus, setErrorStatus] = useState('');
+    const [loadingSignUp, setLoadingSignUp] = useState(false);
+    const [errorSignUp, setErrorSignUp] = useState('');
+    const [loadingRemove, setLoadingRemove] = useState(false);
+    const [errorRemove, setErrorRemove] = useState('');
     const [applied, setApplied] = useState<SignedUpData[]>([]);
     const [totalApplications, setTotalApplications] = useState([]);
     const [updated, setUpdated] = useState(false);
@@ -36,16 +42,16 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
         const getAllApartmentStatus = async () => {
             if (apartment) {
                 try {
-                    setLoading(true);
-                    setError('');
+                    setLoadingStatus(true);
+                    setErrorStatus('');
                     const data = await getAllApartmentSignups(today);
                     setTotalApplications(data);
                 } catch (error: unknown) {
                     if (error instanceof Error) {
-                        setError(error.message);
+                        setErrorStatus(error.message);
                     }
                 } finally {
-                    setLoading(false);
+                    setLoadingStatus(false);
                 }
             }
         }
@@ -54,16 +60,16 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
     const signUp = async () => {
         if (apartment) {
             try {
-                setLoading(true);
-                setError('');
+                setLoadingSignUp(true);
+                setErrorSignUp('');
                 await createApartmentSignUp(apartment.id, activeUntil);
                 setUpdated(!updated);
             } catch (error: unknown) {
                 if (error instanceof Error) {
-                    setError(error.message);
+                    setErrorSignUp(error.message);
                 }
             } finally {
-                setLoading(false);
+                setLoadingSignUp(false);
             }
         }
     }
@@ -71,16 +77,16 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
     const deleteSignUp = async () => {
         if (apartment) {
             try {
-                setLoading(true);
-                setError('');
+                setLoadingRemove(true);
+                setErrorRemove('');
                 await deleteApartmentSignUp(applied[0].id);
                 setUpdated(!updated)
             } catch (error: unknown) {
                 if (error instanceof Error) {
-                    setError(error.message);
+                    setErrorRemove(error.message);
                 }
             } finally {
-                setLoading(false);
+                setLoadingRemove(false);
             }
         }
     }
@@ -90,6 +96,12 @@ export function useApartmentSignUp({ apartment }: ApartmentProp) {
         deleteSignUp,
         loading,
         error,
+        loadingStatus,
+        errorStatus,
+        loadingSignUp,
+        errorSignUp,
+        loadingRemove,
+        errorRemove,
         applied,
         totalApplications
     };
